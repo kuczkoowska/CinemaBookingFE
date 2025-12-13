@@ -1,0 +1,73 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@cinemabooking/*": [
+        "src/app/*"
+      ],
+      "@cinemabooking/core/*": [
+        "src/app/core/*"
+      ],
+      "@cinemabooking/const/*": [
+        "src/app/const/*"
+      ],
+      "@cinemabooking/directives/*": [
+        "src/app/directives/*"
+      ],
+      "@cinemabooking/guards/*": [
+        "src/app/guards/*"
+      ],
+      "@cinemabooking/shell/*": [
+        "src/app/shell/*"
+      ],
+      "@cinemabooking/interceptors/*": [
+        "src/app/interceptors/*"
+      ],
+      "@cinemabooking/locales/*": [
+        "src/app/locales/*"
+      ],
+      "@cinemabooking/models/*": [
+        "src/app/models/*"
+      ],
+      "@cinemabooking/pipes/*": [
+        "src/app/pipes/*"
+      ],
+      "@cinemabooking/providers/*": [
+        "src/app/providers/*"
+      ],
+      "@cinemabooking/resolvers/*": [
+        "src/app/resolvers/*"
+      ],
+      "@cinemabooking/services/*": [
+        "src/app/services/*"
+      ],
+      "@cinemabooking/stores/*": [
+        "src/app/stores/*"
+      ],
+      "@cinemabooking/ui/*": [
+        "src/app/ui/*"
+      ],
+      "@cinemabooking/ui/atoms/*": [
+        "src/app/ui/atoms/*"
+      ],
+      "@cinemabooking/ui/molecules/*": [
+        "src/app/ui/molecules/*"
+      ],
+      "@cinemabooking/ui/organisms/*": [
+        "src/app/ui/organisms/*"
+      ],
+      "@cinemabooking/utils/*": [
+        "src/app/utils/*"
+      ],
+      "@cinemabooking/modals/*": [
+        "src/app/modals/*"
+      ],
+      "@cinemabooking/assets/*": [
+        "src/app/assets/*"
+      ],
+      "@cinemabooking/env/*": [
+        "environments/*"
+      ]
+    }
+  }
+}
