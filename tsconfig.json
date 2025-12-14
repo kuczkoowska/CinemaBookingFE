@@ -31,7 +31,7 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "listEmittedFiles": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "diagnostics": true,
     "extendedDiagnostics": true,
