@@ -1,0 +1,54 @@
+<nav
+  class="sticky top-0 z-50 w-full h-16 bg-element shadow-lg transition-colors duration-300">
+
+  <div class="container mx-auto px-4 h-full flex items-center justify-between">
+
+    <a [routerLink]="['/', AppRoute.HOME]"
+       class="flex items-center gap-2 cursor-pointer group">
+
+      <img alt="Logo aplikacji" height="32" src="/svg/logo.svg" width="32"/>
+
+      <span class="text-2xl font-bold tracking-tight text-main transition-colors">
+        CINEMA<span class="text-primary group-hover:text-primary-hover transition-colors">APP</span>
+      </span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      @for (link of navLinks; track link.route) {
+        <a [routerLink]="['/', link.route]"
+           class="text-sm uppercase cursor-pointer text-main hover:text-primary transition-colors tracking-wide"
+           routerLinkActive="text-primary font-bold">
+          {{ link.label }}
+        </a>
+      }
+    </div>
+
+    <div class="flex items-center gap-4">
+
+      <button (click)="toggleTheme()"
+              class="p-2 rounded-full text-main hover:bg-gray-500/20 transition-all"
+              title="Zmień motyw">
+        @if (isLightTheme) {
+          <img alt="dark mode" height="20" ngSrc="/svg/moon.svg" width="20"/>
+        } @else {
+          <img alt="light mode" height="20" ngSrc="/svg/sun.svg" width="20"/>
+        }
+      </button>
+
+      <button class="text-sm font-bold text-main hover:text-primary transition-colors">PL</button>
+
+      @if (isLoggedIn) {
+        <div
+          class="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center hover:bg-primary-hover transition-colors shadow-md border-2 border-transparent hover:border-white/20">
+          JK
+        </div>
+      } @else {
+        <a [routerLink]="['/', AppRoute.LOGIN]"
+           class="px-5 py-2 rounded font-medium bg-primary text-white hover:bg-primary-hover shadow-lg transition-colors cursor-pointer">
+          Zaloguj
+        </a>
+      }
+    </div>
+
+  </div>
+</nav>

@@ -1,3 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary-color);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-app: var(--bg-app);
+  --color-element: var(--bg-element);
+
+  --color-main: var(--text-main);
+  --color-muted: var(--text-muted);
+}
+
+:root {
+  --palette-black-deep: #1E1A1D;
+  --palette-black-soft: #22181C;
+  --palette-white: #EDF2F4;
+  --palette-pure-white: #ffffff;
+  --palette-red-vivid: #EF233C;
+  --palette-red-dark: #D90429;
+
+  --palette-gray-light: #e0e0e0;
+  --palette-gray-dark: #333333;
+}
+
+:root {
+  --bg-app: var(--palette-black-deep);
+  --bg-element: var(--palette-black-soft);
+
+  --text-main: var(--palette-white);
+  --text-muted: #b0b0b0;
+
+  --primary-color: var(--palette-red-vivid);
+  --primary-hover: var(--palette-red-dark);
+
+  --border-color: var(--palette-gray-dark);
+}
+
+body.light-theme {
+  --bg-app: var(--palette-white);
+  --bg-element: var(--palette-pure-white);
+
+  --text-main: var(--palette-black-deep);
+  --text-muted: #555555;
+
+  --border-color: var(--palette-gray-light);
+
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+
+  background-color: var(--bg-app);
+  color: var(--text-main);
+
+  transition: background-color 0.3s, color 0.3s;
+}
