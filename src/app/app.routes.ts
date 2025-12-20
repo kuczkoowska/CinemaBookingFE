@@ -8,6 +8,14 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./core/home-routing/home.routes')
+      },
+      {
+        path: 'login',
+        loadChildren: () => import('./core/login-routing/login.routes')
+      },
+      {
+        path: 'movies',
+        loadChildren: () => import('./core/movie-list-routing/movie.routes')
       }
     ]
   },
