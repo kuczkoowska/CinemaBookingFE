@@ -45,4 +45,10 @@ export class MovieService {
   public getMovies(): Observable<Movie[]> {
     return of(this.mockMovies);
   }
+
+  public getMovieById(id: number): Observable<Movie | undefined> {
+    const movie = this.mockMovies.find((m) => m.id === id);
+    
+return of(movie);
+  }
 }
