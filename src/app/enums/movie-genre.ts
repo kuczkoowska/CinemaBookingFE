@@ -1,13 +1,27 @@
 export enum MovieGenre {
-  AKCJA = 'Akcja',
-  KOMEDIA = 'Komedia',
-  DRAMAT = 'Dramat',
-  THRILLER = 'Thriller',
-  SCI_FI = 'Sci‑Fi',
-  HORROR = 'Horror',
-  ANIMACJA = 'Animacja',
-  DOKUMENTALNY = 'Dokumentalny',
-  FANTASY = 'Fantasy',
-  HISTORYCZNY = 'Historyczny',
-  INNY = 'Inny',
+  ACTION = 'ACTION',
+  COMEDY = 'COMEDY',
+  DRAMA = 'DRAMA',
+  THRILLER = 'THRILLER',
+  SCIFI = 'SCIFI',
+  HORROR = 'HORROR',
+  ANIMATION = 'ANIMATION',
+  DOCUMENTARY = 'DOCUMENTARY',
+  FANTASY = 'FANTASY',
+  HISTORY = 'HISTORY',
+  OTHER = 'OTHER'
 }
+
+export const MOVIE_GENRE_LABELS: Record<MovieGenre, string> = {
+  [MovieGenre.ACTION]: 'Akcja',
+  [MovieGenre.COMEDY]: 'Komedia',
+  [MovieGenre.DRAMA]: 'Dramat',
+  [MovieGenre.THRILLER]: 'Thriller',
+  [MovieGenre.SCIFI]: 'Sci-Fi',
+  [MovieGenre.HORROR]: 'Horror',
+  [MovieGenre.ANIMATION]: 'Animacja',
+  [MovieGenre.DOCUMENTARY]: 'Dokumentalny',
+  [MovieGenre.FANTASY]: 'Fantasy',
+  [MovieGenre.HISTORY]: 'Historyczny',
+  [MovieGenre.OTHER]: 'Inny'
+};

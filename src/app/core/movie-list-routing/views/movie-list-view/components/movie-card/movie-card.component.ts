@@ -1,10 +1,10 @@
 import {Component, input} from '@angular/core';
 import {Movie} from '@cinemabooking/interfaces/movie';
-import {TitleCasePipe} from '@angular/common';
+import {GenreNamePipe} from '@cinemabooking/pipes/genre-name.pipe';
 
 @Component({
   selector: 'app-movie-card',
-  imports: [TitleCasePipe],
+  imports: [GenreNamePipe],
   templateUrl: './movie-card.component.html',
 })
 export class MovieCardComponent {

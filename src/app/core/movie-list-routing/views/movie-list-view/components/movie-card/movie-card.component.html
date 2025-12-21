@@ -20,7 +20,7 @@
     </div>
 
     <p class="text-sm text-[var(--text-muted)] mb-3">
-      {{ movie().genre | titlecase }} | {{ movie().durationMinutes }} min
+      {{ movie().genre | genreName }} | {{ movie().durationMinutes }} min
     </p>
 
     <button
