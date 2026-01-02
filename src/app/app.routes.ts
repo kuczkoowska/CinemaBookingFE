@@ -16,6 +16,10 @@ export const routes: Routes = [
       {
         path: 'movies',
         loadChildren: () => import('./core/movie-list-routing/movie.routes')
+      },
+      {
+        path: 'booking',
+        loadChildren: () => import('./core/booking-routing/booking.routes')
       }
     ]
   },
