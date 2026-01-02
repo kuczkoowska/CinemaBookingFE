@@ -1,7 +1,43 @@
-<div class="bg-element p-6 rounded-xl border border-[var(--border-color)]">
-  <h3 class="text-xl font-bold text-main mb-6 flex items-center gap-2">Najbliższe seanse</h3>
+<div class="bg-element p-6 rounded-xl border border-[var(--border-color)] h-fit sticky top-24">
+  <h3 class="text-xl font-bold text-main mb-6 flex items-center gap-2">
+    📅 Repertuar
+    <!--    moze zmienic na ikone?-->
+  </h3>
 
-  <div class="flex flex-col gap-4 text-center py-10 text-[var(--text-muted)]">
-    <div>Kalendarz</div>
+  <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+    @for (day of days; track day.date) {
+      <button
+        (click)="selectDay(day.date)"
+        [class.bg-primary]="selectedDate() === day.date"
+        [class.text-white]="selectedDate() === day.date"
+        class="px-4 py-2 rounded-lg text-sm font-bold border border-[var(--border-color)] text-main hover:border-primary transition-all whitespace-nowrap">
+        {{ day.label }}
+      </button>
+    }
   </div>
+
+  @if (filteredScreenings().length > 0) {
+    <div class="flex flex-col gap-3">
+      @for (screening of filteredScreenings(); track screening.id) {
+
+        <button (click)="onScreeningClick(screening.id)"
+                class="flex justify-between items-center p-4 rounded bg-[var(--bg-app)] border border-[var(--border-color)] hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer text-left w-full">
+
+          <div>
+            <span class="text-xl font-bold text-[var(--text-main)] block group-hover:text-primary transition-colors">
+              {{ screening.startTime | date:'HH:mm' }}
+            </span>
+            <span class="text-xs text-[var(--text-muted)]">{{ screening.theaterRoomName }}</span>
+          </div>
+
+          <span class="text-xs text-primary font-bold opacity-0 group-hover:opacity-100 uppercase tracking-wider">
+             Wybierz
+          </span>
+        </button>
+
+      }
+    </div>
+  } @else {
+    <div class="py-8 text-center text-[var(--text-muted)]">Brak seansów</div>
+  }
 </div>

@@ -11,6 +11,7 @@ import {
 import {
   ScreeningDatesComponent
 } from '@cinemabooking/core/movie-list-routing/views/movie-details-view/components/screening-dates/screening-dates.component';
+import {Screening} from '@cinemabooking/interfaces/screening';
 
 @Component({
   selector: 'app-movie-details-view',
@@ -24,6 +25,7 @@ import {
 })
 export class MovieDetailsViewComponent implements OnInit {
   public movie$!: Observable<Movie | undefined>;
+  public screenings: Screening[] = [];
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
   private location = inject(Location);
@@ -32,13 +34,27 @@ export class MovieDetailsViewComponent implements OnInit {
     this.movie$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const id = Number(params.get('id'));
-
-        return this.movieService.getMovieById(id);
+        this.loadScreenings(id);
+        
+return this.movieService.getMovieById(id);
       })
     );
   }
 
   public goBack(): void {
     this.location.back();
+  }
+
+  public handleScreeningSelect(screeningId: number): void {
+    console.log(screeningId);
+  }
+
+  private loadScreenings(movieId: number): void {
+    this.movieService.getScreenings(movieId).subscribe({
+      next: (data) => {
+        this.screenings = data;
+      },
+      error: (err) => console.error('Błąd pobierania seansów', err)
+    });
   }
 }
