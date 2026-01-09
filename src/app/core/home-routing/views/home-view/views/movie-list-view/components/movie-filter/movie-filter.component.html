@@ -1,27 +1,43 @@
-<div class="bg-element p-6 rounded-lg shadow-lg border border-[var(--border-color)] sticky top-24">
-  <h2 class="text-xl font-bold text-main mb-4 flex items-center gap-2">
+<div class="p-6 rounded-lg shadow-lg border sticky top-24"
+     style="background-color: var(--bg-element); border-color: var(--border-color)">
+  <h2 class="text-xl font-bold mb-4 flex items-center gap-2"
+      style="color: var(--text-main)">
     Filtrowanie
   </h2>
 
   <form [formGroup]="filterForm" class="flex flex-col gap-5">
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide" for="search">Szukaj</label>
+      <label class="text-sm font-bold uppercase tracking-wide"
+             for="search"
+             style="color: var(--text-muted)">
+        Szukaj
+      </label>
       <input
-        class="w-full bg-[var(--bg-app)] border border-[var(--border-color)] rounded p-2 text-main focus:outline-none focus:border-primary transition-colors placeholder:text-gray-600"
+        class="w-full border rounded p-2 focus:outline-none transition-colors placeholder:text-gray-600"
+        style="background-color: var(--bg-app); border-color: var(--border-color); color: var(--text-main)"
         formControlName="searchQuery"
         id="search"
         placeholder="Wpisz tytuł..."
         type="text"
+        onfocus="this.style.borderColor='var(--primary-color)'"
+        onblur="this.style.borderColor='var(--border-color)'"
       >
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide" for="genre">Gatunek</label>
+      <label class="text-sm font-bold uppercase tracking-wide"
+             for="genre"
+             style="color: var(--text-muted)">
+        Gatunek
+      </label>
       <select
-        class="w-full bg-[var(--bg-app)] border border-[var(--border-color)] rounded p-2 text-main focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+        class="w-full border rounded p-2 focus:outline-none transition-colors appearance-none cursor-pointer"
+        style="background-color: var(--bg-app); border-color: var(--border-color); color: var(--text-main)"
         formControlName="genre"
         id="genre"
+        onfocus="this.style.borderColor='var(--primary-color)'"
+        onblur="this.style.borderColor='var(--border-color)'"
       >
         <option value="">Wszystkie gatunki</option>
 
@@ -34,21 +50,30 @@
     </div>
 
     <div
-      class="flex items-center gap-3 p-3 bg-[var(--bg-app)] rounded border border-[var(--border-color)] cursor-pointer hover:border-primary transition-colors">
+      class="flex items-center gap-3 p-3 rounded border cursor-pointer transition-colors"
+      style="background-color: var(--bg-app); border-color: var(--border-color)"
+      onmouseover="this.style.borderColor='var(--primary-color)'"
+      onmouseout="this.style.borderColor='var(--border-color)'">
       <input
-        class="w-5 h-5 text-primary rounded focus:ring-primary bg-element border-gray-600 cursor-pointer accent-primary"
+        class="w-5 h-5 text-primary rounded focus:ring-primary border-gray-600 cursor-pointer accent-primary"
+        style="background-color: var(--bg-element)"
         formControlName="hideAdult"
         id="adult"
         type="checkbox"
       >
-      <label class="text-sm text-main cursor-pointer select-none" for="adult">
+      <label class="text-sm cursor-pointer select-none"
+             for="adult"
+             style="color: var(--text-main)">
         Tylko filmy rodzinne
-        <span class="block text-xs text-[var(--text-muted)]">(Bez ograniczeń 16+)</span>
+        <span class="block text-xs" style="color: var(--text-muted)">(Bez ograniczeń 16+)</span>
       </label>
     </div>
 
     <button (click)="filterForm.reset()"
-            class="text-xs text-[var(--text-muted)] hover:text-primary underline self-end mt-2"
+            class="text-xs underline self-end mt-2 transition-colors"
+            style="color: var(--text-muted)"
+            onmouseover="this.style.color='var(--primary-color)'"
+            onmouseout="this.style.color='var(--text-muted)'"
             type="button">
       Wyczyść filtry
     </button>

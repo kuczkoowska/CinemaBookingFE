@@ -8,7 +8,10 @@
   --color-element: var(--bg-element);
 
   --color-main: var(--text-main);
+  --color-main-reverse: var(--text-main-reverse);
   --color-muted: var(--text-muted);
+
+  --color-border: var(--border-color);
 }
 
 :root {
@@ -28,6 +31,7 @@
   --bg-element: var(--palette-black-soft);
 
   --text-main: var(--palette-white);
+  --text-main-reverse: var(--palette-black-deep);
   --text-muted: #b0b0b0;
 
   --primary-color: var(--palette-red-vivid);
@@ -41,6 +45,7 @@ body.light-theme {
   --bg-element: var(--palette-pure-white);
 
   --text-main: var(--palette-black-deep);
+  --text-main-reverse: var(--palette-white);
   --text-muted: #555555;
 
   --border-color: var(--palette-gray-light);
