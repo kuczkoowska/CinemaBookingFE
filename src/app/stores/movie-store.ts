@@ -43,7 +43,8 @@ export const movieStore = signalStore(
 
     selectedMovie: computed(() => {
       const id = selectedMovieId();
-      return movies().find((m) => m.id === id)
+      
+return movies().find((m) => m.id === id);
 
     })
   })),
@@ -79,7 +80,7 @@ export const movieStore = signalStore(
       pipe(
         tap((id) => patchState(store, {selectedMovieId: id, error: null})),
         switchMap((id) => {
-          const existingMovie = store.movies().find(m => m.id === id);
+          const existingMovie = store.movies().find((m) => m.id === id);
           if (existingMovie) return [];
 
           patchState(store, {isLoading: true});
@@ -100,7 +101,7 @@ export const movieStore = signalStore(
                 patchState(store, {error: errorMsg, isLoading: false});
               },
             })
-          )
+          );
         })
       )
     )
