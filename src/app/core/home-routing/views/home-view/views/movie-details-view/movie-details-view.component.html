@@ -1,43 +1,52 @@
-@if (store.selectedMovie(); as movie) {
+@if (movieStore.selectedMovie(); as movie) {
 
-  <div class="relative w-full h-[50vh] min-h-[400px] my-8">
+  <div class="relative w-full h-[60vh] min-h-[500px]">
 
-    <div class="absolute inset-0 bg-cover bg-center sm:blur-sm opacity-30"
+    <div class="absolute inset-0 bg-cover bg-center"
          [style.backgroundImage]="'url(' + movie.posterUrl + ')'">
     </div>
 
-    <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-app)] via-[var(--bg-app)]/80 to-transparent"></div>
+    <div class="absolute inset-0 sm:backdrop-blur-md"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-[var(--bg-app)]/60 via-[var(--bg-app)]/80 to-[var(--bg-app)]"></div>
 
-    <div class="container mx-auto px-4 h-full flex items-end pb-8 relative z-10">
-      <div class="flex flex-col md:flex-row gap-8 items-end md:items-end w-full">
+    <div class="container mx-auto px-4 h-full flex items-end pb-16 relative z-10">
+      <div class="flex flex-col md:flex-row gap-8 items-end w-full">
 
         <img [src]="movie.posterUrl"
              [alt]="movie.title"
-             class="w-48 md:w-64 rounded-lg shadow-2xl border-4 border-element hidden md:block">
+             class="w-48 md:w-64 rounded-lg shadow-2xl border-4 hidden md:block"
+             style="border-color: var(--bg-element)">
 
-        <div class="flex-1 mb-4">
+        <div class="flex-1">
 
           <button (click)="goBack()"
-                  class="mb-4 text-sm font-bold text-primary hover:text-white flex items-center gap-1 transition-colors">
+                  class="mb-4 text-sm font-bold flex items-center gap-2 transition-colors"
+                  style="color: var(--primary-color)"
+                  onmouseover="this.style.color='var(--text-main)'"
+                  onmouseout="this.style.color='var(--primary-color)'">
             ← WRÓĆ DO REPERTUARU
           </button>
 
-          <h1 class="text-4xl md:text-6xl font-black text-main tracking-tight mb-2">
+          <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4"
+              style="color: var(--text-main)">
             {{ movie.title }}
           </h1>
 
-          <div class="flex flex-wrap items-center gap-4 text-sm md:text-base text-[var(--text-muted)] font-medium">
+          <div class="flex flex-wrap items-center gap-4 text-sm md:text-base font-medium">
 
-            <span class="px-3 py-1 bg-element rounded-full border border-[var(--border-color)] text-main">
+            <span class="px-3 py-1 rounded-full border"
+                  style="background-color: var(--bg-element); border-color: var(--border-color); color: var(--text-main)">
               {{ movie.genre | genreName }}
             </span>
 
-            <span>{{ movie.durationMinutes }} min</span>
-            <span>•</span>
-            <span>{{ movie.director }}</span>
-            <span>•</span>
+            <span style="color: var(--text-muted)">{{ movie.durationMinutes }} min</span>
+            <span style="color: var(--text-muted)">•</span>
+            <span style="color: var(--text-muted)">{{ movie.director }}</span>
+            <span style="color: var(--text-muted)">•</span>
 
-            <span class="px-2 py-0.5 bg-primary/20 text-primary border border-primary/30 rounded text-xs font-bold">
+            <span class="px-2 py-0.5 rounded text-xs font-bold"
+                  style="background-color: var(--primary-color); color: white;">
               {{ movie.ageRating }}+
             </span>
           </div>
@@ -48,18 +57,19 @@
   </div>
 
   <div class="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12">
-
     <app-movie-description [movie]="movie"/>
-    <app-screening-dates [screenings]="screenings" (screeningSelect)="handleScreeningSelect($event)"/>
+    <app-screening-dates [screenings]="screeningStore.screenings()" (screeningSelect)="handleScreeningSelect($event)"/>
   </div>
 
-} @else if (store.isLoading()) {
+} @else if (movieStore.isLoading()) {
   <div class="container mx-auto py-20 text-center">
-    <p class="text-main text-xl">Szukanie filmu...</p>
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mx-auto mb-4"
+         style="border-color: var(--primary-color)"></div>
+    <p class="text-xl" style="color: var(--text-main)">Szukanie filmu...</p>
   </div>
 } @else {
-  <div class="text-red-500 font-bold p-10 text-center">
+  <div class="font-bold p-10 text-center" style="color: var(--primary-color)">
     Nie znaleziono filmu o podanym ID.
-    {{ store.error() }}
+    {{ movieStore.error() }}
   </div>
 }
