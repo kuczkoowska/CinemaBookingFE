@@ -1,9 +1,5 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {MovieService} from '@cinemabooking/services/movie.service';
-import {Observable, switchMap} from 'rxjs';
-import {Movie} from '@cinemabooking/interfaces/movie';
-import {AsyncPipe, Location} from '@angular/common';
+import {Component, inject, input, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
 import {GenreNamePipe} from '@cinemabooking/pipes/genre-name.pipe';
 import {Screening} from '@cinemabooking/interfaces/screening';
 import {
@@ -12,11 +8,11 @@ import {
 import {
   ScreeningDatesComponent
 } from '@cinemabooking/core/home-routing/views/home-view/views/movie-details-view/components/screening-dates/screening-dates.component';
+import {movieStore} from '@cinemabooking/stores/movie-store';
 
 @Component({
   selector: 'app-movie-details-view',
   imports: [
-    AsyncPipe,
     GenreNamePipe,
     MovieDescriptionComponent,
     ScreeningDatesComponent
@@ -24,21 +20,16 @@ import {
   templateUrl: './movie-details-view.component.html',
 })
 export class MovieDetailsViewComponent implements OnInit {
-  public movie$!: Observable<Movie | undefined>;
-  public screenings: Screening[] = [];
-  private route = inject(ActivatedRoute);
-  private movieService = inject(MovieService);
+  public id = input.required<number, string>({
+    transform: (value) => Number(value)
+  });
+  protected store = inject(movieStore);
   private location = inject(Location);
+  public screenings: Screening[] = [];
+
 
   public ngOnInit(): void {
-    this.movie$ = this.route.paramMap.pipe(
-      switchMap((params) => {
-        const id = Number(params.get('id'));
-        this.loadScreenings(id);
-
-        return this.movieService.getMovieById(id);
-      })
-    );
+    this.store.loadMovieById(this.id());
   }
 
   public goBack(): void {
@@ -49,12 +40,12 @@ export class MovieDetailsViewComponent implements OnInit {
     console.log(screeningId);
   }
 
-  private loadScreenings(movieId: number): void {
-    this.movieService.getScreenings(movieId).subscribe({
-      next: (data) => {
-        this.screenings = data;
-      },
-      error: (err) => console.error('Błąd pobierania seansów', err)
-    });
-  }
+  // private loadScreenings(movieId: number): void {
+  //   this.movieService.getScreenings(movieId).subscribe({
+  //     next: (data) => {
+  //       this.screenings = data;
+  //     },
+  //     error: (err) => console.error('Błąd pobierania seansów', err)
+  //   });
+  // }
 }

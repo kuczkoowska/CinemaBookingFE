@@ -10,6 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 
 interface MovieState {
   movies: Movie[];
+  selectedMovieId: number | null;
   filters: MovieFilters;
   isLoading: boolean;
   error: string | null;
@@ -17,6 +18,7 @@ interface MovieState {
 
 const initialState: MovieState = {
   movies: [],
+  selectedMovieId: null,
   filters: {searchQuery: '', genre: '', hideAdult: false},
   isLoading: false,
   error: null,
@@ -26,7 +28,7 @@ export const movieStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
 
-  withComputed(({movies, filters}) => ({
+  withComputed(({movies, filters, selectedMovieId}) => ({
     filteredMovies: computed(() => {
       const currentFilters = filters();
 
@@ -38,6 +40,12 @@ export const movieStore = signalStore(
         return matchesTitle && matchesGenre && matchesAge;
       });
     }),
+
+    selectedMovie: computed(() => {
+      const id = selectedMovieId();
+      return movies().find((m) => m.id === id)
+
+    })
   })),
 
   withMethods((store, movieService = inject(MovieService)) => ({
@@ -65,5 +73,36 @@ export const movieStore = signalStore(
         })
       )
     ),
+
+
+    loadMovieById: rxMethod<number>(
+      pipe(
+        tap((id) => patchState(store, {selectedMovieId: id, error: null})),
+        switchMap((id) => {
+          const existingMovie = store.movies().find(m => m.id === id);
+          if (existingMovie) return [];
+
+          patchState(store, {isLoading: true});
+
+          return movieService.getMovieById(id).pipe(
+            tapResponse({
+              next: (movie) => {
+                if (movie) {
+                  patchState(store, {
+                    movies: [...store.movies(), movie],
+                    isLoading: false
+                  });
+                }
+              },
+              error: (err: HttpErrorResponse) => {
+                const apiError = err.error as { message: string } | null;
+                const errorMsg = apiError?.message || err.message;
+                patchState(store, {error: errorMsg, isLoading: false});
+              },
+            })
+          )
+        })
+      )
+    )
   }))
 );

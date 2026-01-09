@@ -1,4 +1,4 @@
-@if (movie$ | async; as movie) {
+@if (store.selectedMovie(); as movie) {
 
   <div class="relative w-full h-[50vh] min-h-[400px] my-8">
 
@@ -53,8 +53,13 @@
     <app-screening-dates [screenings]="screenings" (screeningSelect)="handleScreeningSelect($event)"/>
   </div>
 
-} @else {
+} @else if (store.isLoading()) {
   <div class="container mx-auto py-20 text-center">
     <p class="text-main text-xl">Szukanie filmu...</p>
+  </div>
+} @else {
+  <div class="text-red-500 font-bold p-10 text-center">
+    Nie znaleziono filmu o podanym ID.
+    {{ store.error() }}
   </div>
 }
