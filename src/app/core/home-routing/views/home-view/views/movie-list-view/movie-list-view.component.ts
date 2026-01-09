@@ -7,7 +7,7 @@ import {
 import {
   MovieFilterComponent
 } from '@cinemabooking/core/home-routing/views/home-view/views/movie-list-view/components/movie-filter/movie-filter.component';
-import {MovieStore} from '@cinemabooking/stores/movie-store';
+import {movieStore} from '@cinemabooking/stores/movie-store';
 
 @Component({
   selector: 'app-movie-list-view',
@@ -19,7 +19,7 @@ import {MovieStore} from '@cinemabooking/stores/movie-store';
   templateUrl: './movie-list-view.component.html',
 })
 export class MovieListViewComponent implements OnInit {
-  protected store = inject(MovieStore);
+  protected store = inject(movieStore);
 
   public ngOnInit(): void {
     this.store.loadMovies();
