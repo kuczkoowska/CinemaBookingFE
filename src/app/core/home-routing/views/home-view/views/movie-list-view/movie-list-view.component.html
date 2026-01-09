@@ -6,14 +6,23 @@
 
   <div class="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8 items-start">
 
-    <app-movie-filter (filterChange)="onFiltersChanged($event)"/>
+    <app-movie-filter [currentFilters]="store.filters()"
+                      (filterChange)="onFiltersChanged($event)"/>
 
     <main>
-      @if (filteredMovies$ | async; as movies) {
+      @if (store.isLoading()) {
+        <div class="flex justify-center py-20">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      } @else if (store.error()) {
+        <div class="p-4 bg-red-100 text-red-700 rounded-lg">
+          Wystąpił błąd: {{ store.error() }}
+        </div>
+      } @else {
 
-        @if (movies.length > 0) {
+        @if (store.filteredMovies().length > 0) {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @for (movie of movies; track movie.id) {
+            @for (movie of store.filteredMovies(); track movie.id) {
               <app-movie-card [movie]="movie"></app-movie-card>
             }
           </div>
@@ -25,10 +34,6 @@
           </div>
         }
 
-      } @else {
-        <div class="flex justify-center py-20">
-          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        </div>
       }
     </main>
 
