@@ -17,11 +17,11 @@ export const routes: Routes = [
         path: 'showtimes',
         loadChildren: () => import('./core/movie-list-routing/movie.routes')
       },
-      {
-        path: 'booking',
-        loadChildren: () => import('./core/booking-routing/booking.routes')
-      }
-    ]
+    ],
+  },
+  {
+    path: 'booking',
+    loadChildren: () => import('./core/booking-routing/booking.routes')
   },
   {
     path: '**',

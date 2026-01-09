@@ -1,8 +1,9 @@
-import {Component, computed, input, output, signal} from '@angular/core';
+import {Component, computed, inject, input, output, signal} from '@angular/core';
 import {Screening} from '@cinemabooking/interfaces/screening';
 import {DatePipe} from '@angular/common';
 import {DatePickerModule} from 'primeng/datepicker';
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-screening-dates',
@@ -12,10 +13,11 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './screening-dates.component.html',
 })
 export class ScreeningDatesComponent {
+  private router = inject(Router);
+
   public screenings = input.required<Screening[]>();
   public screeningSelect = output<number>();
   public selectedDate = signal<string>(new Date().toISOString().split('T')[0]);
-
   public readonly days = this.generateDays(4);
 
   public readonly filteredScreenings = computed(() => {
@@ -34,7 +36,7 @@ export class ScreeningDatesComponent {
   }
 
   public onScreeningClick(screeningId: number): void {
-    this.screeningSelect.emit(screeningId);
+    this.router.navigate(['/booking', screeningId]);
   }
 
   private generateDays(count: number): { label: string, date: string }[] {
