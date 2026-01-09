@@ -5,13 +5,13 @@ import {Observable, switchMap} from 'rxjs';
 import {Movie} from '@cinemabooking/interfaces/movie';
 import {AsyncPipe, Location} from '@angular/common';
 import {GenreNamePipe} from '@cinemabooking/pipes/genre-name.pipe';
+import {Screening} from '@cinemabooking/interfaces/screening';
 import {
   MovieDescriptionComponent
-} from '@cinemabooking/core/movie-list-routing/views/movie-details-view/components/movie-description/movie-description.component';
+} from '@cinemabooking/core/home-routing/views/home-view/views/movie-details-view/components/movie-description/movie-description.component';
 import {
   ScreeningDatesComponent
-} from '@cinemabooking/core/movie-list-routing/views/movie-details-view/components/screening-dates/screening-dates.component';
-import {Screening} from '@cinemabooking/interfaces/screening';
+} from '@cinemabooking/core/home-routing/views/home-view/views/movie-details-view/components/screening-dates/screening-dates.component';
 
 @Component({
   selector: 'app-movie-details-view',
@@ -35,8 +35,8 @@ export class MovieDetailsViewComponent implements OnInit {
       switchMap((params) => {
         const id = Number(params.get('id'));
         this.loadScreenings(id);
-        
-return this.movieService.getMovieById(id);
+
+        return this.movieService.getMovieById(id);
       })
     );
   }

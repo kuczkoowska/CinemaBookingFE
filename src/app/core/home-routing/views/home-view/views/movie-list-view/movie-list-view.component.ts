@@ -3,14 +3,14 @@ import {MovieService} from '@cinemabooking/services/movie.service';
 import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
 import {Movie} from '@cinemabooking/interfaces/movie';
 import {AsyncPipe} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
 import {
   MovieCardComponent
-} from '@cinemabooking/core/movie-list-routing/views/movie-list-view/components/movie-card/movie-card.component';
-import {ReactiveFormsModule} from '@angular/forms';
+} from '@cinemabooking/core/home-routing/views/home-view/views/movie-list-view/components/movie-card/movie-card.component';
 import {
   MovieFilterComponent
-} from '@cinemabooking/core/movie-list-routing/views/movie-list-view/components/movie-filter/movie-filter.component';
-import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
+} from '@cinemabooking/core/home-routing/views/home-view/views/movie-list-view/components/movie-filter/movie-filter.component';
 
 @Component({
   selector: 'app-movie-list-view',

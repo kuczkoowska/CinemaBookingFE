@@ -14,7 +14,7 @@ export const routes: Routes = [
         loadChildren: () => import('./core/login-routing/login.routes')
       },
       {
-        path: 'movies',
+        path: 'showtimes',
         loadChildren: () => import('./core/movie-list-routing/movie.routes')
       },
       {

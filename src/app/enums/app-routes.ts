@@ -1,6 +1,6 @@
 export enum AppRoute {
   HOME = '',
-  MOVIES = 'movies',
+  MOVIES = 'showtimes',
   PRICING = 'pricing',
   CONTACT = 'contact',
   LOGIN = 'login'
