@@ -1,10 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, input} from '@angular/core';
+import {Screening} from '@cinemabooking/interfaces/screening';
+import {Movie} from '@cinemabooking/interfaces/movie';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-movie-card-booking',
-  imports: [],
+  imports: [
+    DatePipe
+  ],
   templateUrl: './movie-card-booking.component.html',
 })
 export class MovieCardBookingComponent {
-
+  public movie = input.required<Movie>();
+  public screening = input.required<Screening>();
 }

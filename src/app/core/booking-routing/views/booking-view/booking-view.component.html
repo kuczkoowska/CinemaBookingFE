@@ -1,1 +1,20 @@
-<app-movie-card-booking/>
+<div class="container mx-auto p-4">
+
+  @if (store.isLoading()) {
+    <div class="text-center p-10">Ładowanie danych rezerwacji...</div>
+  } @else {
+    @if (store.movie() && store.screening()) {
+
+      <app-movie-card-booking
+        [movie]="store.movie()!"
+        [screening]="store.screening()!">
+      </app-movie-card-booking>
+
+      <div class="mt-8">
+        <h2 class="text-xl font-bold">Wybierz miejsce:</h2>
+      </div>
+
+    }
+  }
+
+</div>
