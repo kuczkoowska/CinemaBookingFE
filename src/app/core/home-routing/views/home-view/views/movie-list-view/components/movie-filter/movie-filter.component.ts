@@ -1,10 +1,11 @@
 import {Component, effect, inject, input, output} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {debounceTime, map} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
 import {MovieGenre} from '@cinemabooking/enums/movie-genre';
 import {GenreNamePipe} from '@cinemabooking/pipes/genre-name.pipe';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {isEqual} from 'lodash-es';
 
 @Component({
   selector: 'app-movie-filter',
@@ -34,26 +35,16 @@ export class MovieFilterComponent {
     effect(() => {
       const filters = this.currentFilters();
       if (filters) {
-        this.filterForm.patchValue({
-          searchQuery: filters.searchQuery,
-          genre: filters.genre,
-          hideAdult: filters.hideAdult
-        }, {emitEvent: false});
+        this.filterForm.patchValue(filters, {emitEvent: false});
       }
     });
 
     this.filterForm.valueChanges
       .pipe(
         debounceTime(300),
-        takeUntilDestroyed(),
-        map((values) => ({
-          searchQuery: values.searchQuery ?? '',
-          genre: values.genre ?? '',
-          hideAdult: values.hideAdult ?? false
-        } as MovieFilters))
+        distinctUntilChanged((a, b) => isEqual(a, b)),
+        takeUntilDestroyed()
       )
-      .subscribe((cleanValues) => {
-        this.filterChange.emit(cleanValues);
-      });
+      .subscribe((val) => this.filterChange.emit(val as MovieFilters));
   }
 }

@@ -19,7 +19,7 @@ export class ScreeningService {
     return this.http.get<Screening[]>(`${this.apiUrl}/movie/${movieId}`);
   }
 
-  public getScreeningsById(id: number): Observable<Screening | undefined> {
+  public getScreeningById(id: number): Observable<Screening | undefined> {
     return this.http.get<Screening>(`${this.apiUrl}/${id}`);
   }
 
