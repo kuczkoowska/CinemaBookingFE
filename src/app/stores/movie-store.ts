@@ -43,8 +43,8 @@ export const movieStore = signalStore(
 
     selectedMovie: computed(() => {
       const id = selectedMovieId();
-      
-return movies().find((m) => m.id === id);
+
+      return movies().find((m) => m.id === id);
 
     })
   })),
@@ -88,12 +88,10 @@ return movies().find((m) => m.id === id);
           return movieService.getMovieById(id).pipe(
             tapResponse({
               next: (movie) => {
-                if (movie) {
-                  patchState(store, {
-                    movies: [...store.movies(), movie],
-                    isLoading: false
-                  });
-                }
+                patchState(store, {
+                  movies: [...store.movies(), movie],
+                  isLoading: false
+                });
               },
               error: (err: HttpErrorResponse) => {
                 const apiError = err.error as { message: string } | null;

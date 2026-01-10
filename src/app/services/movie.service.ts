@@ -17,7 +17,7 @@ export class MovieService {
     return this.http.get<Movie[]>(`${this.apiUrl}/front`);
   }
 
-  public getMovieById(id: number): Observable<Movie | undefined> {
+  public getMovieById(id: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.apiUrl}/${id}`);
   }
 
