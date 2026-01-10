@@ -1,16 +1,22 @@
-<div class="bg-element p-6 rounded-xl border border-[var(--border-color)] h-fit sticky top-24">
-  <h3 class="text-xl font-bold text-main mb-6 flex items-center gap-2">
-    📅 Repertuar
-    <!--    moze zmienic na ikone?-->
+<div class="p-6 rounded-xl border h-fit sticky top-24"
+     style="background-color: var(--bg-element); border-color: var(--border-color)">
+  <h3 class="text-xl font-bold mb-6 flex items-center gap-2"
+      style="color: var(--text-main)">
+    <span class="text-2xl">🎬</span>
+    Repertuar
   </h3>
 
-  <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+  <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
     @for (day of days; track day.date) {
       <button
         (click)="selectDay(day.date)"
-        [class.bg-primary]="selectedDate() === day.date"
-        [class.text-white]="selectedDate() === day.date"
-        class="px-4 py-2 rounded-lg text-sm font-bold border border-[var(--border-color)] text-main hover:border-primary transition-all whitespace-nowrap">
+        [class.shadow-lg]="selectedDate() === day.date"
+        class="px-4 py-2 rounded-lg text-sm font-bold border transition-all whitespace-nowrap"
+        [style.background-color]="selectedDate() === day.date ? 'var(--primary-color)' : 'transparent'"
+        [style.color]="selectedDate() === day.date ? 'white' : 'var(--text-main)'"
+        [style.border-color]="selectedDate() === day.date ? 'var(--primary-color)' : 'var(--border-color)'"
+        onmouseover="if(this.style.backgroundColor !== 'var(--primary-color)') this.style.borderColor='var(--primary-color)'"
+        onmouseout="if(this.style.backgroundColor !== 'var(--primary-color)') this.style.borderColor='var(--border-color)'">
         {{ day.label }}
       </button>
     }
@@ -38,6 +44,8 @@
       }
     </div>
   } @else {
-    <div class="py-8 text-center text-[var(--text-muted)]">Brak seansów</div>
+    <div class="py-8 text-center" style="color: var(--text-muted)">
+      Brak seansów w wybranym dniu
+    </div>
   }
 </div>
