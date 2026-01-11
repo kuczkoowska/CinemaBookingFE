@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+@import "tailwindcss-primeui";
 
 @theme {
   --color-primary: var(--primary-color);

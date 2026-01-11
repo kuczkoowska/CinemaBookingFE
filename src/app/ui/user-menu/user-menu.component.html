@@ -1,0 +1,41 @@
+<div class="relative">
+
+  <button (click)="toggleMenu()"
+          class="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center hover:bg-primary-hover transition-colors shadow-md border-2 border-transparent hover:border-white/20 uppercase">
+    {{ initials() }}
+  </button>
+
+  @if (isOpen()) {
+    <div class="fixed inset-0 z-40" (click)="closeMenu()"></div>
+
+    <div
+      class="absolute right-0 mt-3 w-56 bg-element border border-[var(--border-color)] rounded-lg shadow-xl z-50 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+
+      <div class="px-4 py-3 border-b border-[var(--border-color)] mb-1">
+        <p class="text-sm font-bold text-main truncate">{{ auth.displayName() }}</p>
+        @if (auth.user()?.email) {
+          <p class="text-xs text-[var(--text-muted)] truncate">{{ auth.user()?.email }}</p>
+        }
+      </div>
+
+      <a
+        class="block px-4 py-2 text-sm text-main hover:bg-gray-500/10 hover:text-primary transition-colors cursor-pointer"
+        (click)="closeMenu()">
+        Moje bilety
+      </a>
+
+      <a
+        class="block px-4 py-2 text-sm text-main hover:bg-gray-500/10 hover:text-primary transition-colors cursor-pointer"
+        (click)="closeMenu()">
+        Ustawienia konta
+      </a>
+
+      <div class="h-px bg-[var(--border-color)] my-1"></div>
+
+      <button (click)="logout()"
+              class="w-full text-left block px-4 py-2 text-sm text-[var(--text-muted)] hover:bg-gray-500/10 hover:text-red-500 transition-colors cursor-pointer">
+        Wyloguj się
+      </button>
+    </div>
+  }
+</div>

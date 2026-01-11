@@ -1,8 +1,10 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {DOCUMENT, NgOptimizedImage} from '@angular/common';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NavLink} from '@cinemabooking/interfaces/nav-link';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
 
 
 @Component({
@@ -10,22 +12,28 @@ import {NavLink} from '@cinemabooking/interfaces/nav-link';
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgOptimizedImage
+    NgOptimizedImage,
+    UserMenuComponent
   ],
   templateUrl: './navbar.component.html',
 })
-export class NavbarComponent {
-  // mock
+export class NavbarComponent implements OnInit {
+  protected readonly AppRoute = AppRoute;
+  private document = inject(DOCUMENT);
+
+  public auth = inject(AuthStore);
+
   public isLightTheme = false;
-  public isLoggedIn = false;
 
   public readonly navLinks: NavLink[] = [
     {label: 'Repertuar', route: AppRoute.MOVIES},
     {label: 'Cennik', route: AppRoute.PRICING},
     {label: 'Kontakt', route: AppRoute.CONTACT}
   ];
-  protected readonly AppRoute = AppRoute;
-  private document = inject(DOCUMENT);
+
+  ngOnInit(): void {
+    this.auth.checkAuth();
+  }
 
   public toggleTheme(): void {
     this.isLightTheme = !this.isLightTheme;
