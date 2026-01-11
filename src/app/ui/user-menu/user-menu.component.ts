@@ -1,5 +1,5 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {authStore} from '@cinemabooking/stores/auth.store';
 
 @Component({
   selector: 'app-user-menu',
@@ -7,7 +7,7 @@ import {AuthStore} from '@cinemabooking/stores/auth.store';
   templateUrl: './user-menu.component.html',
 })
 export class UserMenuComponent {
-  public auth = inject(AuthStore);
+  public auth = inject(authStore);
 
   public isOpen = signal(false);
 
@@ -21,15 +21,15 @@ export class UserMenuComponent {
     return name.slice(0, 2).toUpperCase();
   });
 
-  public toggleMenu() {
+  public toggleMenu(): void {
     this.isOpen.update((v) => !v);
   }
 
-  public closeMenu() {
+  public closeMenu(): void {
     this.isOpen.set(false);
   }
 
-  public logout() {
+  public logout(): void {
     this.closeMenu();
     this.auth.logout();
   }

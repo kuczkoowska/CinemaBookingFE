@@ -3,7 +3,7 @@ import {DOCUMENT, NgOptimizedImage} from '@angular/common';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NavLink} from '@cinemabooking/interfaces/nav-link';
-import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {authStore} from '@cinemabooking/stores/auth.store';
 import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
 
 
@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
   protected readonly AppRoute = AppRoute;
   private document = inject(DOCUMENT);
 
-  public auth = inject(AuthStore);
+  public auth = inject(authStore);
 
   public isLightTheme = false;
 
@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
     {label: 'Kontakt', route: AppRoute.CONTACT}
   ];
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.auth.checkAuth();
   }
 

@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from '../../environments/environment.development';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError, map, Observable} from 'rxjs';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import {User} from '@cinemabooking/interfaces/user';
 
 interface LoginResponse {
@@ -13,14 +13,12 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly http = inject(HttpClient);
   private loginUrl = `${environment.loginUrl}/login`;
   private logoutUrl = `${environment.loginUrl}/logout`;
   private currentUserUrl = `${environment.apiUrl}/users/me`;
 
-  constructor(private http: HttpClient) {
-  }
-
-  login(username: string, password: string): Observable<LoginResponse> {
+  public login(username: string, password: string): Observable<LoginResponse> {
     const body = new URLSearchParams();
     body.set('username', username);
     body.set('password', password);
@@ -38,21 +36,21 @@ export class AuthService {
         }
         throw new Error('Nieprawidłowa odpowiedź serwera');
       }),
-      catchError((error) => {
-        if (error.status === 401 || error.status === 403 ||
-          error.status === 302 || error.status === 301) {
-          throw {status: 401, error: {error: 'Błędny login lub hasło'}};
+      catchError((error: HttpErrorResponse) => {
+        if ([401, 403, 302, 301].includes(error.status)) {
+          return throwError(() => new Error('Błędny login lub hasło'));
         }
-        throw error;
+        
+        return throwError(() => error);
       })
     );
   }
 
-  logout(): Observable<any> {
+  public logout(): Observable<unknown> {
     return this.http.post(this.logoutUrl, {}, {withCredentials: true});
   }
 
-  getCurrentUser(): Observable<User> {
+  public getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.currentUserUrl, {withCredentials: true});
   }
 }

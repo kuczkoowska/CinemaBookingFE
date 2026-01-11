@@ -86,7 +86,7 @@ module.exports = defineConfig([
       "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
       "@typescript-eslint/default-param-last": "error",
       '@typescript-eslint/no-floating-promises': 'off',
-      // '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/unbound-method': 'off',
       "@typescript-eslint/explicit-function-return-type": [
         "error",
         {allowExpressions: true, allowHigherOrderFunctions: true},

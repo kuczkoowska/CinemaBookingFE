@@ -1,4 +1,4 @@
-import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {computed, inject} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
@@ -6,6 +6,7 @@ import {pipe, switchMap, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {User} from '@cinemabooking/interfaces/user';
 import {tapResponse} from '@ngrx/operators';
+import {HttpErrorResponse} from '@angular/common/http';
 
 interface AuthState {
   user: User | null;
@@ -21,18 +22,20 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const AuthStore = signalStore(
+export const authStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
 
   withComputed(({user}) => ({
     isAdmin: computed(() => {
       const currentUser = user();
+
       return !!currentUser && currentUser.roles.some((r) => r.name === 'ROLE_ADMIN');
     }),
     displayName: computed(() => {
       const u = user();
       if (!u) return 'Gość';
+
       return u.firstName || u.email;
     })
   })),
@@ -53,7 +56,7 @@ export const AuthStore = signalStore(
                 });
                 router.navigate(['/']);
               },
-              error: (error: any) => {
+              error: (error: HttpErrorResponse) => {
                 const errorMessage = error.status === 401 || error.status === 403
                   ? 'Błędny login lub hasło'
                   : 'Wystąpił błąd podczas logowania';
@@ -118,14 +121,8 @@ export const AuthStore = signalStore(
       )
     ),
 
-    clearError() {
+    clearError(): void {
       patchState(store, {error: null});
     }
   })),
-
-  withHooks({
-    onInit(store) {
-      store.checkAuth();
-    }
-  })
 );
