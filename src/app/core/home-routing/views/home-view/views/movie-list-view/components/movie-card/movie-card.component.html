@@ -1,37 +1,41 @@
-<a [routerLink]="['/movie', movie().id]">
-  <div
-    class="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer border"
-    style="background-color: var(--bg-element); border-color: var(--border-color)">
+<a [routerLink]="['/movie', movie().id]" class="block no-underline h-full">
 
-    <div class="relative aspect-[2/3] overflow-hidden">
-      <img [alt]="movie().title"
-           [src]="movie().posterUrl"
-           class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500">
+  <p-card
+    class="h-full bg-app-element border border-app-border overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group rounded-lg"
+  >
 
-      <div
-        class="absolute top-2 right-2 bg-black/70 text-white text-xs font-bold px-2 py-1 rounded border border-white/20">
-        {{ movie().ageRating }}+
+    <ng-template pTemplate="header">
+      <div class="relative aspect-[2/3] overflow-hidden">
+        <img
+          [alt]="movie().title"
+          [src]="movie().posterUrl"
+          class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+        />
+
+        <p-tag
+          [value]="movie().ageRating + '+'"
+          class="absolute top-2 right-2 !bg-black/70 !text-white border border-white/20 backdrop-blur-sm"
+        />
       </div>
-    </div>
+    </ng-template>
 
-    <div class="p-4">
-      <div class="flex justify-between items-start mb-2">
-        <h3 class="text-lg font-bold" style="color: var(--text-main)">
-          {{ movie().title }}
-        </h3>
-      </div>
+    <div class="flex flex-col gap-2">
+      <h3 class="text-lg font-bold m-0 text-app-text">
+        {{ movie().title }}
+      </h3>
 
-      <p class="text-sm mb-3" style="color: var(--text-muted)">
+      <p class="text-sm m-0 mb-2 text-app-muted">
         {{ movie().genre | genreName }} | {{ movie().durationMinutes }} min
       </p>
-
-      <button
-        class="w-full py-2 text-white font-medium rounded transition-colors"
-        style="background-color: var(--primary-color)"
-        onmouseover="this.style.backgroundColor='var(--primary-hover)'"
-        onmouseout="this.style.backgroundColor='var(--primary-color)'">
-        Szczegóły
-      </button>
     </div>
-  </div>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Szczegóły"
+        [fluid]="true"
+        size="small"
+      />
+    </ng-template>
+
+  </p-card>
 </a>
