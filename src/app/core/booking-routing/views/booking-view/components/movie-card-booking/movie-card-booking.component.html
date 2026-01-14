@@ -1,58 +1,55 @@
-<div
-  class="bg-element border border-[var(--border-color)] rounded-2xl p-6 shadow-lg">
-
+<p-card class="shadow-lg bg-app-border">
   <div class="flex flex-col md:flex-row gap-6">
 
     <div class="flex justify-center md:justify-start">
-      <img
+      <p-image
         [src]="movie().posterUrl"
         [alt]="movie().title"
-        class="w-28 h-40 md:w-32 md:h-48 object-cover rounded-xl shadow-md border border-[var(--border-color)]"
-      >
+        width="128"
+        height="192"
+        imageClass="rounded-xl object-cover"
+        [preview]="true">
+      </p-image>
     </div>
 
     <div class="flex-1 flex flex-col gap-4">
 
       <div class="flex flex-row justify-between">
         <div class="flex flex-col gap-1">
-          <p class="text-xs text-[var(--text-muted)] uppercase tracking-wider font-bold">
+          <p class="text-xs text-muted uppercase tracking-wider font-bold">
             Kupujesz bilety na
           </p>
 
-          <h2 class="text-2xl md:text-3xl font-black text-main leading-tight">
+          <h2 class="text-2xl md:text-3xl font-black leading-tight">
             {{ movie().title }}
           </h2>
 
-          <div class="flex flex-wrap gap-2 text-sm text-[var(--text-muted)]">
+          <div class="flex flex-wrap gap-2 text-sm text-muted">
             <span>{{ movie().genre }}</span>
             <span>•</span>
             <span>{{ movie().durationMinutes }} min</span>
           </div>
         </div>
 
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-
-          <div class="flex flex-col ">
-            <p class="text-xs text-[var(--text-muted)] uppercase tracking-wider font-bold">
-              Sala
-            </p>
-            <p class="text-lg font-bold text-main">
-              {{ screening().theaterRoomName }}
-            </p>
-          </div>
+        <div class="flex flex-col">
+          <p class="text-xs text-muted uppercase tracking-wider font-bold">
+            Sala
+          </p>
+          <p class="text-lg font-bold">
+            {{ screening().theaterRoomName }}
+          </p>
         </div>
       </div>
 
-
-      <div class="h-px bg-[var(--border-color)] opacity-50"></div>
+      <p-divider></p-divider>
 
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
         <div class="flex flex-col">
-          <p class="text-xs text-[var(--text-muted)] uppercase tracking-wider font-bold mb-1">
+          <p class="text-xs text-muted uppercase tracking-wider font-bold mb-1">
             Data seansu
           </p>
-          <p class="text-lg font-bold text-main">
+          <p class="text-lg font-bold">
             {{ screening().startTime | date:'EEEE, d MMMM y' }}
           </p>
         </div>
@@ -62,14 +59,16 @@
             {{ screening().startTime | date:'shortTime' }}
           </div>
 
-          <button
-            class="text-xs text-[var(--text-muted)] hover:text-primary underline text-left transition-colors">
-            Zmień termin
-          </button>
+          <p-button
+            label="Zmień termin"
+            [text]="true"
+            size="small"
+            severity="secondary">
+          </p-button>
         </div>
 
       </div>
 
     </div>
   </div>
-</div>
+</p-card>
