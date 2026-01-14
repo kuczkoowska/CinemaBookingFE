@@ -1,0 +1,18 @@
+<p-card class="h-full transition-all duration-300 shadow-sm hover:shadow-md">
+  <div class="flex items-center justify-between gap-3">
+
+    <div>
+      <span class="block text-app-muted font-medium mb-1 text-xs uppercase tracking-wider">
+        {{ stat().label }}
+      </span>
+      <div class="text-2xl font-bold text-main">
+        {{ stat().value }}
+      </div>
+    </div>
+
+    <div [class]="'flex items-center justify-center w-12 h-12 rounded-lg ' + stat().bg">
+      <i [class]="'text-xl ' + stat().icon + ' ' + stat().color"></i>
+    </div>
+
+  </div>
+</p-card>

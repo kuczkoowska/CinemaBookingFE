@@ -1,1 +1,31 @@
-<p>admin-view works!</p>
+<div class="container mx-auto p-6 animate-fade-in">
+
+  <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-main tracking-tight">
+        Panel Administratora
+      </h1>
+      <p class="text-[var(--text-muted)] mt-1">
+        Witaj, <span class="font-semibold text-primary">{{ auth.displayName() }}</span>!
+        Dzisiaj jest {{ today | date:'dd MMMM yyyy' }}
+      </p>
+    </div>
+
+    <app-refresh-button/>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+    @for (stat of stats; track stat.label) {
+      <app-stats [stat]="stat"/>
+    }
+  </div>
+
+  <h2 class="text-xl font-bold text-main mb-4">Zarządzanie</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    @for (item of menuItems; track item.title) {
+      <app-menu-item [item]="item"/>
+    }
+  </div>
+</div>

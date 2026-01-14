@@ -1,0 +1,26 @@
+<a [routerLink]="[item().route]" class="no-underline block h-full">
+
+  <p-card class="h-full shadow-1 hover:shadow-4 transition-all duration-300 border-l-4"
+          [ngClass]="item().styleClass">
+
+    <ng-template pTemplate="header">
+      <div class="px-4 pt-4 flex justify-between items-start">
+        <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-2xl">
+          <i [class]="item().icon"></i>
+        </div>
+
+        <i class="pi pi-arrow-right text-primary opacity-50"></i>
+      </div>
+    </ng-template>
+
+    <div class="mt-2">
+      <h3 class="text-lg font-bold text-main mb-2">
+        {{ item().title }}
+      </h3>
+      <p class="text-sm text-app-muted line-height-3 m-0">
+        {{ item().description }}
+      </p>
+    </div>
+
+  </p-card>
+</a>
