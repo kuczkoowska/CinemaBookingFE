@@ -15,40 +15,37 @@
 
         <img [src]="movie.posterUrl"
              [alt]="movie.title"
-             class="w-48 md:w-64 rounded-lg shadow-2xl border-4 hidden md:block"
-             style="border-color: var(--bg-element)">
+             class="w-48 md:w-64 rounded-lg shadow-2xl border-4 border-app-element hidden md:block">
 
         <div class="flex-1">
 
-          <button (click)="goBack()"
-                  class="mb-4 text-sm font-bold flex items-center gap-2 transition-colors"
-                  style="color: var(--primary-color)"
-                  onmouseover="this.style.color='var(--text-main)'"
-                  onmouseout="this.style.color='var(--primary-color)'">
-            ← WRÓĆ DO REPERTUARU
-          </button>
+          <p-button
+            label="WRÓĆ DO REPERTUARU"
+            icon="pi pi-arrow-left"
+            [link]="true"
+            (onClick)="goBack()"
+            styleClass="p-0 mb-4 font-bold text-primary hover:text-primary-hover transition-colors no-underline"
+          />
 
-          <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4"
-              style="color: var(--text-main)">
+          <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 text-main">
             {{ movie.title }}
           </h1>
 
           <div class="flex flex-wrap items-center gap-4 text-sm md:text-base font-medium">
 
-            <span class="px-3 py-1 rounded-full border"
-                  style="background-color: var(--bg-element); border-color: var(--border-color); color: var(--text-main)">
+            <div class="px-3 py-1 rounded-full border border-app-border bg-app-element text-app-text">
               {{ movie.genre | genreName }}
-            </span>
+            </div>
 
-            <span style="color: var(--text-muted)">{{ movie.durationMinutes }} min</span>
-            <span style="color: var(--text-muted)">•</span>
-            <span style="color: var(--text-muted)">{{ movie.director }}</span>
-            <span style="color: var(--text-muted)">•</span>
+            <span class="text-muted-color">{{ movie.durationMinutes }} min</span>
+            <span class="text-muted-color">•</span>
+            <span class="text-muted-color">{{ movie.director }}</span>
+            <span class="text-muted-color">•</span>
 
-            <span class="px-2 py-0.5 rounded text-xs font-bold"
-                  style="background-color: var(--primary-color); color: white;">
-              {{ movie.ageRating }}+
-            </span>
+            <p-tag
+              [value]="movie.ageRating + '+'"
+              class="text-primary"
+            />
           </div>
         </div>
 
@@ -62,14 +59,16 @@
   </div>
 
 } @else if (movieStore.isLoading()) {
-  <div class="container mx-auto py-20 text-center">
-    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mx-auto mb-4"
-         style="border-color: var(--primary-color)"></div>
-    <p class="text-xl" style="color: var(--text-main)">Szukanie filmu...</p>
+
+  <div class="container mx-auto py-20 text-center flex flex-col items-center gap-4">
+    <p-progressSpinner ariaLabel="loading" class="w-12 h-12" strokeWidth="4"/>
+    <p class="text-xl text-app-text">Szukanie filmu...</p>
   </div>
+
 } @else {
-  <div class="font-bold p-10 text-center" style="color: var(--primary-color)">
-    Nie znaleziono filmu o podanym ID.
-    {{ movieStore.error() }}
+
+  <div class="container mx-auto py-10 flex justify-center">
+    <p-message severity="error">Nie znaleziono filmu o podanym ID.</p-message>
   </div>
+
 }

@@ -9,13 +9,21 @@ import {
 } from '@cinemabooking/core/home-routing/views/home-view/views/movie-details-view/components/screening-dates/screening-dates.component';
 import {movieStore} from '@cinemabooking/stores/movie-store';
 import {screeningStore} from '@cinemabooking/stores/screening-store';
+import {Button} from 'primeng/button';
+import {Tag} from 'primeng/tag';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {Message} from 'primeng/message';
 
 @Component({
   selector: 'app-movie-details-view',
   imports: [
     GenreNamePipe,
     MovieDescriptionComponent,
-    ScreeningDatesComponent
+    ScreeningDatesComponent,
+    Button,
+    Tag,
+    ProgressSpinner,
+    Message
   ],
   templateUrl: './movie-details-view.component.html',
 })

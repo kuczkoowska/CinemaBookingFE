@@ -23,7 +23,7 @@
   --bg-app: var(--palette-black-deep);
   --bg-element: #22181C;
   --text-main: var(--palette-white);
-  --text-muted: #b0b0b0;
+  --text-muted: #d0d0d0;
   --border-color: #333333;
   --bg-nav: var(--palette-black-soft);
 }
@@ -32,7 +32,7 @@
   --color-primary: var(--palette-red-vivid);
   --color-primary-hover: var(--palette-red-dark);
 
-  --color-app-bg: var(--bg-app);
+  --color-app: var(--bg-app);
   --color-app-element: var(--bg-element);
   --color-app-nav: var(--bg-nav);
   --color-app-text: var(--text-main);
