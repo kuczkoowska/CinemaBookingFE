@@ -35,6 +35,14 @@
         styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white focus:ring-2 focus:!ring-[var(----primary-color)]">
       </p-button>
 
+      <div class="text-center mt-2 text-sm text-[var(--text-muted)]">
+        Nie masz jeszcze konta?
+        <a [routerLink]="['/login/register']"
+           class="text-primary hover:text-primary-hover font-bold cursor-pointer transition-colors hover:underline ml-1">
+          Zarejestruj się
+        </a>
+      </div>
+
     </form>
   </div>
 </div>

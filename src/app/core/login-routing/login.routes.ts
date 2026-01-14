@@ -8,6 +8,10 @@ export default [
       {
         path: '',
         loadComponent: () => import('@cinemabooking/core/login-routing/views/login-view/login-view.component').then((c) => c.LoginViewComponent)
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('@cinemabooking/core/login-routing/views/register-view/register-view.component').then((c) => c.RegisterViewComponent)
       }
     ]
   },

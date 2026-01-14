@@ -3,6 +3,7 @@ import {environment} from '../../environments/environment.development';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {catchError, map, Observable, throwError} from 'rxjs';
 import {User} from '@cinemabooking/interfaces/user';
+import {RegisterDto} from '@cinemabooking/interfaces/register-dto';
 
 interface LoginResponse {
   message: string;
@@ -16,6 +17,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private loginUrl = `${environment.loginUrl}/login`;
   private logoutUrl = `${environment.loginUrl}/logout`;
+  private registerUrl = `${environment.loginUrl}/register`;
   private currentUserUrl = `${environment.apiUrl}/users/me`;
 
   public login(username: string, password: string): Observable<LoginResponse> {
@@ -40,7 +42,7 @@ export class AuthService {
         if ([401, 403, 302, 301].includes(error.status)) {
           return throwError(() => new Error('Błędny login lub hasło'));
         }
-        
+
         return throwError(() => error);
       })
     );
@@ -52,5 +54,11 @@ export class AuthService {
 
   public getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.currentUserUrl, {withCredentials: true});
+  }
+
+  public register(dto: RegisterDto): Observable<string> {
+    return this.http.post(`${this.registerUrl}`, dto, {
+      responseType: 'text'
+    });
   }
 }

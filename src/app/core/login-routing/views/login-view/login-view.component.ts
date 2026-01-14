@@ -5,6 +5,7 @@ import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
 import {authStore} from '@cinemabooking/stores/auth.store';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-login-view',
@@ -14,7 +15,8 @@ import {authStore} from '@cinemabooking/stores/auth.store';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    MessageModule
+    MessageModule,
+    RouterLink
   ],
   templateUrl: './login-view.component.html',
 })
