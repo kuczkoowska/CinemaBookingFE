@@ -22,6 +22,24 @@
         }
       </div>
 
+      @if (auth.isAdmin()) {
+        <div class="px-2 py-1">
+          <p class="px-2 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1">
+            Administracja
+          </p>
+
+          <button
+            class="w-full text-left flex items-center gap-2 px-2 py-2 text-sm font-bold text-primary hover:bg-primary/10 rounded transition-colors cursor-pointer border-none bg-transparent"
+            (click)="goToAdminPanel()">
+
+            <i class="pi pi-shield"></i>
+
+            Panel Administratora
+          </button>
+        </div>
+        <div class="h-px bg-[var(--border-color)] my-1"></div>
+      }
+
       <button
         class="w-full text-left block px-4 py-2 text-sm text-main hover:bg-gray-500/10 hover:text-primary transition-colors cursor-pointer border-none bg-transparent"
         (click)="closeMenu()">

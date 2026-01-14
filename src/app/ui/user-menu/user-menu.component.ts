@@ -1,5 +1,6 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {authStore} from '@cinemabooking/stores/auth.store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -8,6 +9,7 @@ import {authStore} from '@cinemabooking/stores/auth.store';
 })
 export class UserMenuComponent {
   public auth = inject(authStore);
+  private router = inject(Router);
 
   public isOpen = signal(false);
 
@@ -32,5 +34,10 @@ export class UserMenuComponent {
   public logout(): void {
     this.closeMenu();
     this.auth.logout();
+  }
+
+  public goToAdminPanel(): void {
+    this.closeMenu();
+    this.router.navigate(['/admin/dashboard']);
   }
 }

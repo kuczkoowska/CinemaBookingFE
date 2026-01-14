@@ -17,6 +17,10 @@ export const routes: Routes = [
         path: 'showtimes',
         loadChildren: () => import('./core/movie-list-routing/movie.routes')
       },
+      {
+        path: 'admin',
+        loadChildren: () => import('./core/admin-routing/admin.routes')
+      }
     ],
   },
   {

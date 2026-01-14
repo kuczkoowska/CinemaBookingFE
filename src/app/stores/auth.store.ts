@@ -29,8 +29,8 @@ export const authStore = signalStore(
   withComputed(({user}) => ({
     isAdmin: computed(() => {
       const currentUser = user();
-
-      return !!currentUser && currentUser.roles.some((r) => r.name === 'ROLE_ADMIN');
+      
+      return (currentUser?.roles || []).some((r) => r.name === 'ROLE_ADMIN');
     }),
     displayName: computed(() => {
       const u = user();
