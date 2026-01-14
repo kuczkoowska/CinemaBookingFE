@@ -1,24 +1,18 @@
-<div class="p-6 rounded-xl border h-fit sticky top-24"
-     style="background-color: var(--bg-element); border-color: var(--border-color)">
-  <h3 class="text-xl font-bold mb-6 flex items-center gap-2"
-      style="color: var(--text-main)">
+<div class="sticky top-24 p-6 rounded-xl border border-app-border bg-element shadow-sm h-fit">
+
+  <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-main">
     <span class="text-2xl">🎬</span>
     Repertuar
   </h3>
 
   <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
     @for (day of days; track day.date) {
-      <button
-        (click)="selectDay(day.date)"
-        [class.shadow-lg]="selectedDate() === day.date"
-        class="px-4 py-2 rounded-lg text-sm font-bold border transition-all whitespace-nowrap"
-        [style.background-color]="selectedDate() === day.date ? 'var(--primary-color)' : 'transparent'"
-        [style.color]="selectedDate() === day.date ? 'white' : 'var(--text-main)'"
-        [style.border-color]="selectedDate() === day.date ? 'var(--primary-color)' : 'var(--border-color)'"
-        onmouseover="if(this.style.backgroundColor !== 'var(--primary-color)') this.style.borderColor='var(--primary-color)'"
-        onmouseout="if(this.style.backgroundColor !== 'var(--primary-color)') this.style.borderColor='var(--border-color)'">
-        {{ day.label }}
-      </button>
+      <p-button
+        [label]="day.label"
+        [outlined]="selectedDate() !== day.date"
+        [severity]="selectedDate() === day.date ? 'primary' : 'secondary'"
+        (onClick)="selectDay(day.date)"
+      />
     }
   </div>
 
@@ -26,17 +20,23 @@
     <div class="flex flex-col gap-3">
       @for (screening of filteredScreenings(); track screening.id) {
 
-        <button (click)="onScreeningClick(screening.id)"
-                class="flex justify-between items-center p-4 rounded bg-[var(--bg-app)] border border-[var(--border-color)] hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer text-left w-full">
+        <button
+          pRipple
+          (click)="onScreeningClick(screening.id)"
+          class="flex justify-between items-center p-4 rounded-lg border border-app-border hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer text-left w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-app-element"
+        >
 
           <div>
-            <span class="text-xl font-bold text-[var(--text-main)] block group-hover:text-primary transition-colors">
+            <span class="text-xl font-bold text-main block group-hover:text-primary transition-colors">
               {{ screening.startTime | date:'HH:mm' }}
             </span>
-            <span class="text-xs text-[var(--text-muted)]">{{ screening.theaterRoomName }}</span>
+            <span class="text-xs text-muted-color font-medium">
+              {{ screening.theaterRoomName }}
+            </span>
           </div>
 
-          <span class="text-xs text-primary font-bold opacity-0 group-hover:opacity-100 uppercase tracking-wider">
+          <span
+            class="text-xs text-primary font-bold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 uppercase tracking-wider">
              Wybierz
           </span>
         </button>
@@ -44,8 +44,9 @@
       }
     </div>
   } @else {
-    <div class="py-8 text-center" style="color: var(--text-muted)">
-      Brak seansów w wybranym dniu
+    <div class="py-12 text-center text-app-muted flex flex-col items-center gap-2">
+      <i class="pi pi-calendar-times text-2xl opacity-50"></i>
+      <span>Brak seansów w wybranym dniu</span>
     </div>
   }
 </div>

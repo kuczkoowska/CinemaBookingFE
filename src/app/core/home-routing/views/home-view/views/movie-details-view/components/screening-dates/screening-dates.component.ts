@@ -4,11 +4,13 @@ import {DatePipe} from '@angular/common';
 import {DatePickerModule} from 'primeng/datepicker';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
+import {Button} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-screening-dates',
   imports: [
-    DatePipe, DatePickerModule, FormsModule
+    DatePipe, DatePickerModule, FormsModule, Button, Ripple
   ],
   templateUrl: './screening-dates.component.html',
 })
