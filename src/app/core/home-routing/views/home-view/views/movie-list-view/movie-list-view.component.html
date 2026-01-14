@@ -1,8 +1,7 @@
 <div class="container mx-auto px-4 py-8">
 
-  <h1 class="text-3xl font-bold mb-8 border-l-4 border-primary pl-4"
-      style="color: var(--text-main)">
-    Repertuar Kinowy
+  <h1 class="text-3xl text-main font-bold mb-8 border-l-4 border-primary pl-4">
+    Wszystkie nasze filmy
   </h1>
 
   <div class="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8 items-start">
@@ -29,10 +28,9 @@
           </div>
         } @else {
           <div
-            class="flex flex-col items-center justify-center py-20 rounded-lg border border-dashed"
-            style="background-color: var(--bg-element); border-color: var(--border-color)">
-            <p class="text-xl font-bold mb-2" style="color: var(--text-main)">Brak filmów</p>
-            <p style="color: var(--text-muted)">Spróbuj zmienić kryteria wyszukiwania.</p>
+            class="flex flex-col items-center justify-center py-20 rounded-lg border border-dashed bg-app-element border-app-border">
+            <p class="text-xl font-bold mb-2 text-app-text">Brak filmów</p>
+            <p class="text-app-muted">Spróbuj zmienić kryteria wyszukiwania.</p>
           </div>
         }
 
