@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
+import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
 import {
   MovieCardComponent
 } from '@cinemabooking/core/home-routing/views/home-view/views/movie-list-view/components/movie-card/movie-card.component';

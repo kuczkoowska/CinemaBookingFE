@@ -1,35 +1,39 @@
 import {Component, effect, inject, input, output} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {debounceTime, distinctUntilChanged} from 'rxjs';
-import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
-import {MovieGenre} from '@cinemabooking/enums/movie-genre';
-import {GenreNamePipe} from '@cinemabooking/pipes/genre-name.pipe';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {isEqual} from 'lodash-es';
+import {InputTextModule} from 'primeng/inputtext';
+import {CheckboxModule} from 'primeng/checkbox';
+import {ButtonModule} from 'primeng/button';
+import {SelectModule} from 'primeng/select';
+import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
+import {GENRE_SELECT_OPTIONS} from '@cinemabooking/const/movie-genre.constants';
 
 @Component({
   selector: 'app-movie-filter',
   imports: [
-    FormsModule,
     ReactiveFormsModule,
-    GenreNamePipe
+    InputTextModule,
+    CheckboxModule,
+    ButtonModule,
+    SelectModule
   ],
   templateUrl: './movie-filter.component.html',
 })
 export class MovieFilterComponent {
-  public currentFilters = input<MovieFilters>();
+  private readonly fb = inject(FormBuilder);
+  protected readonly genreOptions = GENRE_SELECT_OPTIONS;
 
-  public genreCodes = Object.values(MovieGenre);
+  public readonly currentFilters = input<MovieFilters>();
+  public readonly filterChange = output<MovieFilters>();
 
-  public filterChange = output<MovieFilters>();
-
-  private fb = inject(FormBuilder);
-
-  public filterForm = this.fb.group({
+  protected readonly filterForm = this.fb.group({
     searchQuery: [''],
     genre: [''],
     hideAdult: [false]
   });
+
 
   public constructor() {
     effect(() => {

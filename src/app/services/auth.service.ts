@@ -3,7 +3,7 @@ import {environment} from '../../environments/environment.development';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {catchError, map, Observable, throwError} from 'rxjs';
 import {User} from '@cinemabooking/interfaces/user';
-import {RegisterDto} from '@cinemabooking/interfaces/register-dto';
+import {RegisterDto} from '@cinemabooking/interfaces/dto/register-dto';
 
 interface LoginResponse {
   message: string;

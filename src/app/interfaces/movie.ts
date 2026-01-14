@@ -9,3 +9,6 @@ export interface Movie {
   readonly posterUrl: string;
   readonly trailerUrl?: string;
 }
+
+
+export type CreateMovieRequest = Omit<Movie, 'id'>;

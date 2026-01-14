@@ -1,64 +1,66 @@
 <div class="relative">
-
-  <button (click)="toggleMenu()"
-          class="w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center hover:bg-primary-hover transition-colors shadow-md border-2 border-transparent hover:border-white/20 uppercase"
+  <p-button
+    (click)="menu.toggle($event)"
+    [rounded]="true"
   >
     {{ initials() }}
-  </button>
+  </p-button>
 
-  @if (isOpen()) {
-    <button
-      class="fixed inset-0 z-40 w-full h-full cursor-default bg-transparent border-none"
-      (click)="closeMenu()">
-    </button>
-
-    <div
-      class="absolute right-0 mt-3 w-56 bg-element border border-[var(--border-color)] rounded-lg shadow-xl z-50 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-
-      <div class="px-4 py-3 border-b border-[var(--border-color)] mb-1">
-        <p class="text-sm font-bold text-main truncate">{{ auth.displayName() }}</p>
-        @if (auth.user()?.email) {
-          <p class="text-xs text-[var(--text-muted)] truncate">{{ auth.user()?.email }}</p>
-        }
+  <p-menu
+    #menu
+    [model]="menuItems()"
+    [popup]="true"
+    appendTo="body"
+    styleClass="w-64 mt-2"
+  >
+    <ng-template pTemplate="start">
+      <div
+        class="flex flex-col gap-1 p-3 mb-1 border-b border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-600">
+        <span class="font-bold text-sm text-surface-900 dark:text-surface-0 truncate">
+          {{ auth.displayName() }}
+        </span>
+        <span class="text-xs text-surface-500 dark:text-surface-400 truncate">
+          {{ auth.user()?.email }}
+        </span>
       </div>
+    </ng-template>
 
-      @if (auth.isAdmin()) {
-        <div class="px-2 py-1">
-          <p class="px-2 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1">
-            Administracja
-          </p>
+    <ng-template pTemplate="item" let-item>
 
+      @if (item.separator) {
+        <div class="h-px bg-surface-200 dark:bg-surface-700 my-1 mx-3"></div>
+      } @else {
+        @if (item.routerLink) {
+          <a [routerLink]="item.routerLink"
+             class="flex items-center p-3 duration-200 rounded-md mx-1">
+
+            <span [class]="item.icon" class="mr-3 text-primary"></span>
+
+            <span class="flex-1 text-sm font-medium">{{ item.label }}</span>
+
+            @if (item.badge) {
+              <span class="bg-primary text-primary-contrast text-xs font-bold rounded-full px-2 py-0.5 ml-auto">
+                 {{ item.badge }}
+               </span>
+            }
+          </a>
+        } @else {
           <button
-            class="w-full text-left flex items-center gap-2 px-2 py-2 text-sm font-bold text-primary hover:bg-primary/10 rounded transition-colors cursor-pointer border-none bg-transparent"
-            (click)="goToAdminPanel()">
+            type="button"
+            (click)="item.command ? item.command() : null"
+            class="w-full text-left flex items-center p-3 cursor-pointer">
 
-            <i class="pi pi-shield"></i>
+            <span [class]="item.icon" class="mr-3 text-primary"></span>
+            <span class="flex-1 text-sm font-medium">{{ item.label }}</span>
 
-            Panel Administratora
+            @if (item.badge) {
+              <span class="bg-primary text-xs">
+                  {{ item.badge }}
+              </span>
+            }
           </button>
-        </div>
-        <div class="h-px bg-[var(--border-color)] my-1"></div>
+        }
       }
-
-      <button
-        class="w-full text-left block px-4 py-2 text-sm text-main hover:bg-gray-500/10 hover:text-primary transition-colors cursor-pointer border-none bg-transparent"
-        (click)="closeMenu()">
-        Moje bilety
-      </button>
-
-      <button
-        class="w-full text-left block px-4 py-2 text-sm text-main hover:bg-gray-500/10 hover:text-primary transition-colors cursor-pointer border-none bg-transparent"
-        (click)="closeMenu()">
-        Ustawienia konta
-      </button>
-
-      <div class="h-px bg-[var(--border-color)] my-1"></div>
-
-      <button
-        (click)="logout()"
-        class="w-full text-left block px-4 py-2 text-sm text-[var(--text-muted)] hover:bg-gray-500/10 hover:text-red-500 transition-colors cursor-pointer border-none bg-transparent">
-        Wyloguj się
-      </button>
-    </div>
-  }
+    </ng-template>
+  </p-menu>
 </div>

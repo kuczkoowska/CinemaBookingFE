@@ -7,7 +7,7 @@ import {ButtonModule} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
 import {AuthService} from '@cinemabooking/services/auth.service';
 import {passwordMatchValidator} from '@cinemabooking/validators/password.validator';
-import {RegisterDto} from '@cinemabooking/interfaces/register-dto';
+import {RegisterDto} from '@cinemabooking/interfaces/dto/register-dto';
 import {finalize} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 

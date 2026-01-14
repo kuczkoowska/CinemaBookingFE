@@ -5,7 +5,7 @@ import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {MovieService} from '@cinemabooking/services/movie.service';
 import {Movie} from '@cinemabooking/interfaces/movie';
-import {MovieFilters} from '@cinemabooking/interfaces/movie-filters';
+import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
 import {HttpErrorResponse} from '@angular/common/http';
 
 interface MovieState {

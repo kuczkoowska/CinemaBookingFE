@@ -1,43 +1,41 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
+import {Router, RouterModule} from '@angular/router';
+import {MenuModule} from 'primeng/menu';
 import {authStore} from '@cinemabooking/stores/auth.store';
-import {Router} from '@angular/router';
+import {getUserMenuItems} from '@cinemabooking/const/user-menu.constants';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-user-menu',
-  imports: [],
+  standalone: true,
+  imports: [
+    MenuModule,
+    RouterModule,
+    Button
+  ],
   templateUrl: './user-menu.component.html',
 })
 export class UserMenuComponent {
   public auth = inject(authStore);
   private router = inject(Router);
 
-  public isOpen = signal(false);
-
   public initials = computed(() => {
     const name = this.auth.displayName() || '';
     const parts = name.split(' ');
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
 
     return name.slice(0, 2).toUpperCase();
   });
 
-  public toggleMenu(): void {
-    this.isOpen.update((v) => !v);
-  }
+  public menuItems = computed(() =>
+    getUserMenuItems(this.auth.isAdmin(), {
+      onLogout: () => {
+        this.auth.logout();
+      },
 
-  public closeMenu(): void {
-    this.isOpen.set(false);
-  }
-
-  public logout(): void {
-    this.closeMenu();
-    this.auth.logout();
-  }
-
-  public goToAdminPanel(): void {
-    this.closeMenu();
-    this.router.navigate(['/admin/dashboard']);
-  }
+      onAdminPanel: () => {
+        this.router.navigate(['/admin/dashboard']);
+      },
+    })
+  );
 }

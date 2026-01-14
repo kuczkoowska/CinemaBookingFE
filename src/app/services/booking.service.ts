@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 import {LockSeatsDto, SeatWithStatus} from '@cinemabooking/interfaces/seat';
 import {Ticket} from '@cinemabooking/interfaces/ticket';
-import {BookingDto} from '@cinemabooking/interfaces/booking-dto';
+import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {MovieService} from '@cinemabooking/services/movie.service';
 import {Booking} from '@cinemabooking/interfaces/booking';

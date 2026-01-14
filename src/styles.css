@@ -1,67 +1,54 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 @import "primeicons/primeicons.css";
-@import "tailwindcss";
-@import "tailwindcss-primeui";
 
-@theme {
-  --color-primary: var(--primary-color);
-  --color-primary-hover: var(--primary-hover);
-
-  --color-app: var(--bg-app);
-  --color-element: var(--bg-element);
-
-  --color-main: var(--text-main);
-  --color-main-reverse: var(--text-main-reverse);
-  --color-muted: var(--text-muted);
-
-  --color-border: var(--border-color);
-}
+@layer theme, base, primeng, tailwind-utilities;
 
 :root {
-  --palette-black-deep: #1E1A1D;
-  --palette-black-soft: #22181C;
-  --palette-white: #EDF2F4;
-  --palette-pure-white: #ffffff;
   --palette-red-vivid: #EF233C;
   --palette-red-dark: #D90429;
+  --palette-black-deep: #1E1A1D;
+  --palette-black-soft: #090909;
+  --palette-white: #EDF2F4;
 
-  --palette-gray-light: #e0e0e0;
-  --palette-gray-dark: #333333;
-}
-
-:root {
-  --bg-app: var(--palette-black-deep);
-  --bg-element: var(--palette-black-soft);
-
-  --text-main: var(--palette-white);
-  --text-main-reverse: var(--palette-black-deep);
-  --text-muted: #b0b0b0;
-
-  --primary-color: var(--palette-red-vivid);
-  --primary-hover: var(--palette-red-dark);
-
-  --border-color: var(--palette-gray-dark);
-}
-
-body.light-theme {
   --bg-app: var(--palette-white);
-  --bg-element: var(--palette-pure-white);
-
+  --bg-element: #ffffff;
   --text-main: var(--palette-black-deep);
-  --text-main-reverse: var(--palette-white);
   --text-muted: #555555;
-
-  --border-color: var(--palette-gray-light);
-
+  --border-color: #e0e0e0;
+  --bg-nav: #cbcbcb;
 }
 
-body {
-  margin: 0;
-  font-family: Roboto, sans-serif;
+.dark-theme {
+  --bg-app: var(--palette-black-deep);
+  --bg-element: #22181C;
+  --text-main: var(--palette-white);
+  --text-muted: #b0b0b0;
+  --border-color: #333333;
+  --bg-nav: var(--palette-black-soft);
+}
 
-  background-color: var(--bg-app);
-  color: var(--text-main);
+@theme {
+  --color-primary: var(--palette-red-vivid);
+  --color-primary-hover: var(--palette-red-dark);
 
-  transition: background-color 0.3s, color 0.3s;
+  --color-app-bg: var(--bg-app);
+  --color-app-element: var(--bg-element);
+  --color-app-nav: var(--bg-nav);
+  --color-app-text: var(--text-main);
+  --color-app-muted: var(--text-muted);
+  --color-app-border: var(--border-color);
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  nav {
+    background-color: var(--bg-nav) !important;
+    color: var(--text-main);
+  }
 }

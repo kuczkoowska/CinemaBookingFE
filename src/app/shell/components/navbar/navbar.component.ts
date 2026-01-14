@@ -1,10 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {DOCUMENT, NgOptimizedImage} from '@angular/common';
+import {DOCUMENT} from '@angular/common';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {NavLink} from '@cinemabooking/interfaces/nav-link';
+import {NavLink} from '@cinemabooking/interfaces/other/nav-link';
 import {authStore} from '@cinemabooking/stores/auth.store';
 import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
+import {ThemeService} from '@cinemabooking/services/theme.service';
+import {Button} from 'primeng/button';
+import {Tooltip} from 'primeng/tooltip';
 
 
 @Component({
@@ -12,14 +15,16 @@ import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgOptimizedImage,
-    UserMenuComponent
+    UserMenuComponent,
+    Button,
+    Tooltip
   ],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
   protected readonly AppRoute = AppRoute;
   private document = inject(DOCUMENT);
+  protected themeService = inject(ThemeService);
 
   public auth = inject(authStore);
 
