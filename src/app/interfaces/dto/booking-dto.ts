@@ -1,6 +1,17 @@
+import {TicketDto} from '@cinemabooking/interfaces/dto/ticket-dto';
+
 export interface BookingDto {
   readonly id: number;
+  readonly bookingTime: string;
   readonly status: string;
-  readonly totalPrice: number;
+  readonly totalAmount: number;
+
+  readonly movieTitle: string;
+  readonly theaterRoomName: string;
+  readonly screeningTime: string;
+
+  readonly tickets: TicketDto[];
   readonly expirationTime: string;
+
 }
+

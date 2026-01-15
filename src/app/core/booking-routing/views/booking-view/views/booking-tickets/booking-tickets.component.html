@@ -1,0 +1,84 @@
+<div class="max-w-3xl mx-auto animate-fade-in">
+
+  <button
+    (click)="goBack()"
+    class="mb-6 text-primary font-bold hover:underline bg-transparent border-none cursor-pointer flex gap-2 items-center transition-colors">
+    <i class="pi pi-arrow-left"></i> Zmień miejsca
+  </button>
+
+  <app-expiration-timer/>
+
+  <div class="bg-element border border-[var(--border-color)] rounded-xl p-6 shadow-sm">
+
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold text-main m-0">Skonfiguruj bilety</h3>
+      <span class="text-sm text-[var(--text-muted)]">
+        Rezerwacja #{{ store.activeBooking()?.id }}
+      </span>
+    </div>
+
+    <div class="flex flex-col gap-4">
+
+      @for (ticket of store.ticketsToDisplay(); track ticket.id) {
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[var(--bg-app)] rounded-lg border border-[var(--border-color)] gap-4 transition-all hover:border-primary/50">
+
+          <div class="flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-lg border border-primary/20">
+              {{ ticket.seatNumber }}
+            </div>
+
+            <div>
+              <p class="text-xs uppercase text-[var(--text-muted)] font-bold tracking-wider mb-1">
+                Rząd {{ ticket.row }}
+              </p>
+              <div class="flex items-center gap-2">
+                <span class="text-main font-bold">Bilet #{{ ticket.id }}</span>
+                <i class="pi pi-ticket text-primary text-xs"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full md:w-64">
+            <p-autocomplete
+              [dropdown]="true"
+              [suggestions]="ticketOptions"
+              fluid
+              placeholder="Wybierz typ biletu"
+
+              [ngModel]="store.ticketSelections()[ticket.id] || ticket.type"
+              (completeMethod)="store.updateLocalTicketType(ticket.id, $event)">
+            </p-autocomplete>
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <div
+      class="mt-8 pt-6 border-t border-[var(--border-color)] flex flex-col sm:flex-row justify-between items-center gap-4">
+
+      <div class="text-center sm:text-left">
+        <p class="text-[var(--text-muted)] text-sm mb-1 uppercase tracking-wider">Do zapłaty</p>
+        <div class="flex items-baseline gap-2">
+          <p class="text-3xl font-bold text-primary">
+            {{ store.activeBooking()?.totalAmount | number:'1.2-2' }} <span class="text-lg text-main">PLN</span>
+          </p>
+          <i class="pi pi-info-circle text-[var(--text-muted)]"
+             pTooltip="Cena zostanie zaktualizowana po zatwierdzeniu"></i>
+        </div>
+      </div>
+
+      <p-button
+        label="Zatwierdź i Płać"
+        icon="pi pi-check"
+        iconPos="right"
+        [loading]="store.isLoading()"
+        (onClick)="store.submitTicketTypesAndPay()"
+        styleClass="font-bold py-3 px-8 text-lg shadow-lg w-full sm:w-auto">
+      </p-button>
+    </div>
+
+  </div>
+</div>

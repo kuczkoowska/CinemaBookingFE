@@ -4,7 +4,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
 import {MessageModule} from 'primeng/message';
-import {authStore} from '@cinemabooking/stores/auth.store';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {RouterLink} from '@angular/router';
 
 @Component({
@@ -22,7 +22,7 @@ import {RouterLink} from '@angular/router';
 })
 export class LoginViewComponent {
   private fb = inject(FormBuilder);
-  public authStore = inject(authStore);
+  public authStore = inject(AuthStore);
 
   public loginForm = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.email]],

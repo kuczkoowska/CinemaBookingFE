@@ -1,0 +1,25 @@
+<div class="flex flex-col justify-center  items-center gap-4 overflow-x-auto pb-4">
+
+
+  @for (row of rows(); track row.rowNumber) {
+    <div class="flex items-center gap-3">
+
+      <app-row-numbers [row]="row.rowNumber"/>
+      <!--      tutaj z right do poprawy-->
+
+      <div class="flex gap-2">
+        @for (seat of row.seats; track seat.id) {
+          <app-seat [seat]="seat"></app-seat>
+        }
+      </div>
+
+      <app-row-numbers [row]="row.rowNumber"/>
+    </div>
+  }
+</div>
+
+<app-opis/>
+
+@if (store.selectedSeatIds().length > 0) {
+  <app-seat-summary/>
+}

@@ -61,7 +61,7 @@
 } @else if (movieStore.isLoading()) {
 
   <div class="container mx-auto py-20 text-center flex flex-col items-center gap-4">
-    <p-progressSpinner ariaLabel="loading" class="w-12 h-12" strokeWidth="4"/>
+    <app-spinner [label]="'ładowanie filmu...'"/>
     <p class="text-xl text-app-text">Szukanie filmu...</p>
   </div>
 

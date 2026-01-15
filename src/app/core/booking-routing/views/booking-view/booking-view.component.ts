@@ -2,21 +2,23 @@ import {Component, inject, OnInit} from '@angular/core';
 import {
   MovieCardBookingComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/components/movie-card-booking/movie-card-booking.component';
-import {ActivatedRoute} from '@angular/router';
-import {bookingStore} from '@cinemabooking/stores/booking-store';
-import {ProgressSpinner} from 'primeng/progressspinner';
+import {ActivatedRoute, RouterOutlet} from '@angular/router';
+import {BookingStore} from '@cinemabooking/stores/booking-store';
+import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 
 @Component({
   selector: 'app-booking-view',
   imports: [
     MovieCardBookingComponent,
-    ProgressSpinner,
+    RouterOutlet,
+    SpinnerComponent,
+
   ],
-  providers: [bookingStore],
+  providers: [BookingStore],
   templateUrl: './booking-view.component.html',
 })
 export class BookingViewComponent implements OnInit {
-  protected readonly store = inject(bookingStore);
+  protected readonly store = inject(BookingStore);
   private readonly route = inject(ActivatedRoute);
 
   public ngOnInit(): void {

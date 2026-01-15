@@ -1,21 +1,16 @@
 <div class="container mx-auto p-4">
 
   @if (store.isLoading()) {
-    <div class="card flex justify-center">
-      <p-progress-spinner strokeWidth="8" fill="transparent"
-                          [style]="{ width: '50px', height: '50px' }"
-                          ariaLabel="Ładowanie danych rezerwacji"/>
-    </div>
+    <app-spinner [label]="'Ładowanie danych rezerwacji'"/>
   } @else {
     @if (store.movie() && store.screening()) {
+      <div class="flex gap-6 flex-col justify-center">
+        <app-movie-card-booking
+          [movie]="store.movie()!"
+          [screening]="store.screening()!">
+        </app-movie-card-booking>
 
-      <app-movie-card-booking
-        [movie]="store.movie()!"
-        [screening]="store.screening()!">
-      </app-movie-card-booking>
-
-      <div class="mt-8">
-        <h2 class="text-xl font-bold">Wybierz miejsce:</h2>
+        <router-outlet/>
       </div>
 
     } @else {

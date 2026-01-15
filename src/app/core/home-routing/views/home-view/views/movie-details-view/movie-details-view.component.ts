@@ -11,8 +11,8 @@ import {movieStore} from '@cinemabooking/stores/movie-store';
 import {screeningStore} from '@cinemabooking/stores/screening-store';
 import {Button} from 'primeng/button';
 import {Tag} from 'primeng/tag';
-import {ProgressSpinner} from 'primeng/progressspinner';
 import {Message} from 'primeng/message';
+import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 
 @Component({
   selector: 'app-movie-details-view',
@@ -22,8 +22,8 @@ import {Message} from 'primeng/message';
     ScreeningDatesComponent,
     Button,
     Tag,
-    ProgressSpinner,
-    Message
+    Message,
+    SpinnerComponent
   ],
   templateUrl: './movie-details-view.component.html',
 })

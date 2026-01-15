@@ -3,11 +3,11 @@ import {forkJoin, map, Observable, switchMap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 import {LockSeatsDto, SeatWithStatus} from '@cinemabooking/interfaces/seat';
-import {Ticket} from '@cinemabooking/interfaces/ticket';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {MovieService} from '@cinemabooking/services/movie.service';
 import {Booking} from '@cinemabooking/interfaces/booking';
+import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 
 
 @Injectable({
@@ -20,11 +20,11 @@ export class BookingService {
   private screeningService = inject(ScreeningService);
   private movieService = inject(MovieService);
 
-  public lockSeats(dto: LockSeatsDto): Observable<number> {
-    return this.http.post<number>(`${this.apiUrl}/lock`, dto);
+  public lockSeats(dto: LockSeatsDto): Observable<BookingDto> {
+    return this.http.post<BookingDto>(`${this.apiUrl}/lock`, dto);
   }
 
-  public updateTicketTypes(bookingId: number, tickets: Ticket[]): Observable<BookingDto> {
+  public updateTicketTypes(bookingId: number, tickets: UpdateTicketTypeDto[]): Observable<BookingDto> {
     return this.http.put<BookingDto>(`${this.apiUrl}/${bookingId}/tickets`, tickets);
   }
 
