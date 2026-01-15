@@ -6,4 +6,5 @@ export interface Booking {
   readonly movie: Movie,
   readonly screening: Screening,
   readonly seats: SeatWithStatus[];
+  readonly prices: Record<string, number>;
 }

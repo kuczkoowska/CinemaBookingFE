@@ -8,7 +8,7 @@ import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {MovieService} from '@cinemabooking/services/movie.service';
 import {Booking} from '@cinemabooking/interfaces/booking';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
-
+import {TicketPrice} from '@cinemabooking/interfaces/ticket';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +16,14 @@ import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 export class BookingService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/bookings`;
+  private pricesUrl = `${environment.apiUrl}/other`;
 
   private screeningService = inject(ScreeningService);
   private movieService = inject(MovieService);
+
+  public getPrices(): Observable<TicketPrice[]> {
+    return this.http.get<TicketPrice[]>(this.pricesUrl);
+  }
 
   public lockSeats(dto: LockSeatsDto): Observable<BookingDto> {
     return this.http.post<BookingDto>(`${this.apiUrl}/lock`, dto);
@@ -46,18 +51,26 @@ export class BookingService {
 
         return forkJoin({
           movie: this.movieService.getMovieById(screening.movieId),
-          seats: this.screeningService.getSeatsByScreeningId(screeningId)
+          seats: this.screeningService.getSeatsByScreeningId(screeningId),
+          prices: this.getPrices()
         }).pipe(
           map((result) => {
+
             const mappedSeats: SeatWithStatus[] = result.seats.map((seat) => ({
               ...seat,
               isSelected: false
             }));
 
+            const priceMap: Record<string, number> = result.prices.reduce((acc, curr) => {
+              acc[curr.ticketType] = curr.price;
+              return acc;
+            }, {} as Record<string, number>);
+
             return {
               movie: result.movie,
               screening: screening,
-              seats: mappedSeats
+              seats: mappedSeats,
+              prices: priceMap
             };
           })
         );

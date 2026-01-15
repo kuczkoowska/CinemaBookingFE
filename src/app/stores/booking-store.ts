@@ -5,16 +5,16 @@ import {Screening} from '@cinemabooking/interfaces/screening';
 import {Seat, SeatWithStatus} from '@cinemabooking/interfaces/seat';
 import {BookingService} from '@cinemabooking/services/booking.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {pipe, switchMap, tap} from 'rxjs';
+import {Observable, pipe, switchMap, tap, throwError} from 'rxjs';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
-import {AuthStore} from '@cinemabooking/stores/auth.store';
 
 interface BookingState {
   activeBooking: BookingDto | null;
   movie: Movie | null;
   screening: Screening | null;
   seats: Seat[];
+  prices: Record<string, number>;
   selectedSeatIds: number[];
   ticketSelections: Record<number, string>;
   isLoading: boolean;
@@ -27,6 +27,7 @@ const initialState: BookingState = {
   movie: null,
   screening: null,
   seats: [],
+  prices: {},
   selectedSeatIds: [],
   ticketSelections: {},
   isLoading: true,
@@ -37,7 +38,7 @@ const initialState: BookingState = {
 export const BookingStore = signalStore(
   withState(initialState),
 
-  withComputed(({seats, selectedSeatIds, activeBooking, ticketSelections, expirationTime}) => ({
+  withComputed(({seats, selectedSeatIds, activeBooking, ticketSelections, expirationTime, prices}) => ({
 
     seatsWithStatus: computed(() => {
       const selectedSet = new Set(selectedSeatIds());
@@ -49,7 +50,6 @@ export const BookingStore = signalStore(
 
     rows: computed(() => {
       const selectedSet = new Set(selectedSeatIds());
-
       const rowNumbers = [...new Set(seats().map(s => s.rowNumber))].sort((a, b) => a - b);
 
       return rowNumbers.map(rowNum => {
@@ -66,13 +66,15 @@ export const BookingStore = signalStore(
     }),
 
     totalPrice: computed(() => {
-      const basePrice = 25;
-      const reducedPrice = basePrice - 7;
-
+      const priceMap = prices();
       let total = 0;
+
       for (const seatId of selectedSeatIds()) {
-        const type = ticketSelections()[seatId] || 'NORMAL';
-        total += (type === 'NORMAL' ? basePrice : reducedPrice);
+        const type = ticketSelections()[seatId] || 'NORMALNY';
+
+        const price = priceMap[type];
+
+        total += price;
       }
       return total;
     }),
@@ -102,12 +104,11 @@ export const BookingStore = signalStore(
     isExpired: computed(() => {
       const exp = expirationTime();
       if (!exp) return false;
-
       return new Date().getTime() > new Date(exp).getTime();
     }),
   })),
 
-  withMethods((store, bookingService = inject(BookingService), authStore = inject(AuthStore)) => ({
+  withMethods((store, bookingService = inject(BookingService)) => ({
 
     toggleSeat(seatId: number) {
       const currentIds = store.selectedSeatIds();
@@ -125,7 +126,6 @@ export const BookingStore = signalStore(
     lockSeats() {
       const seatIds = store.selectedSeatIds();
       const screening = store.screening();
-      const userId = authStore.user()?.id;
 
       if (seatIds.length === 0 || !screening) {
         return;
@@ -133,7 +133,6 @@ export const BookingStore = signalStore(
 
       const lockDto = {
         screeningId: screening.id,
-        userId: userId,
         seatIds: seatIds
       };
 
@@ -141,6 +140,7 @@ export const BookingStore = signalStore(
 
       bookingService.lockSeats(lockDto).subscribe({
         next: (bookingDto) => {
+          console.log(bookingDto)
           patchState(store, {
             isLoading: false,
             activeBooking: bookingDto,
@@ -148,7 +148,7 @@ export const BookingStore = signalStore(
           });
         },
         error: () => {
-          patchState(store, {error: "nie udalo sie"})
+          patchState(store, {error: "nie udalo sie", isLoading: false});
         }
       })
     },
@@ -159,51 +159,73 @@ export const BookingStore = signalStore(
       patchState(store, {ticketSelections: current});
     },
 
-    submitTicketTypesAndPay() {
-      const booking = store.activeBooking();
-      if (!booking) return;
-
-      const updates: UpdateTicketTypeDto[] = booking.tickets.map(ticket => {
-        const selectedType = store.ticketSelections()[ticket.id] || ticket.type;
-
-        return {
-          ticketId: ticket.id,
-          newType: selectedType
-        };
-      });
-
-      patchState(store, {isLoading: true});
-
-      bookingService.updateTicketTypes(booking.id, updates).subscribe({
-        next: (updatedBooking) => {
-          patchState(store, {
-            activeBooking: updatedBooking,
-            isLoading: false
-          });
-        },
-        error: () => {
-          patchState(store, {isLoading: false, error: 'Błąd aktualizacji cen'});
-        }
-      });
-    },
-
-    confirmBooking() {
+    cancelAndGoBack() {
       const booking = store.activeBooking();
 
       if (!booking) {
         return;
       }
 
-      const bookingId = booking.id;
-
       patchState(store, {isLoading: true});
-      bookingService.confirmBooking(bookingId).subscribe({
+
+      bookingService.cancelBooking(booking.id).subscribe({
         next: () => {
-          patchState(store, {isLoading: false});
+          patchState(store, {
+            activeBooking: null,
+            expirationTime: null,
+            isLoading: false,
+            ticketSelections: {}
+          });
+
+        },
+        error: (err) => {
+          console.error('Błąd anulowania:', err);
+          patchState(store, {activeBooking: null, isLoading: false});
         }
-      })
+      });
     },
 
+    cancelBookingSilent(bookingId: number) {
+      bookingService.cancelBooking(bookingId).subscribe();
+
+      patchState(store, {
+        activeBooking: null,
+        expirationTime: null,
+        ticketSelections: {}
+      });
+    },
+
+    submitTicketTypesAndPay(): Observable<any> {
+      const booking = store.activeBooking();
+      if (!booking) {
+        return throwError(() => new Error('Brak aktywnej rezerwacji'));
+      }
+
+      const updates: UpdateTicketTypeDto[] = booking.tickets.map(ticket => {
+        const selectedType = store.ticketSelections()[ticket.id] || ticket.type;
+        return {ticketId: ticket.id, newType: selectedType};
+      });
+
+      patchState(store, {isLoading: true});
+
+      return bookingService.updateTicketTypes(booking.id, updates).pipe(
+        switchMap((updatedBooking) => {
+          console.log("Ceny zaktualizowane. Nowa suma:", updatedBooking.totalAmount);
+          patchState(store, {activeBooking: updatedBooking});
+          return bookingService.confirmBooking(updatedBooking.id);
+        }),
+        tap({
+          next: () => {
+            patchState(store, {isLoading: false});
+            console.log("Rezerwacja opłacona i zakończona!");
+          },
+          error: (err) => {
+            console.error(err);
+            patchState(store, {isLoading: false, error: 'Błąd podczas przetwarzania rezerwacji'});
+          }
+        })
+      );
+    },
 
     loadBookingData: rxMethod<number>(
       pipe(
@@ -215,6 +237,7 @@ export const BookingStore = signalStore(
                 movie: data.movie,
                 screening: data.screening,
                 seats: data.seats,
+                prices: data.prices,
                 isLoading: false
               });
             })
