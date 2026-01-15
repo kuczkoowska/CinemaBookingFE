@@ -1,7 +1,7 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, inject, viewChild} from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
-import {MenuModule} from 'primeng/menu';
-import {authStore} from '@cinemabooking/stores/auth.store';
+import {Menu, MenuModule} from 'primeng/menu';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {getUserMenuItems} from '@cinemabooking/const/user-menu.constants';
 import {Button} from 'primeng/button';
 
@@ -16,7 +16,7 @@ import {Button} from 'primeng/button';
   templateUrl: './user-menu.component.html',
 })
 export class UserMenuComponent {
-  public auth = inject(authStore);
+  public auth = inject(AuthStore);
   private router = inject(Router);
 
   public initials = computed(() => {
@@ -27,9 +27,13 @@ export class UserMenuComponent {
     return name.slice(0, 2).toUpperCase();
   });
 
+  public menu = viewChild<Menu>('menu')
+
   public menuItems = computed(() =>
     getUserMenuItems(this.auth.isAdmin(), {
       onLogout: () => {
+        console.log(this.menu())
+        this.menu()?.hide();
         this.auth.logout();
       },
 
