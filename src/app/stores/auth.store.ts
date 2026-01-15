@@ -21,15 +21,16 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
 };
+export type AuthStore = InstanceType<typeof AuthStore>;
 
-export const authStore = signalStore(
+export const AuthStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
 
   withComputed(({user}) => ({
     isAdmin: computed(() => {
       const currentUser = user();
-      
+
       return (currentUser?.roles || []).some((r) => r.name === 'ROLE_ADMIN');
     }),
     displayName: computed(() => {

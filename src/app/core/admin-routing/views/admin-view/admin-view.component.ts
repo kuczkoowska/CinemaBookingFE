@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {authStore} from '@cinemabooking/stores/auth.store';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {DatePipe} from '@angular/common';
 import {ADMIN_MENU_ITEMS} from '@cinemabooking/const/admin-menu-items.constants';
 import {StatsComponent} from '@cinemabooking/core/admin-routing/views/admin-view/components/stats/stats.component';
@@ -19,7 +19,7 @@ import {RefreshButtonComponent} from '@cinemabooking/ui/refresh-button/refresh-b
   templateUrl: './admin-view.component.html',
 })
 export class AdminViewComponent {
-  public auth = inject(authStore);
+  public auth = inject(AuthStore);
   public today = new Date();
 
   public menuItems = ADMIN_MENU_ITEMS;

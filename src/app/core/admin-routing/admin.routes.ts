@@ -4,7 +4,7 @@ export default [
   {
     path: '',
     canActivate: [], //admin guard do dodania
-    loadComponent: () => import('@cinemabooking/core/booking-routing/booking-routing.component').then((c) => c.BookingRoutingComponent),
+    loadComponent: () => import('@cinemabooking/core/admin-routing/admin-routing.component').then((c) => c.AdminRoutingComponent),
     children: [
       {
         path: 'dashboard',

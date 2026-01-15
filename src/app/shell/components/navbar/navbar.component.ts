@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/common';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NavLink} from '@cinemabooking/interfaces/other/nav-link';
-import {authStore} from '@cinemabooking/stores/auth.store';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
 import {ThemeService} from '@cinemabooking/services/theme.service';
 import {Button} from 'primeng/button';
@@ -26,7 +26,7 @@ export class NavbarComponent implements OnInit {
   private document = inject(DOCUMENT);
   protected themeService = inject(ThemeService);
 
-  public auth = inject(authStore);
+  public auth = inject(AuthStore);
 
   public isLightTheme = false;
 
