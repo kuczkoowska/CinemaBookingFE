@@ -16,7 +16,7 @@ import {TicketPrice} from '@cinemabooking/interfaces/ticket';
 export class BookingService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/bookings`;
-  private pricesUrl = `${environment.apiUrl}/other`;
+  private pricesUrl = `${environment.apiUrl}/ticket-prices`;
 
   private screeningService = inject(ScreeningService);
   private movieService = inject(MovieService);

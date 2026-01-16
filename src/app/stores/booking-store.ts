@@ -8,6 +8,7 @@ import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {Observable, pipe, switchMap, tap, throwError} from 'rxjs';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
+import {HttpErrorResponse} from '@angular/common/http';
 
 interface BookingState {
   activeBooking: BookingDto | null;
@@ -201,27 +202,38 @@ export const BookingStore = signalStore(
         return throwError(() => new Error('Brak aktywnej rezerwacji'));
       }
 
+      // Mapowanie selekcji na DTO
       const updates: UpdateTicketTypeDto[] = booking.tickets.map(ticket => {
+        // Jeśli user nic nie wybrał, zostaje typ domyślny biletu
         const selectedType = store.ticketSelections()[ticket.id] || ticket.type;
         return {ticketId: ticket.id, newType: selectedType};
       });
 
-      patchState(store, {isLoading: true});
+      patchState(store, {isLoading: true, error: null}); // Czyścimy poprzednie błędy
 
       return bookingService.updateTicketTypes(booking.id, updates).pipe(
         switchMap((updatedBooking) => {
-          console.log("Ceny zaktualizowane. Nowa suma:", updatedBooking.totalAmount);
+          console.log("1. Typy biletów zaktualizowane. ID:", updatedBooking.id);
+          // Aktualizujemy stan w store (np. nowa cena)
           patchState(store, {activeBooking: updatedBooking});
+          // Dopiero teraz płacimy
           return bookingService.confirmBooking(updatedBooking.id);
         }),
         tap({
           next: () => {
+            console.log("2. Płatność zakończona sukcesem");
             patchState(store, {isLoading: false});
-            console.log("Rezerwacja opłacona i zakończona!");
           },
-          error: (err) => {
-            console.error(err);
-            patchState(store, {isLoading: false, error: 'Błąd podczas przetwarzania rezerwacji'});
+          error: (err: HttpErrorResponse) => {
+            console.error("Błąd transakcji:", err);
+
+            // Wyciągamy wiadomość z backendu (dzięki GlobalExceptionHandler)
+            const serverMessage = err.error?.error || 'Wystąpił nieoczekiwany błąd';
+
+            patchState(store, {
+              isLoading: false,
+              error: serverMessage // Zapisujemy to w store, żeby wyświetlić w HTML
+            });
           }
         })
       );

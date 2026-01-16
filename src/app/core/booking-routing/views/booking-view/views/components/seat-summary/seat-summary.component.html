@@ -4,6 +4,9 @@
 
     <div>
       <span class="text-xs text-app-muted uppercase tracking-wider">Wybrano miejsca:</span>
+      @for (seat of store.selectedSeatsDetails(); track seat.seatNumber) {
+        <p>{{ seat }}</p>
+      }
       <p>{{ store.selectedSeatsDetails() }}</p>
       <!--      <p class="text-xl font-bold text-main">Rząd: {{ seat().rowNumber }} Miejsce: {{ seat().seatNumber }}</p>-->
     </div>

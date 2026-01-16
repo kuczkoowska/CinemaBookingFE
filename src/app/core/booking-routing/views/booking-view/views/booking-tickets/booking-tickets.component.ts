@@ -8,6 +8,7 @@ import {AutoCompleteModule} from 'primeng/autocomplete';
 import {Select} from 'primeng/select';
 import {TooltipModule} from 'primeng/tooltip';
 import {ExpirationTimerComponent} from '../components/expiration-timer/expiration-timer.component';
+import {BookingService} from '@cinemabooking/services/booking.service';
 
 @Component({
   selector: 'app-booking-tickets-step',
@@ -26,6 +27,7 @@ export class BookingTicketsComponent {
   public store = inject(BookingStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private bookingService = inject(BookingService)
 
   public ticketOptions = computed(() => {
     const prices = this.store.prices();
@@ -47,8 +49,12 @@ export class BookingTicketsComponent {
   }
 
   private isTransactionContinued = false;
+  isSubmitting = false;
 
   finishBooking() {
+    if (this.store.isLoading()) return;
+
+    this.isSubmitting = true;
 
     this.store.submitTicketTypesAndPay().subscribe({
       next: () => {
@@ -56,18 +62,25 @@ export class BookingTicketsComponent {
         this.router.navigate(['../summary'], {relativeTo: this.route});
       },
       error: () => {
+        this.isSubmitting = false;
+
+        const msg = this.store.error();
+        alert("Błąd: " + msg);
+
+        if (msg?.includes('statusie OCZEKUJE')) {
+          this.router.navigate(['/']);
+        }
       }
     });
   }
 
   ngOnDestroy() {
-    if (!this.isTransactionContinued) {
+    if (!this.isTransactionContinued && !this.isSubmitting) {
+      console.log("Użytkownik uciekł! Zwalniam miejsca w tle...");
+
       const booking = this.store.activeBooking();
-
       if (booking) {
-        console.log('Użytkownik uciekł! Zwalniam miejsca w tle...');
-
-        this.store.cancelBookingSilent(booking.id);
+        this.bookingService.cancelBooking(booking.id).subscribe();
       }
     }
   }

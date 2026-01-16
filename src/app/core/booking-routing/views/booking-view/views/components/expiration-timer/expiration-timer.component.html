@@ -1,0 +1,30 @@
+@if (store.expirationTime()) {
+
+  @let time = timeLeft$ | async;
+
+  <div class="timer-wrapper">
+
+    @if (store.isExpired()) {
+
+      <p-message
+        severity="error"
+        styleClass="w-full">
+        Czas minął! Twoje miejsca zostały zwolnione.
+      </p-message>
+
+    } @else {
+
+      <div class="flex align-items-center gap-2">
+        <span class="text-700 font-medium">Czas na dokończenie:</span>
+
+        <p-tag
+          [value]="time || '00:00'"
+          icon="pi pi-clock"
+          [rounded]="true"
+          class="text-lg px-3 py-2">
+        </p-tag>
+      </div>
+
+    }
+  </div>
+}
