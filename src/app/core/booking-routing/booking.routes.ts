@@ -23,6 +23,10 @@ export default [
           {
             path: 'tickets',
             loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/booking-tickets/booking-tickets.component').then((c) => c.BookingTicketsComponent),
+          },
+          {
+            path: 'summary',
+            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/summary/summary.component').then((c) => c.SummaryComponent),
           }
         ]
       }
