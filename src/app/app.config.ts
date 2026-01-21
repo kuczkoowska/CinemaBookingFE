@@ -7,6 +7,7 @@ import {providePrimeNG} from 'primeng/config';
 import {myCustomPreset} from '@cinemabooking/my-theme';
 import {credentialsInterceptor} from '@cinemabooking/interceptors/credentials.interceptor';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {provideTranslateService} from '@ngx-translate/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,6 +30,10 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const authStore = inject(AuthStore);
       authStore.checkAuth();
+    }),
+    provideTranslateService({
+      fallbackLang: 'en',
+      lang: 'en'
     })
   ]
 };
