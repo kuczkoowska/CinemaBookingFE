@@ -1,0 +1,10 @@
+<a [routerLink]="['/booking', screening().id]" class="no-underline">
+  <button
+    pButton
+    pRipple
+    class="p-button-outlined border-2 font-bold px-6 py-2 hover:bg-primary hover:text-white hover:border-primary transition-all"
+  >
+    {{ screening().startTime | date:'HH:mm' }}
+
+  </button>
+</a>

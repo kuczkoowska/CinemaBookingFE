@@ -4,7 +4,12 @@ export default [
   {
     path: '',
     loadComponent: () => import('@cinemabooking/core/movie-list-routing/movie-list-routing.component').then((c) => c.MovieListRoutingComponent),
-    children: [],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('@cinemabooking/core/movie-list-routing/repertoire/repertoire.component').then((c) => c.RepertoireComponent),
+      }
+    ],
   },
 ] satisfies Route[];
 
