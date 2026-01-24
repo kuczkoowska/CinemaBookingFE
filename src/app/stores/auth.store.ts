@@ -23,6 +23,7 @@ const initialState: AuthState = {
 };
 export type AuthStore = InstanceType<typeof AuthStore>;
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const AuthStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),

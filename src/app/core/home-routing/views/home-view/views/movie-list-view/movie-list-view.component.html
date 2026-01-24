@@ -11,9 +11,7 @@
 
     <main>
       @if (store.isLoading()) {
-        <div class="flex justify-center py-20">
-          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        </div>
+        <app-spinner [label]="'ładowanie filmów...'"/>
       } @else if (store.error()) {
         <div class="p-4 bg-red-100 text-red-700 rounded-lg">
           Wystąpił błąd: {{ store.error() }}

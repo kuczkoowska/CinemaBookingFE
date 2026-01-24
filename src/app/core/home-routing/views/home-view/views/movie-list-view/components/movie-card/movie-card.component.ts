@@ -13,5 +13,5 @@ import {Tag} from 'primeng/tag';
   templateUrl: './movie-card.component.html',
 })
 export class MovieCardComponent {
-  public movie = input.required<Movie>();
+  public readonly movie = input.required<Movie>();
 }

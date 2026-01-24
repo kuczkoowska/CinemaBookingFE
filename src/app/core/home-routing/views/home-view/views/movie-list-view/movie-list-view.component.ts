@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
 import {
@@ -7,25 +7,23 @@ import {
 import {
   MovieFilterComponent
 } from '@cinemabooking/core/home-routing/views/home-view/views/movie-list-view/components/movie-filter/movie-filter.component';
-import {movieStore} from '@cinemabooking/stores/movie-store';
+import {movieStore} from '@cinemabooking/stores/movie.store';
+import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 
 @Component({
   selector: 'app-movie-list-view',
   imports: [
     MovieCardComponent,
     ReactiveFormsModule,
-    MovieFilterComponent
+    MovieFilterComponent,
+    SpinnerComponent
   ],
   templateUrl: './movie-list-view.component.html',
 })
-export class MovieListViewComponent implements OnInit {
-  protected store = inject(movieStore);
+export class MovieListViewComponent {
+  protected readonly store = inject(movieStore);
 
-  public ngOnInit(): void {
-    this.store.loadMovies();
-  }
-
-  public onFiltersChanged(filters: MovieFilters): void {
+  protected onFiltersChanged(filters: MovieFilters): void {
     this.store.updateFilters(filters);
   }
 }
