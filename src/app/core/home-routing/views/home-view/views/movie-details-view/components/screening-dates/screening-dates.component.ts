@@ -1,9 +1,8 @@
-import {Component, computed, inject, input, output, signal} from '@angular/core';
+import {Component, computed, input, output, signal} from '@angular/core';
 import {Screening} from '@cinemabooking/interfaces/screening';
 import {DatePipe} from '@angular/common';
 import {DatePickerModule} from 'primeng/datepicker';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
 import {Button} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 
@@ -15,12 +14,10 @@ import {Ripple} from 'primeng/ripple';
   templateUrl: './screening-dates.component.html',
 })
 export class ScreeningDatesComponent {
-  private router = inject(Router);
-
-  public screenings = input.required<Screening[]>();
-  public screeningSelect = output<number>();
-  public selectedDate = signal<string>(new Date().toISOString().split('T')[0]);
-  public readonly days = this.generateDays(4);
+  public readonly screenings = input.required<Screening[]>();
+  public readonly screeningSelect = output<number>();
+  public readonly selectedDate = signal<string>(this.getLocalDateString(new Date()));
+  public readonly days = this.generateDays(5);
 
   public readonly filteredScreenings = computed(() => {
     const allScreenings = this.screenings();
@@ -38,7 +35,7 @@ export class ScreeningDatesComponent {
   }
 
   public onScreeningClick(screeningId: number): void {
-    this.router.navigate(['/booking', screeningId]);
+    this.screeningSelect.emit(screeningId);
   }
 
   private generateDays(count: number): { label: string, date: string }[] {
@@ -62,5 +59,11 @@ export class ScreeningDatesComponent {
     }
 
     return dates;
+  }
+
+  private getLocalDateString(date: Date): string {
+    const offset = date.getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
+    return localISOTime.split('T')[0];
   }
 }

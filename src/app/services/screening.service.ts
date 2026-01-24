@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 import {Observable} from 'rxjs';
 import {Screening} from '@cinemabooking/interfaces/screening';
@@ -12,8 +12,10 @@ export class ScreeningService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/screenings`;
 
-  public getScreenings(): Observable<Screening[]> {
-    return this.http.get<Screening[]>(`${this.apiUrl}`);
+  public getScreenings(dateStr: string): Observable<Screening[]> {
+    const params = new HttpParams().set('date', dateStr);
+
+    return this.http.get<Screening[]>(`${this.apiUrl}`, {params});
   }
 
   public getScreeningsByMovieId(movieId: number): Observable<Screening[]> {

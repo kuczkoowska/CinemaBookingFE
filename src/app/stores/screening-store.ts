@@ -5,38 +5,38 @@ import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
+import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {HttpErrorResponse} from '@angular/common/http';
 
 interface ScreeningState {
   screenings: Screening[];
-  isLoading: boolean;
-  error: string | null;
 }
 
 const initialState: ScreeningState = {
   screenings: [],
-  isLoading: false,
-  error: null,
 };
 
 export const screeningStore = signalStore(
   {providedIn: 'root'},
+  withRequestStatus(),
   withState(initialState),
 
   withMethods((store, screeningService = inject(ScreeningService)) => ({
 
     loadScreeningsByMovieId: rxMethod<number>(
       pipe(
-        tap(() => patchState(store, {isLoading: true, error: null, screenings: []})),
-        switchMap((movieId) => {
+        tap((): void => {
+          patchState(store, {screenings: []});
+          store.setLoading();
+        }),
+        switchMap((movieId: number) => {
           return screeningService.getScreeningsByMovieId(movieId).pipe(
             tapResponse({
-              next: (screenings: Screening[]) => patchState(store, {screenings, isLoading: false}),
-              error: (err: HttpErrorResponse) => {
-                const apiError = err.error as { message: string } | null;
-                const errorMsg = apiError?.message || err.message;
-                patchState(store, {error: errorMsg, isLoading: false});
+              next: (screenings: Screening[]): void => {
+                patchState(store, {screenings});
+                store.setLoaded();
               },
+              error: (err: HttpErrorResponse | Error): void => store.setError(err),
             })
           );
         })

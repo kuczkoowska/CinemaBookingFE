@@ -1,5 +1,5 @@
 import {computed, inject} from '@angular/core';
-import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {EMPTY, pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
@@ -97,9 +97,4 @@ export const movieStore = signalStore(
       )
     )
   })),
-  withHooks({
-    onInit(store: { loadMovies: () => void }): void {
-      store.loadMovies();
-    }
-  })
 );
