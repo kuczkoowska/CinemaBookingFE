@@ -28,7 +28,11 @@ export const routes: Routes = [
     loadChildren: () => import('./core/booking-routing/booking.routes')
   },
   {
+    path: '404',
+    loadComponent: () => import('./core/not-found/not-found.component').then(c => c.NotFoundComponent)
+  },
+  {
     path: '**',
-    redirectTo: '/'
+    redirectTo: '/404'
   },
 ];
