@@ -8,9 +8,11 @@ import {myCustomPreset} from '@cinemabooking/my-theme';
 import {credentialsInterceptor} from '@cinemabooking/interceptors/credentials.interceptor';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {provideTranslateService} from '@ngx-translate/core';
+import {MessageService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    MessageService,
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withFetch()),
