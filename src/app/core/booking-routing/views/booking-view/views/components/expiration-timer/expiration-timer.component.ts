@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {BookingStore} from '@cinemabooking/stores/booking-store';
+import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {interval, map, Observable, startWith} from 'rxjs';
 import {AsyncPipe, CommonModule} from '@angular/common';
 
