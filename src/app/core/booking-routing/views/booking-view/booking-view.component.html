@@ -1,13 +1,23 @@
 <div class="container mx-auto p-4">
-
   @if (store.isLoading()) {
     <app-spinner [label]="'Ładowanie danych rezerwacji'"/>
   } @else {
     @if (store.movie() && store.screening()) {
       <div class="flex gap-6 flex-col justify-center">
+        <div class="flex justify-between items-center">
+          <button
+            (click)="cancelAndGoHome()"
+            class="text-red-600 hover:text-red-700 font-bold hover:underline bg-transparent border-none flex gap-2 items-center"
+          >
+            <i class="pi pi-times-circle"></i> Anuluj rezerwację i wróć do strony głównej
+          </button>
+        </div>
+
         <app-movie-card-booking
           [movie]="store.movie()!"
-          [screening]="store.screening()!">
+          [screening]="store.screening()!"
+          (changeDate)="changeScreening()"
+        >
         </app-movie-card-booking>
 
         <router-outlet/>
