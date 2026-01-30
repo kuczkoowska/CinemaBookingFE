@@ -1,7 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NavLink} from '@cinemabooking/interfaces/other/nav-link';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
@@ -14,7 +13,6 @@ import {Tooltip} from 'primeng/tooltip';
   selector: 'app-navbar',
   imports: [
     RouterLink,
-    RouterLinkActive,
     UserMenuComponent,
     Button,
     Tooltip
@@ -23,12 +21,10 @@ import {Tooltip} from 'primeng/tooltip';
 })
 export class NavbarComponent implements OnInit {
   protected readonly AppRoute = AppRoute;
-  private document = inject(DOCUMENT);
   protected themeService = inject(ThemeService);
-
+  protected router = inject(Router);
   public auth = inject(AuthStore);
 
-  public isLightTheme = false;
 
   public readonly navLinks: NavLink[] = [
     {label: 'Repertuar', route: AppRoute.MOVIES},
@@ -40,14 +36,4 @@ export class NavbarComponent implements OnInit {
     this.auth.checkAuth();
   }
 
-  public toggleTheme(): void {
-    this.isLightTheme = !this.isLightTheme;
-    const body = this.document.body;
-
-    if (this.isLightTheme) {
-      body.classList.add('light-theme');
-    } else {
-      body.classList.remove('light-theme');
-    }
-  }
 }
