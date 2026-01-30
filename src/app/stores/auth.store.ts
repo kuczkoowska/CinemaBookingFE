@@ -56,7 +56,7 @@ export const AuthStore = signalStore(
                   isLoading: false,
                   error: null
                 });
-                router.navigate(['/']);
+                router.navigate(['']);
               },
               error: (error: HttpErrorResponse) => {
                 const errorMessage = error.status === 401 || error.status === 403
