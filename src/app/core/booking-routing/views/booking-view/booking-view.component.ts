@@ -9,12 +9,7 @@ import {AppRoute} from '@cinemabooking/enums/app-routes';
 
 @Component({
   selector: 'app-booking-view',
-  imports: [
-    MovieCardBookingComponent,
-    RouterOutlet,
-    SpinnerComponent,
-
-  ],
+  imports: [MovieCardBookingComponent, RouterOutlet, SpinnerComponent],
   providers: [BookingStore],
   templateUrl: './booking-view.component.html',
 })

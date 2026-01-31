@@ -1,14 +1,14 @@
 import {Route} from '@angular/router';
-import {BookingStore} from '@cinemabooking/stores/booking-store';
+import {BookingStore} from '@cinemabooking/stores/booking.store';
 
 export default [
   {
     path: '',
     loadComponent: () => import('@cinemabooking/core/booking-routing/booking-routing.component').then((c) => c.BookingRoutingComponent),
+    providers: [BookingStore],
     children: [
       {
         path: ':screeningId',
-        providers: [BookingStore],
         loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/booking-view.component').then((c) => c.BookingViewComponent),
         children: [
           {
@@ -24,11 +24,11 @@ export default [
             path: 'tickets',
             loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/booking-tickets/booking-tickets.component').then((c) => c.BookingTicketsComponent),
           },
-          {
-            path: 'summary',
-            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/summary/summary.component').then((c) => c.SummaryComponent),
-          }
         ]
+      },
+      {
+        path: ':screeningId/summary',
+        loadComponent: () => import('@cinemabooking/core/booking-routing/views/summary-view/summary-view.component').then((c) => c.SummaryViewComponent)
       }
     ],
   },
