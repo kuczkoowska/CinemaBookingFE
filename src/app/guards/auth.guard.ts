@@ -1,8 +1,8 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthStore } from '@cinemabooking/stores/auth.store';
+import {inject} from '@angular/core';
+import {CanActivateFn, Router} from '@angular/router';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (state): boolean => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
 
@@ -10,6 +10,8 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate(['/login']);
+  router.navigate(['/login'], {
+    queryParams: {returnUrl: state.url},
+  });
   return false;
 };
