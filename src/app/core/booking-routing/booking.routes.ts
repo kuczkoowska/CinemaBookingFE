@@ -18,12 +18,16 @@ export default [
           },
           {
             path: 'seats',
-            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/screening-seats/screening-seats.component').then((c) => c.ScreeningSeatsComponent),
+            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/seats-view/screening-seats.component').then((c) => c.ScreeningSeatsComponent),
           },
           {
             path: 'tickets',
-            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/booking-tickets/booking-tickets.component').then((c) => c.BookingTicketsComponent),
+            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/tickets-view/booking-tickets.component').then((c) => c.BookingTicketsComponent),
           },
+          {
+            path: 'contact',
+            loadComponent: () => import('@cinemabooking/core/booking-routing/views/booking-view/views/contact-view/contact-view.component').then((c) => c.ContactViewComponent),
+          }
         ]
       },
       {

@@ -56,7 +56,10 @@ export const AuthStore = signalStore(
                   isLoading: false,
                   error: null
                 });
-                router.navigate(['']);
+                const currentUrl = router.parseUrl(router.url);
+
+                const returnUrl = currentUrl.queryParams['returnUrl'];
+                router.navigateByUrl(returnUrl || '/');
               },
               error: (error: HttpErrorResponse) => {
                 const errorMessage = error.status === 401 || error.status === 403

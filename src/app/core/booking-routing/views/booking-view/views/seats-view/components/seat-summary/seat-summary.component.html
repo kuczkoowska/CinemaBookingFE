@@ -1,0 +1,33 @@
+<div
+  class="fixed bottom-0 left-0 w-full bg-element border-t border-app-border p-4 shadow-2xs z-50">
+  <div class="container mx-auto max-w-4xl flex justify-between items-center">
+
+    <div class="flex flex-col gap-1">
+      <span class="text-xs text-app-muted uppercase tracking-wider font-bold">
+        Wybrano miejsca ({{ store.selectedSeatsDetails().length }}):
+      </span>
+
+      <div class="flex flex-wrap gap-2">
+        @for (seat of store.selectedSeatsDetails(); track seat.id) {
+          <span class="bg-app-bg px-2 py-1 rounded text-sm border border-app-border text-main font-medium">
+            Rząd {{ seat.rowNumber }} / Msc {{ seat.seatNumber }}
+          </span>
+        }
+      </div>
+
+      <div class="text-sm mt-1 text-app-muted">
+        Szacowany koszt: <span class="text-primary font-bold">{{ store.totalPrice() }} PLN</span>
+      </div>
+    </div>
+
+    <p-button
+      label="Dalej"
+      icon="pi pi-arrow-right"
+      iconPos="right"
+      [loading]="store.isLoading()"
+      (onClick)="nextStep()"
+      styleClass="font-bold px-6 py-3 shadow-lg">
+    </p-button>
+
+  </div>
+</div>

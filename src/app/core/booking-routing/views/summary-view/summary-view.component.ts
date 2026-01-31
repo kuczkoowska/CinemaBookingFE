@@ -29,7 +29,11 @@ export class SummaryViewComponent {
   public paymentMethod: PaymentMethod = 'BLIK';
 
   public pay(): void {
-    this.store.submitTicketTypesAndPay();
+    this.store.submitTicketTypesAndPay({
+      onSuccess: (): void => {
+        this.store.markAsFinished();
+      }
+    });
   }
 
   public goHome(): void {
