@@ -1,1 +1,10 @@
-<p>movies-view works!</p>
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Zarządzanie Filmami</h1>
+    <button pButton icon="pi pi-plus" (click)="openAdd()">Dodaj Film</button>
+  </div>
+
+  <app-movies-table (edit)="openEdit($event)"/>
+
+  <app-movie-dialog [(visible)]="isDialogVisible" [movie]="movieToEdit()"/>
+</div>

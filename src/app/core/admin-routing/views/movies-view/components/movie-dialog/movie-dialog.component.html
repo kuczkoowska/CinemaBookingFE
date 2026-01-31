@@ -1,0 +1,87 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  (onShow)="initForm()"
+  [header]="movie() ? 'Edytuj Film' : 'Dodaj Film'"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <form [formGroup]="form" class="flex flex-col gap-4 pt-4">
+    <div class="flex flex-col gap-2">
+      <label for="title">Tytuł</label>
+      <input pInputText id="title" formControlName="title" placeholder="Tytuł"/>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="genre">Gatunek ({{ genreOptions.length }} dostępnych)</label>
+      <p-select
+        id="genre"
+        formControlName="genre"
+        [options]="genreOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Wybierz gatunek"
+        fluid
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="director">Reżyser</label>
+      <input pInputText id="director" formControlName="director" placeholder="Reżyser"/>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="description">Opis</label>
+      <textarea
+        pInputTextarea
+        id="description"
+        formControlName="description"
+        rows="4"
+        placeholder="Opis filmu"
+      ></textarea>
+    </div>
+
+    <div class="flex gap-4">
+      <div class="flex flex-col gap-2 flex-1">
+        <label for="durationMinutes">Czas trwania (min)</label>
+        <p-inputNumber
+          id="durationMinutes"
+          formControlName="durationMinutes"
+          [min]="1"
+          [showButtons]="true"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2 flex-1">
+        <label for="ageRating">Ograniczenie wiekowe</label>
+        <p-inputNumber
+          id="ageRating"
+          formControlName="ageRating"
+          [min]="0"
+          [showButtons]="true"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="posterUrl">URL Plakatu</label>
+      <input pInputText id="posterUrl" formControlName="posterUrl" placeholder="https://..."/>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="trailerUrl">URL Zwiastuna (opcjonalne)</label>
+      <input pInputText id="trailerUrl" formControlName="trailerUrl" placeholder="https://..."/>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Anuluj" class="p-button-text" (click)="visible.set(false)"></button>
+    <button
+      pButton
+      label="Zapisz"
+      (click)="onSave()"
+      [loading]="store.isLoading()"
+      [disabled]="form.invalid"
+    ></button>
+  </ng-template>
+</p-dialog>
