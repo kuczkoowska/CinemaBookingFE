@@ -10,7 +10,6 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./core/home-routing/home.routes'),
-        pathMatch: 'full',
       },
       {
         path: 'login',
@@ -25,6 +24,11 @@ export const routes: Routes = [
         loadChildren: () => import('./core/admin-routing/admin.routes'),
         canActivate: [adminGuard],
       },
+      {
+        path: 'profile',
+        loadChildren: () => import('./core/profile-routing/profile.routes'),
+        canActivate: [authGuard],
+      }
     ],
   },
   {

@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {forkJoin, map, Observable, switchMap} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 import {LockSeatsDto, SeatWithStatus} from '@cinemabooking/interfaces/seat';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
@@ -9,6 +9,7 @@ import {MovieService} from '@cinemabooking/services/movie.service';
 import {Booking} from '@cinemabooking/interfaces/booking';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 import {TicketPrice} from '@cinemabooking/interfaces/ticket';
+import {Page} from '@cinemabooking/interfaces/page';
 
 @Injectable({
   providedIn: 'root',
@@ -76,5 +77,13 @@ export class BookingService {
         );
       })
     );
+  }
+
+  public getMyBookings(page: number, size: number): Observable<Page<BookingDto>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Page<BookingDto>>(`${this.apiUrl}/my`, {params});
   }
 }
