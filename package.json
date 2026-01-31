@@ -37,6 +37,7 @@
     "@ngx-translate/http-loader": "^17.0.0",
     "@primeng/themes": "^21.0.2",
     "@primeuix/themes": "^2.0.2",
+    "chart.js": "^4.5.1",
     "lodash-es": "^4.17.22",
     "primeicons": "^7.0.0",
     "primeng": "^21.0.2",

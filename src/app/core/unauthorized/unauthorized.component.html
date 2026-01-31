@@ -1,0 +1,23 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
+    <i class="pi pi-lock text-6xl text-red-500 mb-4"></i>
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">Brak uprawnień</h1>
+    <p class="text-gray-600 mb-6">Nie masz uprawnień do przeglądania tej strony.</p>
+    <div class="flex gap-3 justify-center">
+      <button
+        pButton
+        class="p-button-primary"
+        (click)="goHome()"
+      >
+        Strona główna
+      </button>
+      <button
+        pButton
+        class="p-button-secondary"
+        (click)="goBack()"
+      >
+        Wstecz
+      </button>
+    </div>
+  </div>
+</div>

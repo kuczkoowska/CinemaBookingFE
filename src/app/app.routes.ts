@@ -1,4 +1,6 @@
 import {Routes} from '@angular/router';
+import {authGuard} from '@cinemabooking/guards/auth.guard';
+import {adminGuard} from '@cinemabooking/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -7,7 +9,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./core/home-routing/home.routes')
+        loadChildren: () => import('./core/home-routing/home.routes'),
+        pathMatch: 'full',
       },
       {
         path: 'login',
@@ -19,20 +22,28 @@ export const routes: Routes = [
       },
       {
         path: 'admin',
-        loadChildren: () => import('./core/admin-routing/admin.routes')
-      }
+        loadChildren: () => import('./core/admin-routing/admin.routes'),
+        canActivate: [adminGuard],
+      },
     ],
   },
   {
     path: 'booking',
-    loadChildren: () => import('./core/booking-routing/booking.routes')
+    loadChildren: () => import('./core/booking-routing/booking.routes'),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'unauthorized',
+    loadComponent: () =>
+      import('./core/unauthorized/unauthorized.component').then((c) => c.UnauthorizedComponent),
   },
   {
     path: '404',
-    loadComponent: () => import('./core/not-found/not-found.component').then(c => c.NotFoundComponent)
+    loadComponent: () =>
+      import('./core/not-found/not-found.component').then((c) => c.NotFoundComponent),
   },
   {
     path: '**',
-    redirectTo: '/404'
+    redirectTo: '/404',
   },
 ];

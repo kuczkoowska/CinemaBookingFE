@@ -2,16 +2,16 @@ import {Component, inject} from '@angular/core';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {
   SeatComponent
-} from '@cinemabooking/core/booking-routing/views/booking-view/views/components/seat/seat.component';
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/screening-seats/components/seat/seat.component';
 import {
   RowNumbersComponent
-} from '@cinemabooking/core/booking-routing/views/booking-view/views/components/row-numbers/row-numbers.component';
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/screening-seats/components/row-numbers/row-numbers.component';
 import {
   OpisComponent
-} from '@cinemabooking/core/booking-routing/views/booking-view/views/components/opis/opis.component';
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/screening-seats/components/opis/opis.component';
 import {
   SeatSummaryComponent
-} from '@cinemabooking/core/booking-routing/views/booking-view/views/components/seat-summary/seat-summary.component';
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/screening-seats/components/seat-summary/seat-summary.component';
 
 @Component({
   selector: 'app-screening-seats',

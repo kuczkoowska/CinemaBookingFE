@@ -25,7 +25,7 @@ export function withRequestStatus() {
       setLoaded(): void {
         patchState(store, {isLoading: false});
       },
-      
+
       setError(err: HttpErrorResponse | Error): void {
         let errorMsg: string = 'Wystąpił nieznany błąd';
 

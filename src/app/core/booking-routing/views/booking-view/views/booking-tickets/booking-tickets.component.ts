@@ -7,7 +7,9 @@ import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {Select} from 'primeng/select';
 import {TooltipModule} from 'primeng/tooltip';
-import {ExpirationTimerComponent} from '../components/expiration-timer/expiration-timer.component';
+import {
+  ExpirationTimerComponent
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/booking-tickets/components/expiration-timer/expiration-timer.component';
 
 @Component({
   selector: 'app-booking-tickets-step',

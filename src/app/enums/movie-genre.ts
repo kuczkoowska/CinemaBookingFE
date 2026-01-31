@@ -1,27 +1,27 @@
 export enum MovieGenre {
-  ACTION = 'ACTION',
-  COMEDY = 'COMEDY',
-  DRAMA = 'DRAMA',
+  AKCJA = 'AKCJA',
+  KOMEDIA = 'KOMEDIA',
+  DRAMAT = 'DRAMAT',
   THRILLER = 'THRILLER',
-  SCIFI = 'SCI_FI',
+  SCI_FI = 'SCI_FI',
   HORROR = 'HORROR',
-  ANIMATION = 'ANIMATION',
-  DOCUMENTARY = 'DOCUMENTARY',
+  ANIMACJA = 'ANIMACJA',
+  DOKUMENTALNY = 'DOKUMENTALNY',
   FANTASY = 'FANTASY',
-  HISTORY = 'HISTORY',
-  OTHER = 'OTHER'
+  HISTORYCZNY = 'HISTORYCZNY',
+  INNY = 'INNY',
 }
 
 export const MOVIE_GENRE_LABELS: Record<MovieGenre, string> = {
-  [MovieGenre.ACTION]: 'Akcja',
-  [MovieGenre.COMEDY]: 'Komedia',
-  [MovieGenre.DRAMA]: 'Dramat',
+  [MovieGenre.AKCJA]: 'Akcja',
+  [MovieGenre.KOMEDIA]: 'Komedia',
+  [MovieGenre.DRAMAT]: 'Dramat',
   [MovieGenre.THRILLER]: 'Thriller',
-  [MovieGenre.SCIFI]: 'Sci-Fi',
+  [MovieGenre.SCI_FI]: 'Sci-Fi',
   [MovieGenre.HORROR]: 'Horror',
-  [MovieGenre.ANIMATION]: 'Animacja',
-  [MovieGenre.DOCUMENTARY]: 'Dokumentalny',
+  [MovieGenre.ANIMACJA]: 'Animacja',
+  [MovieGenre.DOKUMENTALNY]: 'Dokumentalny',
   [MovieGenre.FANTASY]: 'Fantasy',
-  [MovieGenre.HISTORY]: 'Historyczny',
-  [MovieGenre.OTHER]: 'Inny'
+  [MovieGenre.HISTORYCZNY]: 'Historyczny',
+  [MovieGenre.INNY]: 'Inny',
 };
