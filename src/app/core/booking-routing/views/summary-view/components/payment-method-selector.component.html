@@ -1,0 +1,33 @@
+<div class="bg-element border border-(--border-color) rounded-xl p-6 shadow-sm">
+  <h3 class="text-xl font-bold text-main mb-6 flex items-center gap-2">
+    <i class="pi pi-wallet text-primary-500"></i> Metoda płatności
+  </h3>
+
+  <div class="flex flex-col gap-3">
+    @for (method of methods; track method.id) {
+      <div
+        class="flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:border-primary/50"
+        [class]="paymentMethod() === method.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-(--border-color) bg-(--bg-app)'"
+        (click)="paymentMethod.set(method.id)"
+      >
+        <p-radiobutton [value]="method.id" [(ngModel)]="paymentMethod"></p-radiobutton>
+        <div class="flex items-center gap-3">
+          @if (method.id === 'BLIK') {
+            <div class="font-black text-2xl italic tracking-tighter text-primary-600">blik</div>
+          } @else {
+            <i [class]="method.icon + ' text-2xl text-primary-600'"></i>
+          }
+          <span class="font-bold">{{ method.label }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <p-button
+    label="Zapłać i zarezerwuj"
+    [loading]="isProcessing()"
+    (onClick)="pay.emit()"
+    fluid
+    styleClass="mt-8 py-4 "
+  />
+</div>

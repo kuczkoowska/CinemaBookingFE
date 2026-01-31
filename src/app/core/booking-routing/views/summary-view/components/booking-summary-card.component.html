@@ -1,0 +1,57 @@
+<div class="bg-element border border-(--border-color) rounded-xl p-6 shadow-sm">
+  <h3 class="text-xl font-bold text-main mb-4 flex items-center gap-2">
+    <i class="pi pi-receipt text-primary-500"></i>
+    Podsumowanie rezerwacji
+  </h3>
+
+  <div class="flex gap-4 mb-4">
+    <img
+      [src]="movie().posterUrl"
+      class="w-16 h-24 object-cover rounded shadow-md"
+      [alt]="movie().title"
+    />
+    <div class="flex-1">
+      <h4 class="font-bold text-lg text-main">{{ movie().title }}</h4>
+      <div class="text-sm text-(--text-muted) flex flex-col gap-1 mt-1">
+        <span
+        ><i class="pi pi-calendar mr-1"></i>
+          {{ screening().startTime | date: 'EEEE, d MMMM y' }}</span
+        >
+        <span
+        ><i class="pi pi-clock mr-1"></i> {{ screening().startTime | date: 'shortTime' }}</span
+        >
+        <span><i class="pi pi-map-marker mr-1"></i> {{ screening().theaterRoomName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-4">
+    <p class="text-xs uppercase text-(--text-muted) tracking-wider mb-2 font-bold">Twoje bilety</p>
+    <div class="flex flex-col gap-2 text-sm">
+      @for (ticket of tickets(); track ticket.id) {
+        <div class="flex justify-between items-center p-2 bg-(--bg-app) rounded">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xs"
+            >
+              {{ ticket.seatNumber }}
+            </div>
+            <span>
+              Rząd {{ ticket.row }}, Miejsce {{ ticket.seatNumber }}
+            </span>
+            <span class="text-xs bg-primary-500 text-white px-2 py-0.5 rounded font-bold">
+              {{ ticket.type === 'NORMALNY' ? 'NORMALNY' : 'ULGOWY' }}
+            </span>
+          </div>
+          <span class="font-bold text-main">{{ ticket.price | number: '1.2-2' }} PLN</span>
+        </div>
+      }
+    </div>
+  </div>
+
+
+  <div class="flex justify-between items-center text-xl font-bold text-primary mt-4">
+    <span>Do zapłaty:</span>
+    <span>{{ totalAmount() | number: '1.2-2' }} PLN</span>
+  </div>
+</div>
