@@ -1,0 +1,28 @@
+<div class="min-h-screen flex items-center justify-center bg-(--bg-app) p-4">
+  <p-card header="Konto Zawieszone" [style]="{ width: '500px' }" class="text-center shadow-xl">
+    <div class="flex flex-col items-center gap-4">
+      <i class="pi pi-lock text-6xl text-orange-500"></i>
+
+      <p class="text-lg text-(--text-muted)">
+        Twoje konto zostało zawieszone przez administratora.
+      </p>
+
+      <p class="text-sm text-(--text-muted)">
+        Jeśli uważasz, że to pomyłka, skontaktuj się z obsługą klienta.
+      </p>
+
+      <div class="flex gap-3 mt-4">
+        <p-button
+          label="Wyloguj się"
+          icon="pi pi-sign-out"
+          severity="secondary"
+          (onClick)="logout()"
+        >
+        </p-button>
+
+        <p-button label="Strona główna" icon="pi pi-home" [outlined]="true" [routerLink]="['/']">
+        </p-button>
+      </div>
+    </div>
+  </p-card>
+</div>
