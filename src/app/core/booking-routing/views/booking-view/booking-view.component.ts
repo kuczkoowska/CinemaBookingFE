@@ -9,36 +9,64 @@ import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {
   BookingStepperComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/components/booking-stepper/booking-stepper.component';
+import {ConfirmationService} from 'primeng/api';
+import {ConfirmDialog} from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-booking-view',
-  imports: [MovieCardBookingComponent, RouterOutlet, SpinnerComponent, BookingStepperComponent],
+  imports: [
+    MovieCardBookingComponent,
+    RouterOutlet,
+    SpinnerComponent,
+    BookingStepperComponent,
+    ConfirmDialog,
+  ],
+  providers: [ConfirmationService],
   templateUrl: './booking-view.component.html',
 })
 export class BookingViewComponent implements OnInit {
   protected readonly store = inject(BookingStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly confirmationService = inject(ConfirmationService);
 
   public ngOnInit(): void {
     const screeningId = Number(this.route.snapshot.paramMap.get('screeningId'));
     this.store.loadBookingData(screeningId);
   }
 
-  // POPRAWIC
   public cancelAndGoHome(): void {
-    const bookingId = this.store.activeBooking()?.id;
-    if (bookingId) {
-      this.store.cancelAndGoBack();
-    }
-    this.router.navigate([AppRoute.HOME]);
+    this.confirmationService.confirm({
+      message: 'Czy na pewno chcesz anulować rezerwację i wrócić do strony głównej?',
+      header: 'Anuluj rezerwację',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Tak, anuluj',
+      rejectLabel: 'Nie, kontynuuj',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        const bookingId = this.store.activeBooking()?.id;
+        if (bookingId) {
+          this.store.cancelAndGoBack();
+        }
+        this.router.navigate([AppRoute.HOME]);
+      },
+    });
   }
 
   public changeScreening(): void {
-    const bookingId = this.store.activeBooking()?.id;
-    if (bookingId) {
-      this.store.cancelBookingSilent(bookingId);
-    }
-    this.router.navigate([AppRoute.MOVIES]);
+    this.confirmationService.confirm({
+      message: 'Zmiana seansu anuluje obecną rezerwację. Czy chcesz kontynuować?',
+      header: 'Zmiana seansu',
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Tak, zmień seans',
+      rejectLabel: 'Anuluj',
+      accept: () => {
+        const bookingId = this.store.activeBooking()?.id;
+        if (bookingId) {
+          this.store.cancelBookingSilent(bookingId);
+        }
+        this.router.navigate([AppRoute.MOVIES]);
+      },
+    });
   }
 }
