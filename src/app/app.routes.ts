@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 import {authGuard} from '@cinemabooking/guards/auth.guard';
 import {adminGuard} from '@cinemabooking/guards/admin.guard';
+import {activeAccountGuard} from '@cinemabooking/guards/active-account.guard';
 
 export const routes: Routes = [
   {
@@ -27,14 +28,19 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('./core/profile-routing/profile.routes'),
-        canActivate: [authGuard],
-      }
+        canActivate: [authGuard, activeAccountGuard],
+      },
     ],
   },
   {
     path: 'booking',
     loadChildren: () => import('./core/booking-routing/booking.routes'),
-    canActivate: [authGuard],
+    canActivate: [authGuard, activeAccountGuard],
+  },
+  {
+    path: 'account-suspended',
+    loadComponent: () =>
+      import('./core/account-suspended/account-suspended.component').then((c) => c.AccountSuspendedComponent,),
   },
   {
     path: 'unauthorized',
