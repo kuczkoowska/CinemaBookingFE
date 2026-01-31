@@ -5,13 +5,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {Checkbox} from 'primeng/checkbox';
 
 @Component({
   selector: 'app-contact-view',
   imports: [
     Button,
     ReactiveFormsModule,
-    InputText
+    InputText,
+    Checkbox
   ],
   templateUrl: './contact-view.component.html',
 })
@@ -27,8 +29,35 @@ export class ContactViewComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]]
     }),
+    wantsInvoice: [false],
+
+    invoice: this.fb.group({
+      companyName: [''],
+      nip: [''],
+      address: ['']
+    }),
+
     holders: this.fb.array([])
   });
+
+  protected toggleInvoiceValidators(): void {
+    const wantsInvoice = this.form.controls.wantsInvoice.value;
+    const invoiceGroup = this.form.controls.invoice;
+
+    if (wantsInvoice) {
+      invoiceGroup.controls.companyName.setValidators([Validators.required]);
+      invoiceGroup.controls.nip.setValidators([Validators.required, Validators.minLength(10)]);
+      invoiceGroup.controls.address.setValidators([Validators.required]);
+    } else {
+      invoiceGroup.controls.companyName.clearValidators();
+      invoiceGroup.controls.nip.clearValidators();
+      invoiceGroup.controls.address.clearValidators();
+    }
+
+    invoiceGroup.controls.companyName.updateValueAndValidity();
+    invoiceGroup.controls.nip.updateValueAndValidity();
+    invoiceGroup.controls.address.updateValueAndValidity();
+  }
 
   public constructor() {
     effect(() => {
