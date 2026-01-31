@@ -1,48 +1,79 @@
-<div class="flex items-center justify-center bg-[var(--bg-app)] p-4">
-
-  <div class="w-full max-w-md bg-element border border-[var(--border-color)] rounded-2xl shadow-xl p-8">
+<div class="flex items-center justify-center bg-(--bg-app) p-4">
+  <div
+    class="w-full max-w-md bg-element border border-(--border-color) rounded-2xl shadow-xl p-8 relative"
+  >
+    <button
+      (click)="toggleLanguage()"
+      class="absolute top-4 right-4 text-2xl hover:scale-110 transition-transform cursor-pointer"
+      [title]="language() === 'pl' ? 'Switch to English' : 'Przełącz na Polski'"
+    >
+      {{ language() === 'pl' ? '🇬🇧' : '🇵🇱' }}
+    </button>
 
     <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-main">Załóż konto</h2>
-      <p class="text-[var(--text-muted)] text-sm mt-1">Dołącz do CinemaBooking w 30 sekund</p>
+      <h2 class="text-2xl font-bold text-main">{{ t().title }}</h2>
+      <p class="text-(--text-muted) text-sm mt-1">{{ t().subtitle }}</p>
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-
       <div class="flex flex-col sm:flex-row gap-4">
         <div class="flex-1 flex flex-col gap-1">
-          <label for="firstName" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">Imię</label>
-          <input pInputText id="firstName" formControlName="firstName" placeholder="Jan"
-                 class="w-full p-3 text-sm"
-                 [invalid]="isInvalid('firstName')"/>
+          <label for="firstName" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
+            t().firstName
+          }}</label>
+          <input
+            pInputText
+            id="firstName"
+            formControlName="firstName"
+            [placeholder]="t().firstNamePlaceholder"
+            class="w-full p-3 text-sm"
+            [invalid]="isInvalid('firstName')"
+          />
           @if (isInvalid('firstName')) {
-            <small class="text-red-500 text-xs">Wymagane (min 2 znaki).</small>
+            <small class="text-red-500 text-xs">{{ t().firstNameError }}</small>
           }
         </div>
 
         <div class="flex-1 flex flex-col gap-1">
-          <label for="lastName" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">Nazwisko</label>
-          <input pInputText id="lastName" formControlName="lastName" placeholder="Kowalski"
-                 class="w-full p-3 text-sm"
-                 [invalid]="isInvalid('lastName')"/>
+          <label for="lastName" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
+            t().lastName
+          }}</label>
+          <input
+            pInputText
+            id="lastName"
+            formControlName="lastName"
+            [placeholder]="t().lastNamePlaceholder"
+            class="w-full p-3 text-sm"
+            [invalid]="isInvalid('lastName')"
+          />
           @if (isInvalid('lastName')) {
-            <small class="text-red-500 text-xs">Wymagane (min 2 znaki).</small>
+            <small class="text-red-500 text-xs">{{ t().lastNameError }}</small>
           }
         </div>
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="email" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">Email</label>
-        <input pInputText type="email" id="email" formControlName="email" placeholder="jan@example.com"
-               class="w-full p-3 text-sm"
-               [invalid]="isInvalid('email')"/>
+        <label for="email" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
+          t().email
+        }}</label>
+        <input
+          pInputText
+          type="email"
+          id="email"
+          formControlName="email"
+          [placeholder]="t().emailPlaceholder"
+          class="w-full p-3 text-sm"
+          [invalid]="isInvalid('email')"
+        />
         @if (isInvalid('email')) {
-          <small class="text-red-500 text-xs">Wpisz poprawny adres email.</small>
+          <small class="text-red-500 text-xs">{{ t().emailError }}</small>
         }
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="password" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">Hasło</label>
+        <label for="password" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
+          t().password
+        }}</label>
         <p-password
           id="password"
           formControlName="password"
@@ -52,54 +83,66 @@
           fluid
         >
           <ng-template pTemplate="footer">
-            <p class="mt-2 text-xs">Wskazówka: Użyj minimum 6 znaków.</p>
+            <p class="mt-2 text-xs">{{ t().passwordHint }}</p>
           </ng-template>
         </p-password>
 
         @if (isInvalid('password')) {
-          <small class="text-red-500 text-xs">Hasło jest za krótkie.</small>
+          <small class="text-red-500 text-xs">{{ t().passwordError }}</small>
         }
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="confirmPassword" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">Powtórz
-          hasło</label>
+        <label for="confirmPassword" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
+          t().confirmPassword
+        }}</label>
         <p-password
           id="confirmPassword"
           formControlName="confirmPassword"
           [toggleMask]="true"
           [feedback]="false"
           fluid
-          [invalid]="isInvalid('confirmPassword') || (registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched)">
+          [invalid]="
+            isInvalid('confirmPassword') ||
+            (registerForm.errors?.['passwordMismatch'] &&
+              registerForm.get('confirmPassword')?.touched)
+          "
+        >
         </p-password>
 
-        @if (registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched) {
-          <small class="text-red-500 text-xs">Hasła muszą być identyczne.</small>
+        @if (
+          registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched
+        ) {
+          <small class="text-red-500 text-xs">{{ t().passwordMismatch }}</small>
         }
       </div>
 
       @if (errorMessage()) {
-        <div class="bg-red-500/10 text-red-500 text-xs p-3 rounded text-center border border-red-500/20">
+        <div
+          class="bg-red-500/10 text-red-500 text-xs p-3 rounded text-center border border-red-500/20"
+        >
           {{ errorMessage() }}
         </div>
       }
 
       <p-button
-        label="Zarejestruj się"
+        [label]="t().registerButton"
         type="submit"
         [loading]="isLoading()"
         [disabled]="registerForm.invalid"
-        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white focus:ring-2 focus:!ring-[var(----primary-color)]">
+        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white focus:ring-2 focus:!ring-[var(----primary-color)]"
+      >
       </p-button>
 
-      <div class="text-center mt-2 text-sm text-[var(--text-muted)]">
-        Masz już konto?
-        <a [routerLink]="['/login']"
-           class="text-primary hover:text-primary-hover font-bold cursor-pointer hover:underline ml-1">
-          Zaloguj się
+      <div class="text-center mt-2 text-sm text-(--text-muted)">
+        {{ t().haveAccount }}
+        <a
+          [routerLink]="['/login']"
+          class="text-primary hover:text-primary-hover font-bold cursor-pointer hover:underline ml-1"
+        >
+          {{ t().signIn }}
         </a>
       </div>
-
     </form>
   </div>
 </div>
