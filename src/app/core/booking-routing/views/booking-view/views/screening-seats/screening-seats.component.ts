@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {BookingStore} from '@cinemabooking/stores/booking-store';
+import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {
   SeatComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/views/components/seat/seat.component';
@@ -24,6 +24,6 @@ import {
   templateUrl: './screening-seats.component.html',
 })
 export class ScreeningSeatsComponent {
-  public store = inject(BookingStore);
-  public rows = this.store.rows;
+  protected readonly store = inject(BookingStore);
+  protected readonly rows = this.store.rows;
 }
