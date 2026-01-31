@@ -6,10 +6,13 @@ import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
+import {
+  BookingStepperComponent
+} from '@cinemabooking/core/booking-routing/views/booking-view/components/booking-stepper/booking-stepper.component';
 
 @Component({
   selector: 'app-booking-view',
-  imports: [MovieCardBookingComponent, RouterOutlet, SpinnerComponent],
+  imports: [MovieCardBookingComponent, RouterOutlet, SpinnerComponent, BookingStepperComponent],
   templateUrl: './booking-view.component.html',
 })
 export class BookingViewComponent implements OnInit {
