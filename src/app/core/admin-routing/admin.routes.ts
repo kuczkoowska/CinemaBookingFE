@@ -1,14 +1,23 @@
 import {Route} from '@angular/router';
+import {adminGuard} from '@cinemabooking/guards/admin.guard';
 
 export default [
   {
     path: '',
-    canActivate: [], //admin guard do dodania
+    canActivate: [adminGuard],
     loadComponent: () => import('@cinemabooking/core/admin-routing/admin-routing.component').then((c) => c.AdminRoutingComponent),
     children: [
       {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
         path: 'dashboard',
-        loadComponent: () => import('@cinemabooking/core/admin-routing/views/admin-view/admin-view.component').then((c) => c.AdminViewComponent),
+        loadComponent: () =>
+          import('@cinemabooking/core/admin-routing/views/admin-view/admin-view.component').then(
+            (c) => c.AdminViewComponent,
+          ),
       },
       {
         path: 'movies',
@@ -17,10 +26,6 @@ export default [
       {
         path: 'users',
         loadComponent: () => import('@cinemabooking/core/admin-routing/views/users-view/users-view.component').then((c) => c.UsersViewComponent),
-      },
-      {
-        path: 'infrastructure',
-        loadComponent: () => import('@cinemabooking/core/admin-routing/views/infrastructure-view/infrastructure-view.component').then((c) => c.InfrastructureViewComponent),
       },
       {
         path: 'logs',
@@ -37,4 +42,3 @@ export default [
     ],
   },
 ] satisfies Route[];
-
