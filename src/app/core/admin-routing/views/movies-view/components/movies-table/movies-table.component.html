@@ -1,12 +1,16 @@
+<p-confirmDialog />
+
 <p-table [value]="store.movies()" [loading]="store.isLoading()">
   <ng-template pTemplate="header">
     <tr>
-      <th>ID</th>
-      <th>Tytuł</th>
-      <th>Gatunek</th>
-      <th>Reżyser</th>
-      <th>Czas trwania (min)</th>
-      <th>Wiek</th>
+      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+      <th pSortableColumn="title">Tytuł <p-sortIcon field="title" /></th>
+      <th pSortableColumn="genre">Gatunek <p-sortIcon field="genre" /></th>
+      <th pSortableColumn="director">Reżyser <p-sortIcon field="director" /></th>
+      <th pSortableColumn="durationMinutes">
+        Czas trwania (min) <p-sortIcon field="durationMinutes" />
+      </th>
+      <th pSortableColumn="ageRating">Wiek <p-sortIcon field="ageRating" /></th>
       <th>Akcje</th>
     </tr>
   </ng-template>
@@ -24,13 +28,17 @@
           icon="pi pi-pencil"
           class="p-button-text p-button-sm"
           (click)="onEdit(movie)"
-        ></button>
+        >
+          Edytuj
+        </button>
         <button
           pButton
           icon="pi pi-trash"
           class="p-button-text p-button-danger p-button-sm"
           (click)="onDelete(movie)"
-        ></button>
+        >
+          Usuń
+        </button>
       </td>
     </tr>
   </ng-template>

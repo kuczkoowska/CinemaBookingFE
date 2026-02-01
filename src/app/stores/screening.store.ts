@@ -64,6 +64,7 @@ export const screeningStore = signalStore(
 
 function getLocalDateString(date: Date): string {
   const offset = date.getTimezoneOffset() * 60000;
+
   return new Date(date.getTime() - offset).toISOString().split('T')[0];
 }
 
@@ -73,10 +74,11 @@ function generateDays(count: number): { label: string; date: string }[] {
     const date = new Date();
     date.setDate(date.getDate() + i);
 
-    let label = i === 0 ? 'Dzisiaj' : date.toLocaleDateString('pl-PL', {day: 'numeric', month: 'numeric'});
+    const label = i === 0 ? 'Dzisiaj' : date.toLocaleDateString('pl-PL', {day: 'numeric', month: 'numeric'});
     const dateString = getLocalDateString(date);
 
     dates.push({label, date: dateString});
   }
+  
   return dates;
 }

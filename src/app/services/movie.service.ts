@@ -1,9 +1,8 @@
-import {inject, Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Movie} from '@cinemabooking/interfaces/movie';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment.development';
-
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Movie } from '@cinemabooking/interfaces/movie';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +10,6 @@ import {environment} from '../../environments/environment.development';
 export class MovieService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/movies`;
-
 
   public getMovies(): Observable<Movie[]> {
     return this.http.get<Movie[]>(`${this.apiUrl}/front`);
@@ -22,6 +20,10 @@ export class MovieService {
   }
 
   public postMovie(movie: Movie): Observable<Movie> {
+    return this.http.post<Movie>(`${this.apiUrl}`, movie);
+  }
+
+  public create(movie: Omit<Movie, 'id'>): Observable<Movie> {
     return this.http.post<Movie>(`${this.apiUrl}`, movie);
   }
 

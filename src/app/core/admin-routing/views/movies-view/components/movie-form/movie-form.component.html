@@ -1,0 +1,74 @@
+<div class="max-w-3xl mx-auto p-6 animate-fade-in">
+  <p-card [header]="isEditMode() ? 'Edycja Filmu' : 'Dodaj Nowy Film'">
+
+    <form [formGroup]="form" class="flex flex-col gap-4">
+
+      <div class="flex flex-col gap-2">
+        <label class="font-bold">Tytuł</label>
+        <input pInputText formControlName="title"/>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="font-bold">Gatunek</label>
+        <p-select
+          formControlName="genre"
+          [options]="genreOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Wybierz gatunek"
+          fluid
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="font-bold">Opis</label>
+        <textarea pTextarea formControlName="description" rows="4"></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Reżyser</label>
+          <input pInputText formControlName="director"/>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Czas (min)</label>
+          <p-inputNumber formControlName="durationMinutes" [showButtons]="true" [min]="1"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Wiek (+)</label>
+          <p-inputNumber formControlName="ageRating" [showButtons]="true" [min]="0"/>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="font-bold">Plakat URL</label>
+          <input pInputText formControlName="posterUrl"/>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="font-bold">Zwiastun URL</label>
+        <input pInputText formControlName="trailerUrl"/>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-surface-200">
+        <p-button
+          label="Anuluj"
+          icon="pi pi-times"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="onCancel()">
+        </p-button>
+        <p-button
+          [label]="isEditMode() ? 'Zapisz zmiany' : 'Dodaj film'"
+          icon="pi pi-check"
+          (onClick)="onSave()"
+          [loading]="store.isLoading()"
+          [disabled]="form.invalid">
+        </p-button>
+      </div>
+
+    </form>
+  </p-card>
+</div>

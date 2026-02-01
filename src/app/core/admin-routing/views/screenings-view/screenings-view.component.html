@@ -1,1 +1,141 @@
-<p>screenings-view works!</p>
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <div class="flex items-center gap-3">
+      <app-back-dashboard />
+      <h1 class="text-3xl font-bold">Zarządzanie Seansami</h1>
+    </div>
+    <button pButton icon="pi pi-plus" (click)="openNewDialog()">Dodaj Seans</button>
+  </div>
+
+  <div class="flex gap-3 items-center mb-4">
+    <label class="font-medium">Wybierz datę:</label>
+    <p-datepicker
+      [ngModel]="store.selectedDate()"
+      dateFormat="dd.mm.yy"
+      [showIcon]="true"
+      (onSelect)="onDateChange($event)"
+      [style]="{ width: '250px' }"
+    >
+    </p-datepicker>
+  </div>
+
+  <p-table
+    [value]="store.screenings()"
+    [loading]="store.isLoading()"
+    [tableStyle]="{ 'min-width': '60rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+        <th pSortableColumn="movieTitle">Film <p-sortIcon field="movieTitle" /></th>
+        <th pSortableColumn="theaterRoomName">Sala <p-sortIcon field="theaterRoomName" /></th>
+        <th pSortableColumn="startTime">Data i Godzina <p-sortIcon field="startTime" /></th>
+        <th>Akcje</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-screening>
+      <tr>
+        <td>{{ screening.id }}</td>
+        <td>{{ screening.movieTitle }}</td>
+        <td>{{ screening.theaterRoomName }}</td>
+        <td>{{ screening.startTime | date: 'dd.MM.yyyy HH:mm' }}</td>
+        <td>
+          <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text p-button-info">
+            Zobacz szczegóły
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center py-4">Brak seansów w wybranym dniu</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog
+    [visible]="store.isDialogOpen()"
+    (visibleChange)="!$event ? store.closeDialog() : null"
+    header="Dodaj Seans"
+    [modal]="true"
+    [style]="{ width: '40vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="screeningForm">
+      <div class="flex flex-col gap-4">
+        <div>
+          <label for="movie" class="block mb-2 font-medium">Film *</label>
+          <p-select
+            id="movie"
+            formControlName="movieId"
+            [options]="movieStore.movies()"
+            optionLabel="title"
+            optionValue="id"
+            placeholder="Wybierz film"
+            [filter]="true"
+            filterBy="title"
+            [style]="{ width: '100%' }"
+            appendTo="body"
+          >
+          </p-select>
+          @if (screeningForm.controls.movieId.invalid && screeningForm.controls.movieId.touched) {
+            <small class="text-red-600">Film jest wymagany</small>
+          }
+        </div>
+
+        <div>
+          <label for="room" class="block mb-2 font-medium">Sala *</label>
+          <p-select
+            id="room"
+            formControlName="theaterRoomId"
+            [options]="theaterRooms"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Wybierz salę"
+            [style]="{ width: '100%' }"
+            appendTo="body"
+          >
+          </p-select>
+          @if (
+            screeningForm.controls.theaterRoomId.invalid &&
+            screeningForm.controls.theaterRoomId.touched
+          ) {
+            <small class="text-red-600">Sala jest wymagana</small>
+          }
+        </div>
+
+        <div>
+          <label for="startTime" class="block mb-2 font-medium">Data i godzina rozpoczęcia *</label>
+          <p-datepicker
+            id="startTime"
+            formControlName="startTime"
+            [showTime]="true"
+            [showSeconds]="false"
+            dateFormat="dd.mm.yy"
+            hourFormat="24"
+            [stepMinute]="5"
+            [showIcon]="true"
+            [style]="{ width: '100%' }"
+            appendTo="body"
+          >
+          </p-datepicker>
+          @if (
+            screeningForm.controls.startTime.invalid && screeningForm.controls.startTime.touched
+          ) {
+            <small class="text-red-600">Data i godzina są wymagane</small>
+          }
+        </div>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <button pButton icon="pi pi-times" class="p-button-text" (click)="store.closeDialog()">
+        Anuluj
+      </button>
+      <button pButton icon="pi pi-check" (click)="saveScreening()" [loading]="store.isLoading()">
+        Dodaj
+      </button>
+    </ng-template>
+  </p-dialog>
+</div>

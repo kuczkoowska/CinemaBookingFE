@@ -132,13 +132,28 @@ export const BookingStore = signalStore(
 
       isExpired: computed((): boolean => {
         const exp = expirationTime();
-
         return exp ? new Date().getTime() > new Date(exp).getTime() : false;
       }),
     }),
   ),
 
-  withMethods((store, bookingService = inject(BookingService)) => ({
+  withMethods((store) => ({
+    resetBookingState(): void {
+      patchState(store, {
+        activeBooking: null,
+        selectedSeatIds: [],
+        ticketSelections: {},
+        expirationTime: null,
+        isPaymentProcessing: false,
+        isPaymentSuccess: false,
+        isFinished: false,
+        contactDetails: null,
+        movie: null,
+        screening: null,
+        seats: []
+      });
+    },
+
     markAsFinished() {
       patchState(store, {isFinished: true});
     },
@@ -165,13 +180,37 @@ export const BookingStore = signalStore(
         ticketSelections: {...state.ticketSelections, [ticketId]: newType},
       }));
     },
+  })),
+
+  withMethods((store, bookingService = inject(BookingService)) => ({
+
+    loadBookingData: rxMethod<number>(
+      pipe(
+        tap(() => {
+          store.resetBookingState();
+          store.setLoading();
+        }),
+        switchMap((screeningId) => {
+          return bookingService.getBookingData(screeningId).pipe(
+            tapResponse({
+              next: (data: Booking) => {
+                patchState(store, {
+                  movie: data.movie,
+                  screening: data.screening,
+                  seats: data.seats,
+                  prices: data.prices,
+                });
+                store.setLoaded();
+              },
+              error: (err: HttpErrorResponse | Error) => store.setError(err),
+            }),
+          );
+        }),
+      ),
+    ),
 
     cancelBookingOnExit: rxMethod<number>(
-      pipe(
-        switchMap(id => bookingService.cancelBooking(id).pipe(
-          catchError(() => EMPTY)
-        ))
-      )
+      pipe(switchMap((id) => bookingService.cancelBooking(id).pipe(catchError(() => EMPTY)))),
     ),
 
     cancelBookingSilent: rxMethod<number>(
@@ -194,16 +233,16 @@ export const BookingStore = signalStore(
         tap(() => store.setLoading()),
         switchMap(() => {
           const booking = store.activeBooking();
-          if (!booking) return EMPTY;
+          if (!booking) {
+            store.resetBookingState();
+            store.setLoaded();
+            return EMPTY;
+          }
 
           return bookingService.cancelBooking(booking.id).pipe(
             tapResponse({
               next: () => {
-                patchState(store, {
-                  activeBooking: null,
-                  expirationTime: null,
-                  ticketSelections: {},
-                });
+                store.resetBookingState();
                 store.setLoaded();
               },
               error: (err: HttpErrorResponse | Error) => store.setError(err),
@@ -222,7 +261,6 @@ export const BookingStore = signalStore(
 
           if (!screening || seatIds.length === 0) {
             store.setLoaded();
-
             return EMPTY;
           }
 
@@ -260,74 +298,63 @@ export const BookingStore = signalStore(
             delay(2000),
             tapResponse({
               next: () => {
-                patchState(store, {isPaymentProcessing: false, isPaymentSuccess: true, isFinished: true});
+                patchState(store, {
+                  isPaymentProcessing: false,
+                  isPaymentSuccess: true,
+                  isFinished: true,
+                });
                 store.setLoaded();
                 payload?.onSuccess?.();
               },
               error: (err: HttpErrorResponse) => {
                 patchState(store, {isPaymentProcessing: false});
                 store.setError(err);
-              }
-            })
-          );
-        })
-      )
-    ),
-
-    loadBookings: rxMethod<{ page: number; rows: number }>(
-      pipe(
-        tap(() => patchState(store, {isLoading: true})),
-        switchMap(({page, rows}) =>
-          bookingService.getMyBookings(page, rows).pipe(
-            tapResponse({
-              next: (response) => patchState(store, {
-                items: response.content,
-                totalRecords: response.totalElements,
-                isLoading: false
-              }),
-              error: () => patchState(store, {items: [], isLoading: false}),
-            })
-          )
-        )
-      )
-    ),
-
-    loadBookingData: rxMethod<number>(
-      pipe(
-        tap(() => store.setLoading()),
-        switchMap((screeningId) => {
-          return bookingService.getBookingData(screeningId).pipe(
-            tapResponse({
-              next: (data: Booking) => {
-                patchState(store, {
-                  movie: data.movie,
-                  screening: data.screening,
-                  seats: data.seats,
-                  prices: data.prices,
-                });
-                store.setLoaded();
               },
-              error: (err: HttpErrorResponse | Error) => store.setError(err),
             }),
           );
         }),
       ),
     ),
 
+    loadBookings: rxMethod<{ page: number; rows: number }>(
+      pipe(
+        tap(() => store.setLoading()),
+        switchMap(({page, rows}) =>
+          bookingService.getMyBookings(page, rows).pipe(
+            tapResponse({
+              next: (response) => {
+                patchState(store, {
+                  items: response.content,
+                  totalRecords: response.totalElements,
+                });
+                store.setLoaded();
+              },
+              error: () => {
+                patchState(store, {items: []});
+                store.setLoaded();
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
+
     loadBookingById: rxMethod<number>(
       pipe(
-        tap(() => patchState(store, {isLoading: true, error: null})),
-        switchMap((id) => bookingService.getBookingById(id).pipe(
-          tapResponse({
-            next: (booking) => patchState(store, {
-              activeBooking: booking,
-              isLoading: false
+        tap(() => store.setLoading()),
+        switchMap((id) =>
+          bookingService.getBookingById(id).pipe(
+            tapResponse({
+              next: (booking) => {
+                patchState(store, {activeBooking: booking});
+                store.setLoaded();
+              },
+              error: (err: HttpErrorResponse | Error) => store.setError(err),
             }),
-            error: (err: HttpErrorResponse | Error) => store.setError(err),
-          })
-        ))
-      )
-    )
+          ),
+        ),
+      ),
+    ),
   })),
 );
 
@@ -356,8 +383,11 @@ function groupSeatsByRows(
   });
 }
 
-function mapTicketsToUpdates(booking: BookingDto, selections: Record<number, string>): UpdateTicketTypeDto[] {
-  return booking.tickets.map(ticket => ({
+function mapTicketsToUpdates(
+  booking: BookingDto,
+  selections: Record<number, string>,
+): UpdateTicketTypeDto[] {
+  return booking.tickets.map((ticket) => ({
     ticketId: ticket.id,
     newType: (selections[ticket.id] || ticket.type) as TicketType,
   }));

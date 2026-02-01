@@ -1,7 +1,7 @@
 export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
+  readonly content: T[];
+  readonly totalElements: number;
+  readonly totalPages: number;
+  readonly size: number;
+  readonly number: number;
 }

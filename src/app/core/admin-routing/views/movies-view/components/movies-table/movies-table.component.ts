@@ -1,13 +1,14 @@
-import {Component, inject, output} from '@angular/core';
-import {movieStore} from '@cinemabooking/stores/movie.store';
-import {Movie} from '@cinemabooking/interfaces/movie';
-import {TableModule} from 'primeng/table';
-import {ButtonModule} from 'primeng/button';
-import {ConfirmationService} from 'primeng/api';
+import { Component, inject, output } from '@angular/core';
+import { movieStore } from '@cinemabooking/stores/movie.store';
+import { Movie } from '@cinemabooking/interfaces/movie';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-movies-table',
-  imports: [TableModule, ButtonModule],
+  imports: [TableModule, ButtonModule, ConfirmDialog],
   templateUrl: './movies-table.component.html',
 })
 export class MoviesTableComponent {
@@ -28,7 +29,7 @@ export class MoviesTableComponent {
       acceptLabel: 'Tak',
       rejectLabel: 'Nie',
       accept: () => {
-        this.store.deleteMovie({id: movie.id});
+        this.store.deleteMovie({ id: movie.id });
       },
     });
   }

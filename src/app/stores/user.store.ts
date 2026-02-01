@@ -7,52 +7,96 @@ import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {NotificationService} from '@cinemabooking/services/notification.service';
 import {AuthStore} from './auth.store';
+import {Router} from '@angular/router';
+import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
+import {HttpErrorResponse} from '@angular/common/http';
+import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
 
 interface UserState {
   users: User[];
-  isLoading: boolean;
-  error: string | null;
+  isDialogOpen: boolean;
+  selectedUser: User | null;
 }
 
 const initialState: UserState = {
   users: [],
-  isLoading: false,
-  error: null,
+  isDialogOpen: false,
+  selectedUser: null,
 };
 
 export const UserStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
+  withRequestStatus(),
 
-  withMethods((store, userService = inject(UserService), notification = inject(NotificationService), authStore = inject(AuthStore)) => ({
+  withMethods((
+    store,
+    userService = inject(UserService),
+    notify = inject(NotificationService),
+    authStore = inject(AuthStore),
+    router = inject(Router)
+  ) => ({
 
-    loadAllUsers: rxMethod<void>(
+    openEditDialog(user: User): void {
+      patchState(store, {selectedUser: user, isDialogOpen: true});
+    },
+
+    closeDialog(): void {
+      patchState(store, {selectedUser: null, isDialogOpen: false});
+    },
+
+    loadUsers: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, {isLoading: true, error: null})),
+        tap(() => store.setLoading()),
         switchMap(() => userService.getAllUsers().pipe(
           tapResponse({
             next: (users) => {
-              patchState(store, {users, isLoading: false});
+              patchState(store, {users});
+              store.setLoaded();
             },
-            error: () => {
-              patchState(store, {isLoading: false, error: 'Błąd pobierania użytkowników'});
+            error: (err: Error | HttpErrorResponse) => {
+              store.setError(err);
+              notify.showError('Błąd', 'Nie udało się pobrać użytkowników');
             }
           })
         ))
       )
     ),
 
-    toggleBlockUser: rxMethod<number>(
+    updateUser: rxMethod<{ id: number; data: UpdateUserDto }>(
       pipe(
-        switchMap((id) => userService.toggleBlockUser(id).pipe(
+        tap(() => store.setLoading()),
+        switchMap(({id, data}) => userService.updateUser(id, data).pipe(
           tapResponse({
             next: () => {
-              patchState(store, (state) => ({
-                users: state.users.map(u => u.id === id ? {...u, isActive: !u.isActive} : u)
-              }));
-              notification.showSuccess('Sukces', 'Zmieniono status blokady');
+              notify.showSuccess('Sukces', 'Zaktualizowano użytkownika');
+              patchState(store, {isDialogOpen: false, selectedUser: null});
+              store.setLoaded();
+
             },
-            error: () => notification.showError('Błąd', 'Nie udało się zmienić statusu')
+            error: (err: Error | HttpErrorResponse) => {
+              store.setError(err);
+              notify.showError('Błąd', 'Aktualizacja nieudana');
+            }
+          })
+        ))
+      )
+    ),
+
+    toggleBlockUser: rxMethod<User>(
+      pipe(
+        switchMap((user) => userService.toggleBlockUser(user.id).pipe(
+          tapResponse({
+            next: () => {
+              const action = user.isActive ? 'Zablokowano' : 'Odblokowano';
+
+              patchState(store, (state) => ({
+                users: state.users.map(u => u.id === user.id ? {...u, isActive: !u.isActive} : u)
+              }));
+
+              notify.showSuccess('Sukces', `${action} użytkownika`);
+            },
+            error: () => notify.showError('Błąd', 'Zmiana statusu nieudana')
           })
         ))
       )
@@ -63,35 +107,34 @@ export const UserStore = signalStore(
         switchMap((id) => userService.promoteToAdmin(id).pipe(
           tapResponse({
             next: () => {
-              notification.showSuccess('Sukces', 'Użytkownik awansowany na Admina');
+              notify.showSuccess('Sukces', 'Użytkownik awansowany na Admina');
             },
-            error: () => notification.showError('Błąd', 'Nie udało się awansować')
+            error: () => notify.showError('Błąd', 'Nie udało się awansować')
           })
         ))
       )
     ),
 
-    updateMyProfile: rxMethod<{ data: any, onSuccess?: () => void }>(
+    updateMyProfile: rxMethod<any>(
       pipe(
-        tap(() => patchState(store, {isLoading: true})),
-        switchMap(({data, onSuccess}) => userService.updateMyData(data).pipe(
+        tap(() => store.setLoading()),
+        switchMap((data) => userService.updateMyData(data).pipe(
           tapResponse({
             next: () => {
-              patchState(store, {isLoading: false});
-              notification.showSuccess('Sukces', 'Twój profil został zaktualizowany');
-
+              store.setLoaded();
+              notify.showSuccess('Sukces', 'Profil zaktualizowany');
               authStore.checkAuth();
-
-              if (onSuccess) onSuccess();
+              router.navigate(['/profile']);
             },
-            error: () => {
-              patchState(store, {isLoading: false});
-              notification.showError('Błąd', 'Nie udało się zaktualizować profilu');
+
+            error: (err: Error | HttpErrorResponse) => {
+              store.setError(err);
+              notify.showError('Błąd', 'Nie udało się zapisać');
             }
           })
         ))
       )
-    )
+    ),
 
   }))
 );

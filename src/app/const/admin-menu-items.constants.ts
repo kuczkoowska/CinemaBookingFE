@@ -32,19 +32,20 @@ export const ADMIN_MENU_ITEMS = [
     styleClass: 'border-cyan-500',
     styleIcons: 'bg-cyan-500/10'
   },
-  {
-    title: 'Statystyki',
-    description: 'Raporty sprzedaży i popularności.',
-    icon: 'pi pi-chart-bar',
-    route: '../stats',
-    styleClass: 'border-pink-500',
-    styleIcons: 'bg-pink-500/10'
-  },
-  {
-    title: 'Logi Systemowe',
-    description: 'Podgląd błędów i historii zdarzeń.',
-    icon: 'pi pi-list',
-    route: '../logs',
-    styleClass: 'border-orange-500',
-    styleIcons: 'bg-orange-500/10'
-  }];
+  // {
+  //   title: 'Statystyki',
+  //   description: 'Raporty sprzedaży i popularności.',
+  //   icon: 'pi pi-chart-bar',
+  //   route: '../stats',
+  //   styleClass: 'border-pink-500',
+  //   styleIcons: 'bg-pink-500/10'
+  // },
+  // {
+  //   title: 'Logi Systemowe',
+  //   description: 'Podgląd błędów i historii zdarzeń.',
+  //   icon: 'pi pi-list',
+  //   route: '../logs',
+  //   styleClass: 'border-orange-500',
+  //   styleIcons: 'bg-orange-500/10'
+  // }
+];

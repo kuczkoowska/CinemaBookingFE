@@ -1,16 +1,13 @@
 <div class="max-w-4xl mx-auto p-6 animate-fade-in">
-
-  <div class="bg-surface-0 border border-surface-200 rounded-xl p-6 mb-8 shadow-sm flex justify-between items-center">
+  <div
+    class="bg-surface-0 border border-surface-200 rounded-xl p-6 mb-8 shadow-sm flex justify-between items-center"
+  >
     <div>
       <h1 class="text-2xl font-bold mb-1">Witaj, {{ authStore.displayName() }}</h1>
       <p class="text-gray-500">{{ authStore.user()?.email }}</p>
     </div>
 
-    <p-button
-      label="Edytuj Profil"
-      icon="pi pi-user-edit"
-      routerLink="/profile/edit">
-    </p-button>
+    <p-button label="Edytuj Profil" icon="pi pi-user-edit" routerLink="/profile/edit"> </p-button>
   </div>
 
   <div class="bg-surface-0 border border-surface-200 rounded-xl p-6 shadow-sm">
@@ -28,11 +25,11 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th>Nr</th>
-          <th>Film</th>
-          <th>Data</th>
-          <th>Kwota</th>
-          <th>Status</th>
+          <th pSortableColumn="id">Nr <p-sortIcon field="id" /></th>
+          <th pSortableColumn="movieTitle">Film <p-sortIcon field="movieTitle" /></th>
+          <th pSortableColumn="startTime">Data <p-sortIcon field="startTime" /></th>
+          <th pSortableColumn="totalAmount">Kwota <p-sortIcon field="totalAmount" /></th>
+          <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
           <th>Akcje</th>
         </tr>
       </ng-template>
@@ -40,8 +37,8 @@
         <tr>
           <td>#{{ booking.id }}</td>
           <td class="font-bold">{{ booking.movieTitle }}</td>
-          <td>{{ booking.startTime | date:'short' }}</td>
-          <td>{{ booking.totalAmount | number:'1.2-2' }} PLN</td>
+          <td>{{ booking.startTime | date: 'short' }}</td>
+          <td>{{ booking.totalAmount | number: '1.2-2' }} PLN</td>
           <td>
             <span [class]="'badge status-' + booking.status">
               {{ booking.status }}
@@ -53,7 +50,8 @@
               [rounded]="true"
               [text]="true"
               (onClick)="goToDetails(booking.id)"
-              pTooltip="Szczegóły">
+              pTooltip="Szczegóły"
+            >
             </p-button>
           </td>
         </tr>

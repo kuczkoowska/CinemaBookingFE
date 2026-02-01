@@ -1,7 +1,7 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div class="flex items-center gap-3">
-      <app-back-dashboard/>
+      <app-back-dashboard />
       <h1 class="text-3xl font-bold">Logi Systemowe</h1>
     </div>
 
@@ -25,11 +25,11 @@
   <p-table [value]="logs()" [tableStyle]="{ 'min-width': '60rem' }" [rows]="20" [paginator]="true">
     <ng-template pTemplate="header">
       <tr>
-        <th>ID</th>
-        <th>Data i Czas</th>
-        <th>Typ</th>
+        <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+        <th pSortableColumn="timestamp">Data i Czas <p-sortIcon field="timestamp" /></th>
+        <th pSortableColumn="type">Typ <p-sortIcon field="type" /></th>
         <th>Wiadomość</th>
-        <th>ID Użytkownika</th>
+        <th pSortableColumn="userId">ID Użytkownika <p-sortIcon field="userId" /></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-log>

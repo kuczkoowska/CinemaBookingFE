@@ -18,7 +18,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 import {LOCATION_INITIALIZED} from '@angular/common';
 
-export function i18nInitializer(): Promise<void> {
+export async function i18nInitializer(): Promise<void> {
   const translate = inject(TranslateService);
   const injector = inject(Injector);
 
@@ -29,7 +29,8 @@ export function i18nInitializer(): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
       translate.use(langToSet).subscribe({
-        next: () => {
+        next: (): void => {
+          console.log(`Successfully initialized '${langToSet}' language.`);
         },
         error: (err) => {
           console.error(
