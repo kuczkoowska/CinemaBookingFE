@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, output} from '@angular/core';
+import {Component, computed, effect, inject, input, output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs';
@@ -10,6 +10,7 @@ import {SelectModule} from 'primeng/select';
 import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
 import {GENRE_SELECT_OPTIONS} from '@cinemabooking/const/movie-genre.constants';
 import {MovieFilterForm} from '@cinemabooking/interfaces/form/movie-filter-form';
+import {Badge} from 'primeng/badge';
 
 @Component({
   selector: 'app-movie-filter',
@@ -18,7 +19,8 @@ import {MovieFilterForm} from '@cinemabooking/interfaces/form/movie-filter-form'
     InputTextModule,
     CheckboxModule,
     ButtonModule,
-    SelectModule
+    SelectModule,
+    Badge,
   ],
   templateUrl: './movie-filter.component.html',
 })
@@ -35,6 +37,17 @@ export class MovieFilterComponent {
     hideAdult: new FormControl(false, {nonNullable: true}),
   });
 
+  protected readonly activeFiltersCount = computed(() => {
+    const filters = this.currentFilters();
+    if (!filters) return 0;
+
+    let count = 0;
+    if (filters.searchQuery && filters.searchQuery.trim() !== '') count++;
+    if (filters.genre && filters.genre !== '') count++;
+    if (filters.hideAdult) count++;
+
+    return count;
+  });
 
   public constructor() {
     effect((): void => {
