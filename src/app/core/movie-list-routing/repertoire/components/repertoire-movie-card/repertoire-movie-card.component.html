@@ -1,46 +1,39 @@
 <div
-  class="group flex flex-col md:flex-row gap-6 p-5 bg-element border border-app-border rounded-2xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-
-  <div class="relative w-full md:w-48 shrink-0 overflow-hidden rounded-xl aspect-[2/3]">
+  class="group flex flex-row gap-4 p-4 bg-element border border-app-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300"
+>
+  <a
+    [routerLink]="['/movie', item().movie.id]"
+    class="relative w-24 md:w-32 shrink-0 overflow-hidden rounded-lg aspect-2/3 cursor-pointer"
+  >
     <img
       [src]="item().movie.posterUrl"
       [alt]="item().movie.title"
       class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
     />
-    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-3">
-      <span class="text-white text-xs font-bold">{{ item().movie.genre }}</span>
-    </div>
-  </div>
+  </a>
 
-  <div class="flex-1 flex flex-col">
-
-    <div class="flex justify-between items-start mb-2">
-      <h2 class="text-2xl font-bold text-main group-hover:text-primary transition-colors">
+  <div class="flex-1 flex flex-col min-w-0">
+    <div class="flex flex-wrap items-center gap-2 mb-1">
+      <a
+        [routerLink]="['/movie', item().movie.id]"
+        class="text-lg font-bold text-main group-hover:text-primary transition-colors no-underline hover:underline truncate"
+      >
         {{ item().movie.title }}
-      </h2>
-      <div class="flex gap-2">
-        <p-tag [value]="16 + '+'"></p-tag>
-        <span class="text-app-muted text-sm flex items-center gap-1">
-                     <i class="pi pi-clock"></i> {{ item().movie.durationMinutes }} min
-                   </span>
-      </div>
+      </a>
+      <p-tag [value]="item().movie.ageRating + '+'" class="text-xs"/>
     </div>
 
-    <p class="text-app-muted line-clamp-2 mb-6 text-sm">
-      {{ item().movie.description }}
-    </p>
-
-    <div class="mt-auto">
-      <p class="text-xs uppercase text-app-muted font-bold mb-3 tracking-wider">
-        Dostępne seanse:
-      </p>
-
-      <div class="flex flex-wrap gap-3">
-        @for (screening of item().screenings; track screening.id) {
-          <app-repertoire-screening [screening]="screening"/>
-        }
-      </div>
+    <div class="flex items-center gap-3 text-xs text-app-muted mb-2">
+      <span class="flex items-center gap-1">
+        <i class="pi pi-clock"></i> {{ item().movie.durationMinutes }} min
+      </span>
+      <span>{{ item().movie.genre }}</span>
     </div>
 
+    <div class="flex flex-wrap gap-2 mt-auto">
+      @for (screening of item().screenings; track screening.id) {
+        <app-repertoire-screening [screening]="screening"/>
+      }
+    </div>
   </div>
 </div>

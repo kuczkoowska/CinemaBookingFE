@@ -20,7 +20,6 @@ import {
 
 @Component({
   selector: 'app-repertoire',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -37,13 +36,6 @@ export class RepertoireComponent implements OnInit {
   public store = inject(RepertoireStore);
 
   public weekDays = signal<Date[]>([]);
-
-  public isPast(dateStr: string): boolean {
-    const screeningDate = new Date(dateStr);
-    const now = new Date();
-
-    return screeningDate < now;
-  }
 
   public ngOnInit(): void {
     this.generateWeekDays();
