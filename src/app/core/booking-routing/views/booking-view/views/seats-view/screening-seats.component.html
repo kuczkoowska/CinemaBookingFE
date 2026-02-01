@@ -5,7 +5,6 @@
     <div class="flex items-center gap-3">
 
       <app-row-numbers [row]="row.rowNumber"/>
-      <!--      tutaj z right do poprawy-->
 
       <div class="flex gap-2">
         @for (seat of row.seats; track seat.id) {
@@ -16,9 +15,9 @@
       <app-row-numbers [row]="row.rowNumber"/>
     </div>
   }
-</div>
 
-<app-opis/>
+  <app-opis/>
+</div>
 
 @if (store.selectedSeatIds().length > 0) {
   <app-seat-summary/>

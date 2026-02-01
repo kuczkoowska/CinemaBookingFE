@@ -1,16 +1,20 @@
 <div
-  class="fixed bottom-0 left-0 w-full bg-element border-t border-app-border p-4 shadow-2xs z-50">
-  <div class="container mx-auto max-w-4xl flex justify-between items-center">
-
-    <div class="flex flex-col gap-1">
+  class="fixed bottom-0 left-0 w-full bg-element/95 backdrop-blur-md border-t border-app-border p-4 shadow-2xl z-50 animate-slide-up"
+>
+  <div
+    class="container mx-auto max-w-4xl flex flex-col sm:flex-row justify-between items-center gap-4"
+  >
+    <div class="flex flex-col gap-1 text-center sm:text-left">
       <span class="text-xs text-app-muted uppercase tracking-wider font-bold">
         Wybrano miejsca ({{ store.selectedSeatsDetails().length }}):
       </span>
 
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
         @for (seat of store.selectedSeatsDetails(); track seat.id) {
-          <span class="bg-app-bg px-2 py-1 rounded text-sm border border-app-border text-main font-medium">
-            Rząd {{ seat.rowNumber }} / Msc {{ seat.seatNumber }}
+          <span
+            class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm border border-primary/30 font-semibold"
+          >
+            R{{ seat.rowNumber }}/M{{ seat.seatNumber }}
           </span>
         }
       </div>
