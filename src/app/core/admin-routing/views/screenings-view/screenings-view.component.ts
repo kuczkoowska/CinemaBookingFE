@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
@@ -14,15 +14,22 @@ import {
 import {movieStore} from '@cinemabooking/stores/movie.store';
 import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
 import {AdminScreeningsStore} from '@cinemabooking/stores/admin-screening.store';
+import {ScreeningForm} from '@cinemabooking/interfaces/form/screening-form';
 
 @Component({
   selector: 'app-screenings-view',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TableModule, ButtonModule,
-    DialogModule, DatePickerModule, SelectModule, InputTextModule,
-    TooltipModule, BackDashboardComponent, FormsModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    DatePickerModule,
+    SelectModule,
+    InputTextModule,
+    TooltipModule,
+    BackDashboardComponent,
+    FormsModule,
   ],
   templateUrl: './screenings-view.component.html',
 })
@@ -31,7 +38,7 @@ export class ScreeningsViewComponent implements OnInit {
   protected readonly movieStore = inject(movieStore);
   private readonly fb = inject(FormBuilder);
 
-  protected readonly screeningForm = this.fb.group({
+  protected readonly screeningForm: FormGroup<ScreeningForm> = this.fb.group({
     movieId: [null as number | null, Validators.required],
     theaterRoomId: [null as number | null, Validators.required],
     startTime: [null as Date | null, Validators.required],

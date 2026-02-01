@@ -1,7 +1,7 @@
 import {Component, effect, inject, OnInit} from '@angular/core';
 import {User} from '@cinemabooking/interfaces/user';
 import {CommonModule} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
@@ -14,6 +14,7 @@ import {
 import {ConfirmationService} from 'primeng/api';
 import {UserStore} from '@cinemabooking/stores/user.store';
 import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
+import {UserForm} from '@cinemabooking/interfaces/form/user-form';
 
 @Component({
   selector: 'app-users-view',
@@ -35,7 +36,7 @@ export class UsersViewComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly confirmationService = inject(ConfirmationService);
 
-  protected readonly userForm = this.fb.nonNullable.group({
+  protected readonly userForm: FormGroup<UserForm> = this.fb.nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -50,7 +51,7 @@ export class UsersViewComponent implements OnInit {
         this.userForm.patchValue({
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email
+          email: user.email,
         });
       }
     });
@@ -76,7 +77,7 @@ export class UsersViewComponent implements OnInit {
 
     this.store.updateUser({
       id: user.id,
-      data: dto
+      data: dto,
     });
   }
 
@@ -89,7 +90,7 @@ export class UsersViewComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Tak',
       rejectLabel: 'Nie',
-      accept: () => this.store.toggleBlockUser(user)
+      accept: () => this.store.toggleBlockUser(user),
     });
   }
 
@@ -103,7 +104,7 @@ export class UsersViewComponent implements OnInit {
       accept: () => {
         this.store.promoteToAdmin(user.id);
         setTimeout(() => this.store.loadUsers(), 500);
-      }
+      },
     });
   }
 

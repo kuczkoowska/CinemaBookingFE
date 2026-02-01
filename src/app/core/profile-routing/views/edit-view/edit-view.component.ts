@@ -1,10 +1,11 @@
 import {Component, effect, inject} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserStore} from '@cinemabooking/stores/user.store';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {ProfileEditForm} from '@cinemabooking/interfaces/form/profile-edit-form';
 
 @Component({
   selector: 'app-edit-view',
@@ -22,7 +23,7 @@ export class EditViewComponent {
   private readonly router: Router = inject(Router);
 
 
-  protected readonly form = this.fb.nonNullable.group({
+  protected readonly form: FormGroup<ProfileEditForm> = this.fb.nonNullable.group({
     email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]]
@@ -36,7 +37,6 @@ export class EditViewComponent {
       }
     });
   }
-
 
   protected save(): void {
     if (this.form.invalid) {

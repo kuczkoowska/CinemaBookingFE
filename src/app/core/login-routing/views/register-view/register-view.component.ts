@@ -1,5 +1,12 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
@@ -11,6 +18,7 @@ import {finalize} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {RegisterForm} from '@cinemabooking/interfaces/form/register-form';
 
 @Component({
   selector: 'app-register-view',
@@ -35,7 +43,7 @@ export class RegisterViewComponent implements OnInit {
   public isLoading = signal(false);
   public errorMessage = signal('');
 
-  public registerForm = this.fb.nonNullable.group({
+  public registerForm: FormGroup<RegisterForm> = this.fb.nonNullable.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],

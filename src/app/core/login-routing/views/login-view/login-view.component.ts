@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
@@ -7,6 +7,7 @@ import {MessageModule} from 'primeng/message';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {TranslateModule, TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
+import {LoginForm} from '@cinemabooking/interfaces/form/login-form';
 
 @Component({
   selector: 'app-login-view',
@@ -27,7 +28,7 @@ export class LoginViewComponent implements OnInit {
   public authStore = inject(AuthStore);
   public translateService = inject(TranslateService);
 
-  public loginForm = this.fb.nonNullable.group({
+  public loginForm: FormGroup<LoginForm> = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
