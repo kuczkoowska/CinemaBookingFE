@@ -1,20 +1,19 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
-import {User} from '@cinemabooking/interfaces/user';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TableModule} from 'primeng/table';
-import {ButtonModule} from 'primeng/button';
-import {DialogModule} from 'primeng/dialog';
-import {InputTextModule} from 'primeng/inputtext';
-import {TagModule} from 'primeng/tag';
-import {TooltipModule} from 'primeng/tooltip';
-import {
-  BackDashboardComponent
-} from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
-import {ConfirmationService} from 'primeng/api';
-import {UserStore} from '@cinemabooking/stores/user.store';
-import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
-import {UserForm} from '@cinemabooking/interfaces/form/user-form';
+import { Component, effect, inject, OnInit } from '@angular/core';
+import { User } from '@cinemabooking/interfaces/user';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { BackDashboardComponent } from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
+import { ConfirmationService } from 'primeng/api';
+import { UserStore } from '@cinemabooking/stores/user.store';
+import { UpdateUserDto } from '@cinemabooking/interfaces/dto/update-user-dto';
+import { UserForm } from '@cinemabooking/interfaces/form/user-form';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-users-view',
@@ -28,6 +27,7 @@ import {UserForm} from '@cinemabooking/interfaces/form/user-form';
     TagModule,
     TooltipModule,
     BackDashboardComponent,
+    ConfirmDialog,
   ],
   templateUrl: './users-view.component.html',
 })
@@ -36,10 +36,10 @@ export class UsersViewComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly confirmationService = inject(ConfirmationService);
 
-  protected readonly userForm: FormGroup<UserForm> = this.fb.nonNullable.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+  protected readonly userForm: FormGroup<UserForm> = this.fb.nonNullable.group<UserForm>({
+    firstName: this.fb.nonNullable.control('', Validators.required),
+    lastName: this.fb.nonNullable.control('', Validators.required),
+    email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
   });
 
   constructor() {
@@ -109,6 +109,25 @@ export class UsersViewComponent implements OnInit {
   }
 
   public isAdmin(user: User): boolean {
-    return user.roles.some((r) => r.name === 'ROLE_ADMIN');
+    return user.roles.some((r) => {
+      if (typeof r === 'string') {
+        return r === 'ROLE_ADMIN';
+      }
+      return r.name === 'ROLE_ADMIN';
+    });
+  }
+
+  public getRoleName(role: string | { name: string }): string {
+    if (typeof role === 'string') {
+      return role === 'ROLE_ADMIN' ? 'Admin' : 'Użytkownik';
+    }
+    return role.name === 'ROLE_ADMIN' ? 'Admin' : 'Użytkownik';
+  }
+
+  public isRoleAdmin(role: string | { name: string }): boolean {
+    if (typeof role === 'string') {
+      return role === 'ROLE_ADMIN';
+    }
+    return role.name === 'ROLE_ADMIN';
   }
 }

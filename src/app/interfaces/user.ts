@@ -9,5 +9,5 @@ export interface User {
   readonly firstName: string;
   readonly lastName: string;
   readonly isActive: boolean;
-  readonly roles: UserRole[];
+  readonly roles: UserRole[] | string[];
 }

@@ -1,3 +1,5 @@
+<p-confirmDialog />
+
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div class="flex items-center gap-3">
@@ -28,10 +30,10 @@
         <td>{{ user.firstName }} {{ user.lastName }}</td>
         <td>{{ user.email }}</td>
         <td>
-          @for (role of user.roles; track role.name) {
+          @for (role of user.roles; track $index) {
             <p-tag
-              [value]="role.name === 'ROLE_ADMIN' ? 'Admin' : 'Użytkownik'"
-              [severity]="role.name === 'ROLE_ADMIN' ? 'danger' : 'info'"
+              [value]="getRoleName(role)"
+              [severity]="isRoleAdmin(role) ? 'danger' : 'info'"
               class="mr-1"
             />
           }
@@ -45,7 +47,7 @@
         <td>
           <button
             pButton
-            pButtonIcon="pi pi-pencil"
+            icon="pi pi-pencil"
             class="p-button-rounded p-button-text p-button-info mr-2"
             (click)="openEditDialog(user)"
             pTooltip="Edytuj"
@@ -56,7 +58,7 @@
           @if (user.isActive) {
             <button
               pButton
-              pButtonIcon="pi pi-lock"
+              icon="pi pi-lock"
               class="p-button-rounded p-button-text p-button-warning mr-2"
               (click)="toggleBlock(user)"
               pTooltip="Zablokuj"
@@ -64,7 +66,7 @@
           } @else {
             <button
               pButton
-              pButtonIcon="pi pi-lock-open"
+              icon="pi pi-lock-open"
               class="p-button-rounded p-button-text p-button-success mr-2"
               (click)="toggleBlock(user)"
               pTooltip="Odblokuj"
@@ -74,7 +76,7 @@
           @if (!isAdmin(user)) {
             <button
               pButton
-              pButtonIcon="pi pi-user-plus"
+              icon="pi pi-user-plus"
               class="p-button-rounded p-button-text p-button-success"
               (click)="promoteToAdmin(user)"
               pTooltip="Awansuj na Admina"
@@ -123,15 +125,10 @@
     </form>
 
     <ng-template pTemplate="footer">
-      <button
-        pButton
-        pButtonIconn="pi pi-times"
-        class="p-button-text"
-        (click)="store.closeDialog()"
-      >
+      <button pButton icon="pi pi-times" class="p-button-text" (click)="store.closeDialog()">
         Anuluj
       </button>
-      <button pButton pButtonIcon="pi pi-check" (click)="saveUser()" [loading]="store.isLoading()">
+      <button pButton icon="pi pi-check" (click)="saveUser()" [loading]="store.isLoading()">
         Zapisz
       </button>
     </ng-template>
