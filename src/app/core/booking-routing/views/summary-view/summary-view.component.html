@@ -13,6 +13,7 @@
         [tickets]="store.ticketsToDisplay()"
         [totalAmount]="store.estimatedTotal()"
         [selections]="store.ticketSelections()"
+        [prices]="store.prices()"
       />
       <app-payment-method-selector
         [(paymentMethod)]="paymentMethod"

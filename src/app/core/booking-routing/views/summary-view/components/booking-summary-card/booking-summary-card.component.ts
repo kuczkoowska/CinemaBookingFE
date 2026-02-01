@@ -17,12 +17,19 @@ export class BookingSummaryCardComponent {
   public readonly screening = input.required<Screening>();
   public readonly tickets = input.required<TicketDto[]>();
   public readonly totalAmount = input.required<number>();
-
+  public readonly prices = input.required<Record<string, number>>();
   public readonly selections = input<Record<number, string>>({});
 
   public getTicketType(ticket: TicketDto): string {
     const type = this.selections()[ticket.id] || ticket.type;
-    
+
     return type === 'NORMALNY' ? 'NORMALNY' : 'ULGOWY';
+  }
+
+  public getTicketPrice(ticket: TicketDto): number {
+    const type = this.getTicketType(ticket);
+    const priceList = this.prices();
+
+    return priceList[type] ?? ticket.price;
   }
 }

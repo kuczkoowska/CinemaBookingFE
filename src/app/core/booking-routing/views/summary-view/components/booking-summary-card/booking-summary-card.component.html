@@ -40,11 +40,8 @@
               Rząd {{ ticket.row }}, Miejsce {{ ticket.seatNumber }}
             </span>
 
-            <span class="text-xs bg-primary-500 text-white px-2 py-0.5 rounded font-bold">
-              {{ getTicketType(ticket) }}
-            </span>
           </div>
-          <span class="font-bold text-main">{{ ticket.price | number: '1.2-2' }} PLN</span>
+          <span class="font-bold text-main">{{ getTicketPrice(ticket) | number: '1.2-2' }} PLN</span>
         </div>
       }
     </div>
