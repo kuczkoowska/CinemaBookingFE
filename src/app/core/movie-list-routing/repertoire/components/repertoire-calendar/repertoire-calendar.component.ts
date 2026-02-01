@@ -15,11 +15,11 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './repertoire-calendar.component.html',
 })
 export class RepertoireCalendarComponent {
-  public weekDays = input.required<Date[]>();
-  public selectedDate = input.required<Date>();
-  public dateSelected = output<Date>();
+  public readonly weekDays = input.required<Date[]>();
+  public readonly selectedDate = input.required<Date>();
+  public readonly dateSelected = output<Date>();
 
-  public isSelected(day: Date): boolean {
+  protected isSelected(day: Date): boolean {
     return day.toDateString() === this.selectedDate().toDateString();
   }
 }

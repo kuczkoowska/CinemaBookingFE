@@ -16,6 +16,8 @@ import {
 import {
   RepertoireMovieCardComponent
 } from '@cinemabooking/core/movie-list-routing/repertoire/components/repertoire-movie-card/repertoire-movie-card.component';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -33,13 +35,38 @@ import {
   templateUrl: './repertoire.component.html',
 })
 export class RepertoireComponent implements OnInit {
-  public store = inject(RepertoireStore);
+  protected readonly store = inject(RepertoireStore);
+  private readonly authStore = inject(AuthStore);
+  private readonly router = inject(Router);
 
-  public weekDays = signal<Date[]>([]);
+  protected readonly weekDays = signal<Date[]>([]);
 
   public ngOnInit(): void {
     this.generateWeekDays();
     this.store.loadRepertoire(this.store.selectedDate());
+  }
+
+  protected handleScreeningSelect(screeningId: number): void {
+    if (!this.authStore.isAuthenticated()) {
+      this.router.navigate(['/login'], {
+        queryParams: {returnUrl: `/booking/${screeningId}`},
+      });
+
+      return;
+    }
+
+    const user = this.authStore.user();
+    if (user && user.isActive === false) {
+      this.router.navigate(['/account-suspended']);
+
+      return;
+    }
+
+    this.router.navigate(['/booking', screeningId]);
+  }
+
+  protected selectDate(date: Date): void {
+    this.store.changeDate(date);
   }
 
   private generateWeekDays(): void {
@@ -51,9 +78,5 @@ export class RepertoireComponent implements OnInit {
       dates.push(d);
     }
     this.weekDays.set(dates);
-  }
-
-  public selectDate(date: Date): void {
-    this.store.changeDate(date);
   }
 }
