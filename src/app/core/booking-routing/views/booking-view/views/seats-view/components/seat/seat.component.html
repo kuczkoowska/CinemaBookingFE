@@ -1,5 +1,6 @@
 <button
-  (click)="store.toggleSeat(seat().id)"
+  type="button"
+  (click)="seatToggle.emit(seat().id)"
   [disabled]="!seat().available"
   [pTooltip]="'Rząd: ' + seat().rowNumber + ', Miejsce: ' + seat().seatNumber"
   tooltipPosition="top"
