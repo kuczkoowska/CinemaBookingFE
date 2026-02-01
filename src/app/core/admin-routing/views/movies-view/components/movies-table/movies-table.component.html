@@ -1,17 +1,38 @@
-<p-confirmDialog />
+<p-confirmDialog/>
 
-<p-table [value]="store.movies()" [loading]="store.isLoading()">
+<p-table
+  [value]="store.movies()"
+  [loading]="store.isLoading()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  class="p-datatable-sm"
+>
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
-      <th pSortableColumn="title">Tytuł <p-sortIcon field="title" /></th>
-      <th pSortableColumn="genre">Gatunek <p-sortIcon field="genre" /></th>
-      <th pSortableColumn="director">Reżyser <p-sortIcon field="director" /></th>
-      <th pSortableColumn="durationMinutes">
-        Czas trwania (min) <p-sortIcon field="durationMinutes" />
+      <th pSortableColumn="id" style="width: 60px">
+        ID
+        <p-sortIcon field="id"/>
       </th>
-      <th pSortableColumn="ageRating">Wiek <p-sortIcon field="ageRating" /></th>
-      <th>Akcje</th>
+      <th pSortableColumn="title">
+        Tytuł
+        <p-sortIcon field="title"/>
+      </th>
+      <th pSortableColumn="genre" style="width: 120px">
+        Gatunek
+        <p-sortIcon field="genre"/>
+      </th>
+      <th pSortableColumn="director" style="width: 150px">
+        Reżyser
+        <p-sortIcon field="director"/>
+      </th>
+      <th pSortableColumn="durationMinutes" style="width: 100px">
+        Czas (min)
+        <p-sortIcon field="durationMinutes"/>
+      </th>
+      <th pSortableColumn="ageRating" style="width: 80px">
+        Wiek
+        <p-sortIcon field="ageRating"/>
+      </th>
+      <th style="width: 120px">Akcje</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-movie>
@@ -20,25 +41,23 @@
       <td>{{ movie.title }}</td>
       <td>{{ movie.genre }}</td>
       <td>{{ movie.director }}</td>
-      <td>{{ movie.durationMinutes }}</td>
-      <td>{{ movie.ageRating }}+</td>
+      <td class="text-center">{{ movie.durationMinutes }}</td>
+      <td class="text-center">{{ movie.ageRating }}+</td>
       <td>
         <button
           pButton
           icon="pi pi-pencil"
-          class="p-button-text p-button-sm"
+          class="p-button-text p-button-sm mr-1"
           (click)="onEdit(movie)"
-        >
-          Edytuj
-        </button>
+          pTooltip="Edytuj"
+        ></button>
         <button
           pButton
           icon="pi pi-trash"
           class="p-button-text p-button-danger p-button-sm"
           (click)="onDelete(movie)"
-        >
-          Usuń
-        </button>
+          pTooltip="Usuń"
+        ></button>
       </td>
     </tr>
   </ng-template>

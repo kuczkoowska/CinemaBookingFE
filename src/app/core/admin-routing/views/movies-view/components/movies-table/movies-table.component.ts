@@ -5,10 +5,11 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-movies-table',
-  imports: [TableModule, ButtonModule, ConfirmDialog],
+  imports: [TableModule, ButtonModule, ConfirmDialog, TooltipModule],
   templateUrl: './movies-table.component.html',
 })
 export class MoviesTableComponent {
