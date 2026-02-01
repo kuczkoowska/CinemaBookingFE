@@ -4,12 +4,13 @@ import {FormsModule} from '@angular/forms';
 import {InputTextModule} from 'primeng/inputtext';
 import {Button} from 'primeng/button';
 import {CommonModule} from '@angular/common';
+import {ClassNames} from 'primeng/classnames';
 
 export type PaymentMethod = 'BLIK' | 'CARD';
 
 @Component({
   selector: 'app-payment-method-selector',
-  imports: [RadioButtonModule, FormsModule, InputTextModule, Button, CommonModule],
+  imports: [RadioButtonModule, FormsModule, InputTextModule, Button, CommonModule, ClassNames],
   templateUrl: './payment-method-selector.component.html',
 })
 export class PaymentMethodSelectorComponent {

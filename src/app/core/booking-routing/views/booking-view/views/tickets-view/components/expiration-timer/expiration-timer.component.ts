@@ -16,21 +16,32 @@ export class ExpirationTimerComponent implements OnDestroy {
   private readonly router = inject(Router);
   protected readonly timeDiff = signal<number>(0);
 
-  private readonly intervalId = setInterval(() => this.updateTimer(), 1000);
+  private intervalId: ReturnType<typeof setInterval>;
+  private timeoutId: ReturnType<typeof setTimeout>;
 
   public constructor() {
-    this.updateTimer();
+    this.startTimer();
 
-    effect((): void => {
-      if (this.timeDiff() <= 0 && this.store.activeBooking() && !this.store.isFinished()) {
-        clearInterval(this.intervalId);
-        setTimeout(() => this.router.navigate(['/']), 2000);
+    effect(() => {
+      if (this.timeDiff() <= 0 && this.store.expirationTime() && !this.store.isFinished()) {
+        this.stopTimer();
+        this.timeoutId = setTimeout(() => this.router.navigate(['/']), 2000);
       }
     });
   }
 
   public ngOnDestroy(): void {
-    clearInterval(this.intervalId);
+    this.stopTimer();
+    clearTimeout(this.timeoutId);
+  }
+
+  private startTimer(): void {
+    this.updateTimer();
+    this.intervalId = setInterval(() => this.updateTimer(), 1000);
+  }
+
+  private stopTimer(): void {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 
   private updateTimer(): void {

@@ -30,7 +30,6 @@ interface BookingState {
   contactDetails: BookingContactDetails | null;
   items: BookingDto[];
   totalRecords: number;
-  isLoading: boolean;
 }
 
 const initialState: BookingState = {
@@ -48,7 +47,6 @@ const initialState: BookingState = {
   contactDetails: null,
   items: [],
   totalRecords: 0,
-  isLoading: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -145,14 +143,6 @@ export const BookingStore = signalStore(
       patchState(store, {isFinished: true});
     },
 
-    cancelBookingOnExit: rxMethod<number>(
-      pipe(
-        switchMap(id => bookingService.cancelBooking(id).pipe(
-          catchError(() => EMPTY)
-        ))
-      )
-    ),
-
     saveContactDetails(details: BookingContactDetails): void {
       patchState(store, {contactDetails: details});
     },
@@ -175,6 +165,14 @@ export const BookingStore = signalStore(
         ticketSelections: {...state.ticketSelections, [ticketId]: newType},
       }));
     },
+
+    cancelBookingOnExit: rxMethod<number>(
+      pipe(
+        switchMap(id => bookingService.cancelBooking(id).pipe(
+          catchError(() => EMPTY)
+        ))
+      )
+    ),
 
     cancelBookingSilent: rxMethod<number>(
       pipe(
@@ -325,10 +323,7 @@ export const BookingStore = signalStore(
               activeBooking: booking,
               isLoading: false
             }),
-            error: (err: HttpErrorResponse) => patchState(store, {
-              error: 'Nie udało się pobrać szczegółów',
-              isLoading: false
-            }),
+            error: (err: HttpErrorResponse | Error) => store.setError(err),
           })
         ))
       )

@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, input} from '@angular/core';
 import {
   MovieCardBookingComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/components/movie-card-booking/movie-card-booking.component';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
@@ -24,21 +24,21 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
   providers: [ConfirmationService],
   templateUrl: './booking-view.component.html',
 })
-export class BookingViewComponent implements OnInit {
+export class BookingViewComponent {
   protected readonly store = inject(BookingStore);
-
-  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
+  public readonly screeningId = input<string>();
 
-  public ngOnInit(): void {
-    const screeningId = this.route.snapshot.paramMap.get('screeningId');
-
-    if (screeningId) {
-      this.store.loadBookingData(Number(screeningId));
-    } else {
-      this.router.navigate([AppRoute.HOME]);
-    }
+  public constructor() {
+    effect(() => {
+      const id = this.screeningId();
+      if (id) {
+        this.store.loadBookingData(Number(id));
+      } else {
+        this.router.navigate([AppRoute.HOME]);
+      }
+    });
   }
 
   protected onCancelAndGoHome(): void {

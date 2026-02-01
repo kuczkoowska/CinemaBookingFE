@@ -1,88 +1,33 @@
 <div class="max-w-3xl mx-auto animate-fade-in pb-10">
-
   <h2 class="text-2xl font-bold mb-6">Potwierdź dane</h2>
 
   <form [formGroup]="form" class="flex flex-col gap-6">
-
-    <div class="bg-primary-50 border border-primary-200 text-primary-900 px-4 py-3 rounded-lg flex items-center gap-3">
-      <i class="pi pi-user text-xl"></i>
-      <div>
-        Rezerwujesz jako <span class="font-bold">{{ authStore.displayName() }}</span>.
-      </div>
-    </div>
 
     <div formGroupName="contact" class="bg-surface-0 p-6 border rounded-xl shadow-sm flex flex-col gap-4">
       <h3 class="font-bold text-lg">Dane kontaktowe</h3>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-bold text-sm text-gray-700">E-mail</label>
-          <input pInputText formControlName="email"/>
+          <label class="font-bold text-sm text-gray-700" for="email">E-mail</label>
+          <input pInputText formControlName="email" id="email"/>
           <small class="text-gray-500">Pobrane z Twojego konta</small>
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="font-bold text-sm text-gray-700">Telefon *</label>
-          <input pInputText formControlName="phone" placeholder="123 456 789"/>
+          <label class="font-bold text-sm text-gray-700" for="phone">Telefon *</label>
+          <input pInputText formControlName="phone" id="phone" placeholder="123456789"/>
         </div>
       </div>
     </div>
 
-    <div class="bg-surface-0 p-6 border rounded-xl shadow-sm flex flex-col gap-4">
+    <app-invoice-section-component
+      [parentForm]="form"
+      [wantsInvoiceControl]="form.controls.wantsInvoice"
+    />
 
-      <div class="flex items-center gap-2">
-        <p-checkbox
-          [binary]="true"
-          formControlName="wantsInvoice"
-          inputId="invoiceCheck"
-          (onChange)="toggleInvoiceValidators()"
-        ></p-checkbox>
-        <label for="invoiceCheck" class="font-bold cursor-pointer select-none">
-          Chcę otrzymać fakturę VAT
-        </label>
-      </div>
-
-      @if (form.get('wantsInvoice')?.value) {
-        <div formGroupName="invoice" class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in pt-2 border-t mt-2">
-
-          <div class="flex flex-col gap-2 md:col-span-2">
-            <label class="text-sm font-bold">Nazwa firmy *</label>
-            <input pInputText formControlName="companyName" placeholder="Pełna nazwa firmy"/>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold">NIP *</label>
-            <input pInputText formControlName="nip" placeholder="0000000000"/>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label class="text-sm font-bold">Adres *</label>
-            <input pInputText formControlName="address" placeholder="Ulica, Miasto, Kod"/>
-          </div>
-
-        </div>
-      }
-    </div>
-
-    <div class="bg-surface-0 p-6 border rounded-xl shadow-sm flex flex-col gap-4">
-      <h3 class="font-bold text-lg flex items-center gap-2">
-        Imiona na biletach <span class="text-sm font-normal text-gray-400 ml-auto">(Opcjonalne)</span>
-      </h3>
-
-      <div formArrayName="holders" class="flex flex-col gap-3">
-        @for (control of holdersArray.controls; track $index) {
-          <div [formGroupName]="$index" class="flex items-center gap-4 p-3 border rounded-lg bg-gray-50">
-            <div
-              class="w-10 h-10 bg-white border text-primary-700 font-bold flex items-center justify-center rounded-lg">
-              {{ control.value.seatNumber }}
-            </div>
-            <div class="flex-1">
-              <input pInputText formControlName="name" placeholder="Dla kogo ten bilet?" class="w-full p-inputtext-sm"/>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
+    <app-ticket-holders-component
+      [holdersArray]="form.controls.holders"
+    />
 
     <div class="flex justify-between mt-4">
       <p-button
@@ -100,5 +45,6 @@
         (onClick)="submit()">
       </p-button>
     </div>
+
   </form>
 </div>

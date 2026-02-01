@@ -6,11 +6,20 @@
   <div class="flex flex-col gap-3">
     @for (method of methods; track method.id) {
       <div
-        class="flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:border-primary/50"
+        class="flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
         [class]="paymentMethod() === method.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-(--border-color) bg-(--bg-app)'"
         (click)="paymentMethod.set(method.id)"
+        (keydown.enter)="paymentMethod.set(method.id)"
+        (keydown.space)="paymentMethod.set(method.id); $event.preventDefault()"
+        tabindex="0"
+        role="button"
       >
-        <p-radiobutton [value]="method.id" [(ngModel)]="paymentMethod"></p-radiobutton>
+        <p-radiobutton
+          [value]="method.id"
+          [ngModel]="paymentMethod()"
+          pClass="pointer-events-none">
+        </p-radiobutton>
+
         <div class="flex items-center gap-3">
           @if (method.id === 'BLIK') {
             <div class="font-black text-2xl italic tracking-tighter text-primary-600">blik</div>

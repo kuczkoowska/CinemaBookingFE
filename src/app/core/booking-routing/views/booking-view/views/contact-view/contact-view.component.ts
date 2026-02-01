@@ -1,20 +1,26 @@
 import {Component, effect, inject, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Button} from 'primeng/button';
-import {InputText} from 'primeng/inputtext';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
-import {Checkbox} from 'primeng/checkbox';
-import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
+import {CheckoutForm, HolderForm} from '@cinemabooking/interfaces/form/contact-view-form';
+import {
+  InvoiceSectionComponentComponent
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/contact-view/components/invoice-section-component/invoice-section-component.component';
+import {
+  TicketHoldersComponentComponent
+} from '@cinemabooking/core/booking-routing/views/booking-view/views/contact-view/components/ticket-holders-component/ticket-holders-component.component';
+import {InputText} from 'primeng/inputtext';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-contact-view',
   imports: [
-    Button,
     ReactiveFormsModule,
+    InvoiceSectionComponentComponent,
+    TicketHoldersComponentComponent,
     InputText,
-    Checkbox
+    Button
   ],
   templateUrl: './contact-view.component.html',
 })
@@ -25,29 +31,25 @@ export class ContactViewComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  protected readonly form = this.fb.group({
+  protected readonly form: FormGroup<CheckoutForm> = this.fb.group<CheckoutForm>({
     contact: this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]]
+      email: this.fb.nonNullable.control<string>('', [Validators.required, Validators.email]),
+      phone: this.fb.nonNullable.control<string>('', [Validators.required, Validators.pattern(/^\d{9,15}$/)]),
     }),
-    wantsInvoice: [false],
-
+    wantsInvoice: this.fb.nonNullable.control<boolean>(false),
     invoice: this.fb.group({
-      companyName: [''],
-      nip: [''],
-      address: ['']
+      companyName: this.fb.nonNullable.control<string>(''),
+      nip: this.fb.nonNullable.control<string>(''),
+      address: this.fb.nonNullable.control<string>('')
     }),
-
-    holders: this.fb.array([])
+    holders: this.fb.array<FormGroup<HolderForm>>([])
   });
 
   public constructor() {
     effect(() => {
       const user = this.authStore.user();
       if (user && !this.form.controls.contact.controls.email.value) {
-        this.form.controls.contact.patchValue({
-          email: user.email
-        });
+        this.form.controls.contact.patchValue({email: user.email});
       }
     });
   }
@@ -57,73 +59,39 @@ export class ContactViewComponent implements OnInit {
     this.restoreSavedState();
   }
 
-  protected get holdersArray(): FormArray {
-    return this.form.get('holders') as FormArray;
-  }
-
-  protected toggleInvoiceValidators(): void {
-    const wantsInvoice = this.form.controls.wantsInvoice.value;
-    const invoiceGroup = this.form.controls.invoice;
-
-    if (wantsInvoice) {
-      invoiceGroup.controls.companyName.setValidators([Validators.required]);
-      invoiceGroup.controls.nip.setValidators([Validators.required, Validators.minLength(10)]);
-      invoiceGroup.controls.address.setValidators([Validators.required]);
-    } else {
-      invoiceGroup.controls.companyName.clearValidators();
-      invoiceGroup.controls.nip.clearValidators();
-      invoiceGroup.controls.address.clearValidators();
-    }
-
-    invoiceGroup.controls.companyName.updateValueAndValidity();
-    invoiceGroup.controls.nip.updateValueAndValidity();
-    invoiceGroup.controls.address.updateValueAndValidity();
-  }
-
   protected goBack(): void {
-    const formValue = this.form.getRawValue() as unknown as BookingContactDetails;
-    this.store.saveContactDetails(formValue);
-
+    this.store.saveContactDetails(this.form.getRawValue());
     this.router.navigate(['../tickets'], {relativeTo: this.route});
   }
 
   protected submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      
       return;
     }
-    const formValue = this.form.getRawValue() as unknown as BookingContactDetails;
-    this.store.saveContactDetails(formValue);
+    this.store.saveContactDetails(this.form.getRawValue());
     this.router.navigate(['../summary'], {relativeTo: this.route});
   }
 
   private initHoldersArray(): void {
     const tickets = this.store.ticketsToDisplay();
-    this.holdersArray.clear();
+    this.form.controls.holders.clear();
 
-    tickets.forEach(t => {
-      this.holdersArray.push(this.fb.group({
-        seatNumber: [t.seatNumber],
-        name: ['']
-      }));
+    tickets.forEach((t) => {
+      this.form.controls.holders.push(
+        this.fb.group<HolderForm>({
+          seatNumber: this.fb.nonNullable.control(t.seatNumber),
+          name: this.fb.nonNullable.control('')
+        })
+      );
     });
   }
 
   private restoreSavedState(): void {
     const savedDetails = this.store.contactDetails();
-
     if (savedDetails) {
-      this.form.patchValue({
-        contact: savedDetails.contact,
-        wantsInvoice: savedDetails.wantsInvoice,
-        invoice: savedDetails.invoice
-      });
-
-      if (savedDetails.holders && savedDetails.holders.length > 0) {
-        this.holdersArray.patchValue(savedDetails.holders);
-      }
-
-      this.toggleInvoiceValidators();
+      this.form.patchValue(savedDetails);
     }
   }
 }
