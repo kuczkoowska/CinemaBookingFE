@@ -65,6 +65,7 @@ export class BookingService {
 
             const priceMap: Record<string, number> = result.prices.reduce((acc, curr) => {
               acc[curr.ticketType] = curr.price;
+              
               return acc;
             }, {} as Record<string, number>);
 

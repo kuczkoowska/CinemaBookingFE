@@ -26,7 +26,7 @@ export class UserMenuComponent {
   public menu = viewChild<Menu>('menu');
   public menuItems = signal<MenuItem[]>([]);
 
-  constructor() {
+  public constructor() {
     effect(() => {
       const isAdmin = this.auth.isAdmin();
       const isActive = this.auth.user()?.isActive ?? true;

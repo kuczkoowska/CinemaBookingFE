@@ -121,6 +121,7 @@ export const BookingStore = signalStore(
         return booking.tickets.reduce((total, ticket) => {
           const currentType = selections[ticket.id] || ticket.type;
           const currentPrice = priceMap[currentType] || ticket.price;
+          
           return total + currentPrice;
         }, 0);
       }),

@@ -6,9 +6,9 @@ import {MessageService} from 'primeng/api';
 })
 export class NotificationService {
 
-  private messageService = inject(MessageService)
+  private messageService = inject(MessageService);
 
-  showSuccess(summary: string, detail?: string) {
+  public showSuccess(summary: string, detail?: string): void {
     this.messageService.add({
       severity: 'success',
       summary,
@@ -17,7 +17,7 @@ export class NotificationService {
     });
   }
 
-  showError(summary: string, detail?: string) {
+  public showError(summary: string, detail?: string): void {
     this.messageService.add({
       severity: 'error',
       summary,
@@ -26,7 +26,7 @@ export class NotificationService {
     });
   }
 
-  showInfo(summary: string, detail?: string) {
+  public showInfo(summary: string, detail?: string): void {
     this.messageService.add({
       severity: 'info',
       summary,
@@ -35,7 +35,7 @@ export class NotificationService {
     });
   }
 
-  showWarn(summary: string, detail?: string) {
+  public showWarn(summary: string, detail?: string): void {
     this.messageService.add({
       severity: 'warn',
       summary,

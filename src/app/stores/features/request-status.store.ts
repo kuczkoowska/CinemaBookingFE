@@ -10,7 +10,7 @@ const initialState: RequestStatusState =
   {
     isLoading: false,
     error: null
-  }
+  };
 
 export function withRequestStatus() {
   return signalStoreFeature(
