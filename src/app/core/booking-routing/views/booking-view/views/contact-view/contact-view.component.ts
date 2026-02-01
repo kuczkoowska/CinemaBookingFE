@@ -4,6 +4,7 @@ import {BookingStore} from '@cinemabooking/stores/booking.store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {CheckoutForm, HolderForm} from '@cinemabooking/interfaces/form/contact-view-form';
+import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
 import {
   InvoiceSectionComponentComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/views/contact-view/components/invoice-section-component/invoice-section-component.component';
@@ -55,8 +56,12 @@ export class ContactViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.initHoldersArray();
-    this.restoreSavedState();
+    const savedDetails = this.store.contactDetails();
+    if (savedDetails) {
+      this.restoreSavedState(savedDetails);
+    } else {
+      this.initHoldersArray();
+    }
   }
 
   protected goBack(): void {
@@ -88,11 +93,25 @@ export class ContactViewComponent implements OnInit {
     });
   }
 
-  private restoreSavedState(): void {
-    const savedDetails = this.store.contactDetails();
-    if (savedDetails) {
-      this.form.patchValue(savedDetails);
-    }
+  private restoreSavedState(savedDetails: BookingContactDetails): void {
+    const tickets = this.store.ticketsToDisplay();
+    this.form.controls.holders.clear();
+
+    tickets.forEach((t, index) => {
+      const savedHolder = savedDetails.holders?.[index];
+      this.form.controls.holders.push(
+        this.fb.group<HolderForm>({
+          seatNumber: this.fb.nonNullable.control(t.seatNumber),
+          name: this.fb.nonNullable.control(savedHolder?.name || '')
+        })
+      );
+    });
+
+    this.form.patchValue({
+      contact: savedDetails.contact,
+      wantsInvoice: savedDetails.wantsInvoice,
+      invoice: savedDetails.invoice
+    });
   }
 }
 

@@ -33,8 +33,12 @@ export class BookingViewComponent {
   public constructor() {
     effect(() => {
       const id = this.screeningId();
+      const currentScreeningId = this.store.screening()?.id;
+
       if (id) {
-        this.store.loadBookingData(Number(id));
+        if (!currentScreeningId || currentScreeningId !== Number(id)) {
+          this.store.loadBookingData(Number(id));
+        }
       } else {
         this.router.navigate([AppRoute.HOME]);
       }

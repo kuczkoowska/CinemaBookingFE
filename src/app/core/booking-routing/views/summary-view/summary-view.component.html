@@ -1,4 +1,8 @@
 <div class="max-w-2xl mx-auto pb-20">
+  @if (!store.isPaymentSuccess()) {
+    <app-booking-stepper/>
+  }
+  
   @if (store.isPaymentSuccess()) {
     <app-booking-confirmation
       [bookingId]="store.activeBooking()!.id"
@@ -20,6 +24,15 @@
         [isProcessing]="store.isPaymentProcessing()"
         (pay)="pay()"
       />
+      <div class="flex justify-between items-center mt-4">
+        <p-button
+          label="Cofnij"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="goBack()"
+        />
+      </div>
     </div>
   }
 </div>

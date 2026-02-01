@@ -12,6 +12,11 @@ import {
   BookingSummaryCardComponent
 } from '@cinemabooking/core/booking-routing/views/summary-view/components/booking-summary-card/booking-summary-card.component';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
+import {
+  BookingStepperComponent
+} from '@cinemabooking/core/booking-routing/views/booking-view/components/booking-stepper/booking-stepper.component';
+import {ButtonModule} from 'primeng/button';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-summary-view',
@@ -19,12 +24,15 @@ import {AppRoute} from '@cinemabooking/enums/app-routes';
     BookingConfirmationComponent,
     BookingSummaryCardComponent,
     PaymentMethodSelectorComponent,
+    BookingStepperComponent,
+    ButtonModule,
   ],
   templateUrl: './summary-view.component.html',
 })
 export class SummaryViewComponent {
   public readonly store = inject(BookingStore);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   public paymentMethod: PaymentMethod = 'BLIK';
 
@@ -34,6 +42,10 @@ export class SummaryViewComponent {
         this.store.markAsFinished();
       }
     });
+  }
+
+  public goBack(): void {
+    this.location.back();
   }
 
   public goHome(): void {
