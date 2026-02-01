@@ -132,6 +132,7 @@ export const BookingStore = signalStore(
 
       isExpired: computed((): boolean => {
         const exp = expirationTime();
+
         return exp ? new Date().getTime() > new Date(exp).getTime() : false;
       }),
     }),
@@ -236,6 +237,7 @@ export const BookingStore = signalStore(
           if (!booking) {
             store.resetBookingState();
             store.setLoaded();
+
             return EMPTY;
           }
 
@@ -261,6 +263,7 @@ export const BookingStore = signalStore(
 
           if (!screening || seatIds.length === 0) {
             store.setLoaded();
+
             return EMPTY;
           }
 
@@ -292,6 +295,7 @@ export const BookingStore = signalStore(
           return bookingService.updateTicketTypes(booking.id, updates).pipe(
             switchMap((updatedBooking) => {
               patchState(store, {activeBooking: updatedBooking});
+              
               return bookingService.confirmBooking(updatedBooking.id, store.contactDetails());
             }),
             tap(() => patchState(store, {isPaymentProcessing: true})),

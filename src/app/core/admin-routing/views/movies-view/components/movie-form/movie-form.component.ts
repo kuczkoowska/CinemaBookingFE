@@ -13,6 +13,7 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import {SelectModule} from 'primeng/select';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
+import {CreateMovieDto} from '@cinemabooking/interfaces/dto/create-movie-dto';
 
 @Component({
   selector: 'app-movie-form',
@@ -74,11 +75,15 @@ export class MovieFormComponent implements OnInit {
   protected onSave(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+
       return;
     }
 
     const formValue = this.form.getRawValue();
-    const onSuccess = () => this.router.navigate(['/admin/movies']);
+
+    const onSuccess = (): void => {
+      void this.router.navigate(['/admin/movies']);
+    };
 
     if (this.isEditMode() && this.movieId()) {
       this.store.updateMovie({
@@ -87,7 +92,7 @@ export class MovieFormComponent implements OnInit {
       });
     } else {
       this.store.addMovie({
-        movie: formValue as any,
+        movie: formValue as CreateMovieDto,
         onSuccess
       });
     }

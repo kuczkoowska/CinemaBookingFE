@@ -21,8 +21,7 @@ const initialState: RepertoireState = {
   movies: [],
   isLoading: false,
 };
-
-export const RepertoireStore = signalStore(
+export const repertoireStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
 
@@ -94,7 +93,7 @@ function generateNext7Days(): Date[] {
   return Array.from({length: 7}, (_, i) => {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
-    
+
     return d;
   });
 }

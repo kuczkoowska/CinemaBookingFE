@@ -4,13 +4,14 @@
     <form [formGroup]="form" class="flex flex-col gap-4">
 
       <div class="flex flex-col gap-2">
-        <label class="font-bold">Tytuł</label>
-        <input pInputText formControlName="title"/>
+        <label class="font-bold" for="title">Tytuł</label>
+        <input pInputText id="title" formControlName="title"/>
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="font-bold">Gatunek</label>
+        <label class="font-bold" for="genre">Gatunek</label>
         <p-select
+          inputId="genre"
           formControlName="genre"
           [options]="genreOptions"
           optionLabel="label"
@@ -21,36 +22,58 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="font-bold">Opis</label>
-        <textarea pTextarea formControlName="description" rows="4"></textarea>
+        <label class="font-bold" for="description">Opis</label>
+        <textarea pTextarea id="description" formControlName="description" rows="4"></textarea>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-bold">Reżyser</label>
-          <input pInputText formControlName="director"/>
+          <label class="font-bold" for="director">Reżyser</label>
+          <input pInputText id="director" formControlName="director"/>
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-bold">Czas (min)</label>
-          <p-inputNumber formControlName="durationMinutes" [showButtons]="true" [min]="1"/>
+          <label class="font-bold" for="durationMinutes">Czas (min)</label>
+          <p-inputNumber
+            inputId="durationMinutes"
+            formControlName="durationMinutes"
+            [showButtons]="true"
+            [min]="1"
+          />
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-2">
-          <label class="font-bold">Wiek (+)</label>
-          <p-inputNumber formControlName="ageRating" [showButtons]="true" [min]="0"/>
+          <label class="font-bold" for="ageRating">Wiek (+)</label>
+          <p-inputNumber
+            inputId="ageRating"
+            formControlName="ageRating"
+            [showButtons]="true"
+            [min]="0"
+          />
         </div>
         <div class="flex flex-col gap-2">
-          <label class="font-bold">Plakat URL</label>
-          <input pInputText formControlName="posterUrl"/>
+          <label class="font-bold" for="posterUrl">Plakat URL</label>
+          <input pInputText id="posterUrl" formControlName="posterUrl"/>
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="font-bold">Zwiastun URL</label>
-        <input pInputText formControlName="trailerUrl"/>
+        <label class="font-bold" for="trailerUrl">Zwiastun URL</label>
+        <input pInputText id="trailerUrl" formControlName="trailerUrl"/>
       </div>
+
+      @if (form.controls.posterUrl.value) {
+        <div class="flex flex-col gap-2">
+          <span class="font-bold text-sm">Podgląd plakatu</span>
+          <img
+            [src]="form.controls.posterUrl.value"
+            class="w-32 h-48 object-cover rounded border"
+            alt="Podgląd plakatu"
+            onerror="this.style.display='none'"
+          />
+        </div>
+      }
 
       <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-surface-200">
         <p-button

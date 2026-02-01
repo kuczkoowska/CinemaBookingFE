@@ -1,19 +1,21 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
-import { User } from '@cinemabooking/interfaces/user';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
-import { TooltipModule } from 'primeng/tooltip';
-import { BackDashboardComponent } from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
-import { ConfirmationService } from 'primeng/api';
-import { UserStore } from '@cinemabooking/stores/user.store';
-import { UpdateUserDto } from '@cinemabooking/interfaces/dto/update-user-dto';
-import { UserForm } from '@cinemabooking/interfaces/form/user-form';
-import { ConfirmDialog } from 'primeng/confirmdialog';
+import {Component, effect, inject, OnInit} from '@angular/core';
+import {User} from '@cinemabooking/interfaces/user';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {TagModule} from 'primeng/tag';
+import {TooltipModule} from 'primeng/tooltip';
+import {
+  BackDashboardComponent
+} from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
+import {ConfirmationService} from 'primeng/api';
+import {userStore} from '@cinemabooking/stores/user.store';
+import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
+import {UserForm} from '@cinemabooking/interfaces/form/user-form';
+import {ConfirmDialog} from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-users-view',
@@ -32,7 +34,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
   templateUrl: './users-view.component.html',
 })
 export class UsersViewComponent implements OnInit {
-  protected readonly store = inject(UserStore);
+  protected readonly store = inject(userStore);
   private readonly fb = inject(FormBuilder);
   private readonly confirmationService = inject(ConfirmationService);
 
@@ -42,7 +44,7 @@ export class UsersViewComponent implements OnInit {
     email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
   });
 
-  constructor() {
+  public constructor() {
     effect(() => {
       const user = this.store.selectedUser();
       const isOpen = this.store.isDialogOpen();
@@ -70,6 +72,7 @@ export class UsersViewComponent implements OnInit {
 
     if (this.userForm.invalid || !user) {
       this.userForm.markAllAsTouched();
+
       return;
     }
 
@@ -111,23 +114,29 @@ export class UsersViewComponent implements OnInit {
   public isAdmin(user: User): boolean {
     return user.roles.some((r) => {
       if (typeof r === 'string') {
+
         return r === 'ROLE_ADMIN';
       }
+
       return r.name === 'ROLE_ADMIN';
     });
   }
 
   public getRoleName(role: string | { name: string }): string {
     if (typeof role === 'string') {
+
       return role === 'ROLE_ADMIN' ? 'Admin' : 'Użytkownik';
     }
+
     return role.name === 'ROLE_ADMIN' ? 'Admin' : 'Użytkownik';
   }
 
   public isRoleAdmin(role: string | { name: string }): boolean {
     if (typeof role === 'string') {
+
       return role === 'ROLE_ADMIN';
     }
+
     return role.name === 'ROLE_ADMIN';
   }
 }

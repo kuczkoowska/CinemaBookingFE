@@ -1,16 +1,16 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { inject } from '@angular/core';
-import { UserService } from '@cinemabooking/services/user.service';
-import { User } from '@cinemabooking/interfaces/user';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
-import { tapResponse } from '@ngrx/operators';
-import { NotificationService } from '@cinemabooking/services/notification.service';
-import { AuthStore } from './auth.store';
-import { Router } from '@angular/router';
-import { withRequestStatus } from '@cinemabooking/stores/features/request-status.store';
-import { HttpErrorResponse } from '@angular/common/http';
-import { UpdateUserDto } from '@cinemabooking/interfaces/dto/update-user-dto';
+import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
+import {inject} from '@angular/core';
+import {UserService} from '@cinemabooking/services/user.service';
+import {User} from '@cinemabooking/interfaces/user';
+import {rxMethod} from '@ngrx/signals/rxjs-interop';
+import {pipe, switchMap, tap} from 'rxjs';
+import {tapResponse} from '@ngrx/operators';
+import {NotificationService} from '@cinemabooking/services/notification.service';
+import {AuthStore} from './auth.store';
+import {Router} from '@angular/router';
+import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
+import {HttpErrorResponse} from '@angular/common/http';
+import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
 
 interface UserState {
   users: User[];
@@ -24,8 +24,8 @@ const initialState: UserState = {
   selectedUser: null,
 };
 
-export const UserStore = signalStore(
-  { providedIn: 'root' },
+export const userStore = signalStore(
+  {providedIn: 'root'},
   withState(initialState),
   withRequestStatus(),
 
@@ -38,11 +38,11 @@ export const UserStore = signalStore(
       router = inject(Router),
     ) => ({
       openEditDialog(user: User): void {
-        patchState(store, { selectedUser: user, isDialogOpen: true });
+        patchState(store, {selectedUser: user, isDialogOpen: true});
       },
 
       closeDialog(): void {
-        patchState(store, { selectedUser: null, isDialogOpen: false });
+        patchState(store, {selectedUser: null, isDialogOpen: false});
       },
 
       loadUsers: rxMethod<void>(
@@ -52,7 +52,7 @@ export const UserStore = signalStore(
             userService.getAllUsers().pipe(
               tapResponse({
                 next: (users) => {
-                  patchState(store, { users });
+                  patchState(store, {users});
                   store.setLoaded();
                 },
                 error: (err: Error | HttpErrorResponse) => {
@@ -68,7 +68,7 @@ export const UserStore = signalStore(
       updateUser: rxMethod<{ id: number; data: UpdateUserDto }>(
         pipe(
           tap(() => store.setLoading()),
-          switchMap(({ id, data }) =>
+          switchMap(({id, data}) =>
             userService.updateUser(id, data).pipe(
               tapResponse({
                 next: (updatedUser) => {
@@ -101,7 +101,7 @@ export const UserStore = signalStore(
 
                   patchState(store, (state) => ({
                     users: state.users.map((u) =>
-                      u.id === user.id ? { ...u, isActive: newActiveState } : u,
+                      u.id === user.id ? {...u, isActive: newActiveState} : u,
                     ),
                   }));
 
@@ -129,7 +129,7 @@ export const UserStore = signalStore(
         ),
       ),
 
-      updateMyProfile: rxMethod<any>(
+      updateMyProfile: rxMethod<UpdateUserDto>(
         pipe(
           tap(() => store.setLoading()),
           switchMap((data) =>
@@ -141,7 +141,6 @@ export const UserStore = signalStore(
                   authStore.checkAuth();
                   router.navigate(['/profile']);
                 },
-
                 error: (err: Error | HttpErrorResponse) => {
                   store.setError(err);
                   notify.showError('Błąd', 'Nie udało się zapisać');

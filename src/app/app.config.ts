@@ -13,36 +13,34 @@ import {providePrimeNG} from 'primeng/config';
 import {myCustomPreset} from '@cinemabooking/my-theme';
 import {credentialsInterceptor} from '@cinemabooking/interceptors/credentials.interceptor';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
-import {provideTranslateService, TranslateService} from '@ngx-translate/core';
+import {InterpolatableTranslationObject, provideTranslateService, TranslateService} from '@ngx-translate/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 import {LOCATION_INITIALIZED} from '@angular/common';
+import {lastValueFrom, tap} from 'rxjs';
 
-export async function i18nInitializer(): Promise<void> {
+export async function i18nInitializer(): Promise<InterpolatableTranslationObject> {
   const translate = inject(TranslateService);
   const injector = inject(Injector);
 
-  return injector.get(LOCATION_INITIALIZED, Promise.resolve(null)).then(() => {
-    const langToSet = 'en';
-    translate.addLangs(['pl', 'en']);
-    translate.setFallbackLang(langToSet);
+  await injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
 
-    return new Promise<void>((resolve, reject) => {
-      translate.use(langToSet).subscribe({
-        next: (): void => {
+  const langToSet = 'en';
+  translate.addLangs(['pl', 'en']);
+  translate.setFallbackLang(langToSet);
+
+  return lastValueFrom(
+    translate.use(langToSet).pipe(
+      tap({
+        next: () => {
           console.log(`Successfully initialized '${langToSet}' language.`);
         },
         error: (err) => {
-          console.error(
-            `Problem with '${langToSet}' language initialization.`,
-            err,
-          );
-          reject(err);
-        },
-        complete: () => resolve(),
-      });
-    });
-  });
+          console.error(`Problem with '${langToSet}' language initialization.`, err);
+        }
+      })
+    )
+  );
 }
 
 export const appConfig: ApplicationConfig = {

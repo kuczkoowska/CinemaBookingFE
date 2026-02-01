@@ -22,7 +22,7 @@ const initialState: AdminScreeningsState = {
   isDialogOpen: false,
 };
 
-export const AdminScreeningsStore = signalStore(
+export const adminScreeningsStore = signalStore(
   {providedIn: 'root'},
   withState(initialState),
   withRequestStatus(),
@@ -32,6 +32,7 @@ export const AdminScreeningsStore = signalStore(
       const date = selectedDate();
       const offset = date.getTimezoneOffset() * 60000;
       const localDate = new Date(date.getTime() - offset);
+
       return localDate.toISOString().split('T')[0];
     })
   })),
@@ -54,6 +55,7 @@ export const AdminScreeningsStore = signalStore(
         tap(() => store.setLoading()),
         switchMap(() => {
           const dateStr = store.formattedDate();
+
           return screeningService.getScreenings(dateStr).pipe(
             tapResponse({
               next: (screenings) => {

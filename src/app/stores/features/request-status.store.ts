@@ -1,7 +1,7 @@
-import { patchState, signalStoreFeature, withMethods, withState } from '@ngrx/signals';
-import { HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { NotificationService } from '@cinemabooking/services/notification.service';
+import {patchState, signalStoreFeature, withMethods, withState} from '@ngrx/signals';
+import {HttpErrorResponse} from '@angular/common/http';
+import {inject} from '@angular/core';
+import {NotificationService} from '@cinemabooking/services/notification.service';
 
 interface RequestStatusState {
   isLoading: boolean;
@@ -13,6 +13,7 @@ const initialState: RequestStatusState = {
   error: null,
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
 export function withRequestStatus() {
   return signalStoreFeature(
     withState<RequestStatusState>(initialState),
@@ -22,11 +23,11 @@ export function withRequestStatus() {
 
       return {
         setLoading(): void {
-          patchState(store, { isLoading: true, error: null });
+          patchState(store, {isLoading: true, error: null});
         },
 
         setLoaded(): void {
-          patchState(store, { isLoading: false });
+          patchState(store, {isLoading: false});
         },
 
         setError(err: HttpErrorResponse | Error): void {
@@ -40,7 +41,7 @@ export function withRequestStatus() {
           }
 
           notificationService.showError('Błąd', errorMsg);
-          patchState(store, { error: errorMsg, isLoading: false });
+          patchState(store, {error: errorMsg, isLoading: false});
         },
       };
     }),

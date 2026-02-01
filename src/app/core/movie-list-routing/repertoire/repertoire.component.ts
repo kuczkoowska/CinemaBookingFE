@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {ButtonModule} from 'primeng/button';
 import {TagModule} from 'primeng/tag';
 import {SkeletonModule} from 'primeng/skeleton';
-import {RepertoireStore} from '@cinemabooking/stores/repertoire.store';
+import {repertoireStore} from '@cinemabooking/stores/repertoire.store';
 import {
   RepertoireCalendarComponent
 } from '@cinemabooking/core/movie-list-routing/repertoire/components/repertoire-calendar/repertoire-calendar.component';
@@ -34,7 +34,7 @@ import {Router} from '@angular/router';
   templateUrl: './repertoire.component.html',
 })
 export class RepertoireComponent {
-  protected readonly store = inject(RepertoireStore);
+  protected readonly store = inject(repertoireStore);
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
 

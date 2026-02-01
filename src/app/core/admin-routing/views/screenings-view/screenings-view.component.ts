@@ -13,7 +13,7 @@ import {
 } from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
 import {movieStore} from '@cinemabooking/stores/movie.store';
 import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
-import {AdminScreeningsStore} from '@cinemabooking/stores/admin-screening.store';
+import {adminScreeningsStore} from '@cinemabooking/stores/admin-screening.store';
 import {ScreeningForm} from '@cinemabooking/interfaces/form/screening-form';
 
 @Component({
@@ -34,7 +34,7 @@ import {ScreeningForm} from '@cinemabooking/interfaces/form/screening-form';
   templateUrl: './screenings-view.component.html',
 })
 export class ScreeningsViewComponent implements OnInit {
-  protected readonly store = inject(AdminScreeningsStore);
+  protected readonly store = inject(adminScreeningsStore);
   protected readonly movieStore = inject(movieStore);
   private readonly fb = inject(FormBuilder);
 
@@ -72,6 +72,7 @@ export class ScreeningsViewComponent implements OnInit {
   protected saveScreening(): void {
     if (this.screeningForm.invalid) {
       this.screeningForm.markAllAsTouched();
+
       return;
     }
 

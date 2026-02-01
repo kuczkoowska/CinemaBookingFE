@@ -1,21 +1,14 @@
-import { computed, inject } from '@angular/core';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withHooks,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, pipe, switchMap, tap } from 'rxjs';
-import { tapResponse } from '@ngrx/operators';
-import { MovieService } from '@cinemabooking/services/movie.service';
-import { Movie } from '@cinemabooking/interfaces/movie';
-import { MovieFilters } from '@cinemabooking/interfaces/filters/movie-filters';
-import { withRequestStatus } from '@cinemabooking/stores/features/request-status.store';
-import { HttpErrorResponse } from '@angular/common/http';
-import { NotificationService } from '@cinemabooking/services/notification.service';
+import {computed, inject} from '@angular/core';
+import {patchState, signalStore, withComputed, withHooks, withMethods, withState,} from '@ngrx/signals';
+import {rxMethod} from '@ngrx/signals/rxjs-interop';
+import {EMPTY, pipe, switchMap, tap} from 'rxjs';
+import {tapResponse} from '@ngrx/operators';
+import {MovieService} from '@cinemabooking/services/movie.service';
+import {Movie} from '@cinemabooking/interfaces/movie';
+import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
+import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
+import {HttpErrorResponse} from '@angular/common/http';
+import {NotificationService} from '@cinemabooking/services/notification.service';
 
 interface MovieState {
   movies: Movie[];
@@ -28,17 +21,16 @@ interface MovieState {
 const initialState: MovieState = {
   movies: [],
   selectedMovieId: null,
-  filters: { searchQuery: '', genre: '', hideAdult: false },
+  filters: {searchQuery: '', genre: '', hideAdult: false},
   page: 1,
   pageSize: 9,
 };
-
 export const movieStore = signalStore(
-  { providedIn: 'root' },
+  {providedIn: 'root'},
   withRequestStatus(),
   withState(initialState),
 
-  withComputed(({ movies, filters, selectedMovieId, page, pageSize }) => {
+  withComputed(({movies, filters, selectedMovieId, page, pageSize}) => {
     const filteredMovies = computed((): Movie[] => {
       const currentFilters = filters();
       const query = (currentFilters.searchQuery || '').toLowerCase();
@@ -79,31 +71,31 @@ export const movieStore = signalStore(
     (store, movieService = inject(MovieService), notification = inject(NotificationService)) => ({
       updateFilters(newFilters: Partial<MovieFilters>): void {
         patchState(store, (state) => ({
-          filters: { ...state.filters, ...newFilters },
+          filters: {...state.filters, ...newFilters},
           page: 1,
         }));
       },
 
       setPage(page: number): void {
-        patchState(store, { page });
+        patchState(store, {page});
       },
 
       setPageSize(pageSize: number): void {
-        patchState(store, { pageSize, page: 1 });
+        patchState(store, {pageSize, page: 1});
       },
 
       nextPage(): void {
         const currentPage = store.page();
         const maxPages = store.totalPages();
         if (currentPage < maxPages) {
-          patchState(store, { page: currentPage + 1 });
+          patchState(store, {page: currentPage + 1});
         }
       },
 
       previousPage(): void {
         const currentPage = store.page();
         if (currentPage > 1) {
-          patchState(store, { page: currentPage - 1 });
+          patchState(store, {page: currentPage - 1});
         }
       },
 
@@ -113,7 +105,7 @@ export const movieStore = signalStore(
             if (store.movies().length > 0) {
               return;
             }
-            patchState(store, { isLoading: true, error: null });
+            patchState(store, {isLoading: true, error: null});
           }),
           switchMap(() => {
             if (store.movies().length > 0) {
@@ -123,7 +115,7 @@ export const movieStore = signalStore(
             return movieService.getMovies().pipe(
               tapResponse({
                 next: (movies: Movie[]): void => {
-                  patchState(store, { movies });
+                  patchState(store, {movies});
                   store.setLoaded();
                 },
                 error: (err: HttpErrorResponse | Error): void => store.setError(err),
@@ -135,12 +127,12 @@ export const movieStore = signalStore(
 
       loadMovieById: rxMethod<number>(
         pipe(
-          tap((id: number): void => patchState(store, { selectedMovieId: id, error: null })),
+          tap((id: number): void => patchState(store, {selectedMovieId: id, error: null})),
           switchMap((id: number) => {
             const existingMovie = store.movies().find((m: Movie): boolean => m.id === id);
             if (existingMovie) return EMPTY;
 
-            patchState(store, { isLoading: true });
+            patchState(store, {isLoading: true});
 
             return movieService.getMovieById(id).pipe(
               tapResponse({
@@ -160,11 +152,11 @@ export const movieStore = signalStore(
       addMovie: rxMethod<{ movie: Omit<Movie, 'id'>; onSuccess?: () => void }>(
         pipe(
           tap(() => store.setLoading()),
-          switchMap(({ movie, onSuccess }) =>
+          switchMap(({movie, onSuccess}) =>
             movieService.create(movie).pipe(
               tapResponse({
                 next: (createdMovie) => {
-                  patchState(store, (state) => ({ movies: [...state.movies, createdMovie] }));
+                  patchState(store, (state) => ({movies: [...state.movies, createdMovie]}));
                   store.setLoaded();
                   notification.showSuccess('Sukces', 'Film dodany');
                   if (onSuccess) onSuccess();
@@ -178,8 +170,8 @@ export const movieStore = signalStore(
 
       updateMovie: rxMethod<{ movie: Movie; onSuccess?: () => void }>(
         pipe(
-          tap(() => patchState(store, { isLoading: true })),
-          switchMap(({ movie, onSuccess }) =>
+          tap(() => patchState(store, {isLoading: true})),
+          switchMap(({movie, onSuccess}) =>
             movieService.editMovie(movie).pipe(
               tapResponse({
                 next: (updatedMovie) => {
@@ -199,8 +191,8 @@ export const movieStore = signalStore(
 
       deleteMovie: rxMethod<{ id: number; onSuccess?: () => void }>(
         pipe(
-          tap(() => patchState(store, { isLoading: true })),
-          switchMap(({ id, onSuccess }) =>
+          tap(() => patchState(store, {isLoading: true})),
+          switchMap(({id, onSuccess}) =>
             movieService.deleteMoving(id).pipe(
               tapResponse({
                 next: () => {

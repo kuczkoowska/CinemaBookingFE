@@ -1,12 +1,12 @@
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { computed, inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
-import { Router } from '@angular/router';
-import { User } from '@cinemabooking/interfaces/user';
-import { tapResponse } from '@ngrx/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
+import {computed, inject} from '@angular/core';
+import {AuthService} from '../services/auth.service';
+import {rxMethod} from '@ngrx/signals/rxjs-interop';
+import {pipe, switchMap, tap} from 'rxjs';
+import {Router} from '@angular/router';
+import {User} from '@cinemabooking/interfaces/user';
+import {tapResponse} from '@ngrx/operators';
+import {HttpErrorResponse} from '@angular/common/http';
 
 interface AuthState {
   user: User | null;
@@ -25,17 +25,19 @@ export type AuthStore = InstanceType<typeof AuthStore>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const AuthStore = signalStore(
-  { providedIn: 'root' },
+  {providedIn: 'root'},
   withState(initialState),
 
-  withComputed(({ user }) => ({
+  withComputed(({user}) => ({
     isAdmin: computed(() => {
       const currentUser = user();
 
       return (currentUser?.roles || []).some((r) => {
         if (typeof r === 'string') {
+
           return r === 'ROLE_ADMIN';
         }
+
         return r.name === 'ROLE_ADMIN';
       });
     }),
@@ -50,8 +52,8 @@ export const AuthStore = signalStore(
   withMethods((store, authService = inject(AuthService), router = inject(Router)) => ({
     login: rxMethod<{ username: string; password: string }>(
       pipe(
-        tap(() => patchState(store, { isLoading: true, error: null })),
-        switchMap(({ username, password }) =>
+        tap(() => patchState(store, {isLoading: true, error: null})),
+        switchMap(({username, password}) =>
           authService.login(username, password).pipe(
             tapResponse({
               next: (response) => {
@@ -63,7 +65,7 @@ export const AuthStore = signalStore(
                 });
                 const currentUrl = router.parseUrl(router.url);
 
-                const returnUrl = currentUrl.queryParams['returnUrl'];
+                const returnUrl = currentUrl.queryParams['returnUrl'] as string;
                 router.navigateByUrl(returnUrl || '/');
               },
               error: (error: HttpErrorResponse) => {
@@ -87,7 +89,7 @@ export const AuthStore = signalStore(
 
     logout: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { isLoading: true })),
+        tap(() => patchState(store, {isLoading: true})),
         switchMap(() =>
           authService.logout().pipe(
             tapResponse({
@@ -107,7 +109,7 @@ export const AuthStore = signalStore(
 
     checkAuth: rxMethod<void>(
       pipe(
-        tap(() => patchState(store, { isLoading: true })),
+        tap(() => patchState(store, {isLoading: true})),
         switchMap(() =>
           authService.getCurrentUser().pipe(
             tapResponse({
@@ -133,7 +135,7 @@ export const AuthStore = signalStore(
     ),
 
     clearError(): void {
-      patchState(store, { error: null });
+      patchState(store, {error: null});
     },
   })),
 );

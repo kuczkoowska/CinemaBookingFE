@@ -1,7 +1,7 @@
 import {Component, effect, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {UserStore} from '@cinemabooking/stores/user.store';
+import {userStore} from '@cinemabooking/stores/user.store';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
@@ -19,7 +19,7 @@ import {ProfileEditForm} from '@cinemabooking/interfaces/form/profile-edit-form'
 export class EditViewComponent {
   private readonly fb: FormBuilder = inject(FormBuilder);
   private readonly authStore = inject(AuthStore);
-  protected readonly userStore = inject(UserStore);
+  protected readonly userStore = inject(userStore);
   private readonly router: Router = inject(Router);
 
 

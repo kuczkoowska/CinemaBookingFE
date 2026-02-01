@@ -1,9 +1,9 @@
-<p-confirmDialog />
+<p-confirmDialog/>
 
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div class="flex items-center gap-3">
-      <app-back-dashboard />
+      <app-back-dashboard/>
       <h1 class="text-3xl font-bold">Zarządzanie Użytkownikami</h1>
     </div>
   </div>
@@ -15,11 +15,19 @@
   >
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
-        <th pSortableColumn="firstName">Imię i Nazwisko <p-sortIcon field="firstName" /></th>
-        <th pSortableColumn="email">Email <p-sortIcon field="email" /></th>
+        <th pSortableColumn="id">ID
+          <p-sortIcon field="id"/>
+        </th>
+        <th pSortableColumn="firstName">Imię i Nazwisko
+          <p-sortIcon field="firstName"/>
+        </th>
+        <th pSortableColumn="email">Email
+          <p-sortIcon field="email"/>
+        </th>
         <th>Role</th>
-        <th pSortableColumn="isActive">Status <p-sortIcon field="isActive" /></th>
+        <th pSortableColumn="isActive">Status
+          <p-sortIcon field="isActive"/>
+        </th>
         <th>Akcje</th>
       </tr>
     </ng-template>
@@ -56,21 +64,19 @@
           </button>
 
           @if (user.isActive) {
-            <button
-              pButton
+            <p-button
               icon="pi pi-lock"
               class="p-button-rounded p-button-text p-button-warning mr-2"
               (click)="toggleBlock(user)"
               pTooltip="Zablokuj"
-            ></button>
+            ></p-button>
           } @else {
-            <button
-              pButton
+            <p-button
               icon="pi pi-lock-open"
               class="p-button-rounded p-button-text p-button-success mr-2"
               (click)="toggleBlock(user)"
               pTooltip="Odblokuj"
-            ></button>
+            ></p-button>
           }
 
           @if (!isAdmin(user)) {
@@ -101,7 +107,7 @@
     <form [formGroup]="userForm" class="flex flex-col gap-4">
       <div>
         <label for="firstName" class="block mb-2 font-medium">Imię</label>
-        <input pInputText id="firstName" formControlName="firstName" class="w-full" />
+        <input pInputText id="firstName" formControlName="firstName" class="w-full"/>
         @if (userForm.controls.firstName.invalid && userForm.controls.firstName.touched) {
           <small class="text-red-500">Pole jest wymagane</small>
         }
@@ -109,7 +115,7 @@
 
       <div>
         <label for="lastName" class="block mb-2 font-medium">Nazwisko</label>
-        <input pInputText id="lastName" formControlName="lastName" class="w-full" />
+        <input pInputText id="lastName" formControlName="lastName" class="w-full"/>
         @if (userForm.controls.lastName.invalid && userForm.controls.lastName.touched) {
           <small class="text-red-500">Pole jest wymagane</small>
         }
@@ -117,7 +123,7 @@
 
       <div>
         <label for="email" class="block mb-2 font-medium">Email</label>
-        <input pInputText id="email" formControlName="email" class="w-full" />
+        <input pInputText id="email" formControlName="email" class="w-full"/>
         @if (userForm.controls.email.invalid && userForm.controls.email.touched) {
           <small class="text-red-500">Podaj poprawny adres email</small>
         }
