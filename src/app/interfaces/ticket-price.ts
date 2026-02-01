@@ -1,8 +1,8 @@
-import {TicketType} from '@cinemabooking/enums/ticket-type';
+import { TicketType } from '@cinemabooking/enums/ticket-type';
 
 export interface TicketPrice {
   readonly id: number;
-  readonly type: TicketType;
+  readonly ticketType: TicketType;
   readonly price: number;
 }
 
