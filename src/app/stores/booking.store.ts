@@ -234,20 +234,53 @@ export const BookingStore = signalStore(
         tap(() => store.setLoading()),
         switchMap(() => {
           const booking = store.activeBooking();
+          const screening = store.screening();
+
           if (!booking) {
-            store.resetBookingState();
+            patchState(store, {
+              activeBooking: null,
+              ticketSelections: {},
+              expirationTime: null,
+              isPaymentProcessing: false,
+            });
             store.setLoaded();
 
             return EMPTY;
           }
 
           return bookingService.cancelBooking(booking.id).pipe(
-            tapResponse({
-              next: () => {
-                store.resetBookingState();
-                store.setLoaded();
-              },
-              error: (err: HttpErrorResponse | Error) => store.setError(err),
+            switchMap(() => {
+              if (!screening) {
+                return EMPTY;
+              }
+
+              return bookingService.getBookingData(screening.id).pipe(
+                tapResponse({
+                  next: (data: Booking) => {
+                    const currentSelectedIds = store.selectedSeatIds();
+                    const availableSelectedIds = currentSelectedIds.filter(seatId => {
+                      const seat = data.seats.find(s => s.id === seatId);
+                      return seat && seat.available;
+                    });
+
+                    patchState(store, {
+                      activeBooking: null,
+                      ticketSelections: {},
+                      expirationTime: null,
+                      isPaymentProcessing: false,
+                      seats: data.seats,
+                      prices: data.prices,
+                      selectedSeatIds: availableSelectedIds,
+                    });
+                    store.setLoaded();
+                  },
+                  error: (err: HttpErrorResponse | Error) => store.setError(err),
+                }),
+              );
+            }),
+            catchError((err: HttpErrorResponse | Error) => {
+              store.setError(err);
+              return EMPTY;
             }),
           );
         }),
