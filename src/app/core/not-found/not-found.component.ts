@@ -1,23 +1,22 @@
 import {Component, inject} from '@angular/core';
 import {Router} from '@angular/router';
-import {CommonModule, Location} from '@angular/common';
+import {Location} from '@angular/common';
 import {ButtonModule} from 'primeng/button';
 
 @Component({
   selector: 'app-not-found',
-  imports: [CommonModule, ButtonModule],
+  imports: [ButtonModule],
   templateUrl: './not-found.component.html',
 })
 export class NotFoundComponent {
-  private location = inject(Location);
-  private router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
 
-
-  goToHome(): void {
+  protected goToHome(): void {
     this.router.navigate(['/']);
   }
 
-  goBack(): void {
+  protected goBack(): void {
     this.location.back();
   }
 }

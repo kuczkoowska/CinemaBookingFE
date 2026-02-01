@@ -8,13 +8,9 @@ import {ButtonModule} from 'primeng/button';
   templateUrl: './unauthorized.component.html',
 })
 export class UnauthorizedComponent {
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  public goHome(): void {
+  protected goHome(): void {
     this.router.navigate(['/']);
-  }
-
-  public goBack(): void {
-    window.history.back();
   }
 }
