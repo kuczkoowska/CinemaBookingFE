@@ -17,6 +17,7 @@ export class MovieDescriptionComponent {
     if (!url) return null;
 
     const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/)([\w-]{11}))/);
+
     return videoIdMatch ? `https://www.youtube.com/embed/${videoIdMatch[1]}` : null;
   });
 }

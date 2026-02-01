@@ -48,6 +48,9 @@ export class MovieDetailsViewComponent implements OnInit {
 
   public handleScreeningSelect(screeningId: number): void {
     this.router.navigate(['/booking', screeningId]);
+  }
 
+  public onDateChange(date: string): void {
+    this.screeningStore.selectDate(date);
   }
 }

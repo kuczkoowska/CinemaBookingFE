@@ -56,7 +56,13 @@
 
   <div class="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12">
     <app-movie-description [movie]="movie"/>
-    <app-screening-dates [screenings]="screeningStore.screenings()" (screeningSelect)="handleScreeningSelect($event)"/>
+    <app-screening-dates
+      [screenings]="screeningStore.visibleScreenings()"
+      [days]="screeningStore.calendarDays()"
+      [selectedDate]="screeningStore.selectedDate()"
+      (dateChange)="onDateChange($event)"
+      (screeningSelect)="handleScreeningSelect($event)"
+    />
   </div>
 
 } @else if (movieStore.isLoading()) {

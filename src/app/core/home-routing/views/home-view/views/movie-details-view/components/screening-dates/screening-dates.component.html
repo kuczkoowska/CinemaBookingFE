@@ -5,19 +5,20 @@
   </h3>
 
   <div class="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-thin">
-    @for (day of days; track day.date) {
+    @for (day of days(); track day.date) {
       <p-button
         [label]="day.label"
         [outlined]="selectedDate() !== day.date"
         [severity]="selectedDate() === day.date ? 'primary' : 'secondary'"
-        (onClick)="selectDay(day.date)"
+        (onClick)="onDayClick(day.date)"
       />
     }
   </div>
 
-  @if (filteredScreenings().length > 0) {
+  @if (screenings().length > 0) {
     <div class="flex flex-col gap-3">
-      @for (screening of filteredScreenings(); track screening.id) {
+      @for (screening of screenings(); track screening.id) {
+
         @let isDisabled = isScreeningDisabled(screening);
         @let isPast = isScreeningPast(screening);
         @let status = getScreeningStatus(screening);

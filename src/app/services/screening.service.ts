@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment.development';
 import {Observable} from 'rxjs';
 import {Screening} from '@cinemabooking/interfaces/screening';
 import {Seat} from '@cinemabooking/interfaces/seat';
+import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +31,7 @@ export class ScreeningService {
     return this.http.get<Seat[]>(`${this.apiUrl}/${screeningId}/seats`);
   }
 
-  public createScreening(screening: Screening): Observable<Screening> {
+  public createScreening(screening: CreateScreeningDto): Observable<Screening> {
     return this.http.post<Screening>(`${this.apiUrl}`, screening);
   }
 }
