@@ -12,18 +12,18 @@ import {TooltipModule} from 'primeng/tooltip';
 })
 export class RepertoireScreeningComponent {
   public readonly screening = input.required<Screening>();
-
   public readonly selectScreening = output<number>();
 
-  protected readonly isPast = computed(() => new Date(this.screening().startTime) < new Date());
-  protected readonly isSoldOut = computed(() => this.screening().availableSeats === 0);
-  protected readonly isLowSeats = computed(() => this.screening().availableSeats <= 10 && this.screening().availableSeats > 0);
-  protected readonly isDisabled = computed(() => this.isPast() || this.isSoldOut());
+  protected readonly isPast = computed((): boolean => new Date(this.screening().startTime) < new Date());
+  protected readonly isSoldOut = computed((): boolean => this.screening().availableSeats === 0);
+  protected readonly isLowSeats = computed((): boolean => this.screening().availableSeats <= 10 && this.screening().availableSeats > 0);
+  protected readonly isDisabled = computed((): boolean => this.isPast() || this.isSoldOut());
 
-  protected readonly tooltipText = computed(() => {
+  protected readonly tooltipText = computed((): string => {
     if (this.isPast()) return 'Seans zakończony';
     if (this.isSoldOut()) return 'Brak wolnych miejsc';
     if (this.isLowSeats()) return `Ostatnie ${this.screening().availableSeats} miejsc!`;
+
     return `${this.screening().availableSeats}/${this.screening().totalSeats} miejsc`;
   });
 

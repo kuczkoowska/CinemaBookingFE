@@ -1,10 +1,7 @@
 <button
   (click)="handleClick()"
   class="flex flex-col items-center justify-center min-w-[4.5rem] py-2 px-3 rounded-xl border transition-all duration-200 cursor-pointer"
-  [ngClass]="{
-            'bg-primary border-primary text-white shadow-lg scale-105': isSelected(),
-            'bg-element border-app-border text-app-muted hover:border-primary hover:text-primary': !isSelected()
-          }">
+  [ngClass]="buttonClasses()">
   <span class="text-xs uppercase font-bold tracking-wider opacity-80">{{ day() | date:'EEE' }}</span>
   <span class="text-xl font-bold">{{ day() | date:'dd.MM' }}</span>
 </button>
