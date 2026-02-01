@@ -3,7 +3,6 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {movieStore} from '@cinemabooking/stores/movie.store';
-import {Movie} from '@cinemabooking/interfaces/movie';
 import {MovieForm} from '@cinemabooking/interfaces/form/movie-form';
 import {GENRE_SELECT_OPTIONS} from '@cinemabooking/const/movie-genre.constants';
 
@@ -14,6 +13,7 @@ import {SelectModule} from 'primeng/select';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
 import {CreateMovieDto} from '@cinemabooking/interfaces/dto/create-movie-dto';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 @Component({
   selector: 'app-movie-form',

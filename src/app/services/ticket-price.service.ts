@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {TicketPrice, UpdateTicketPriceDto,} from '@cinemabooking/interfaces/ticket-price';
 import {TicketType} from '@cinemabooking/enums/ticket-type';
 import {environment} from '../../environments/environment.development';
+import {TicketPrice, UpdateTicketPriceDto} from '@cinemabooking/interfaces/models/ticket-price';
 
 @Injectable({
   providedIn: 'root',

@@ -2,13 +2,13 @@ import {computed, inject} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {NotificationService} from '@cinemabooking/services/notification.service';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 interface AdminScreeningsState {
   screenings: Screening[];

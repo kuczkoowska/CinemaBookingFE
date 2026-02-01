@@ -1,7 +1,6 @@
 import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
 import {inject} from '@angular/core';
 import {UserService} from '@cinemabooking/services/user.service';
-import {User} from '@cinemabooking/interfaces/user';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
@@ -11,6 +10,7 @@ import {Router} from '@angular/router';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {HttpErrorResponse} from '@angular/common/http';
 import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
+import {User} from '@cinemabooking/interfaces/models/user';
 
 interface UserState {
   users: User[];

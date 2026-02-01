@@ -2,8 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from '../../environments/environment.development';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {catchError, map, Observable, throwError} from 'rxjs';
-import {User} from '@cinemabooking/interfaces/user';
 import {RegisterDto} from '@cinemabooking/interfaces/dto/register-dto';
+import {User} from '@cinemabooking/interfaces/models/user';
 
 interface LoginResponse {
   message: string;

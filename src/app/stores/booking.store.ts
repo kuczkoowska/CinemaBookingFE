@@ -1,8 +1,5 @@
 import {computed, inject} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
-import {Movie} from '@cinemabooking/interfaces/movie';
-import {Screening} from '@cinemabooking/interfaces/screening';
-import {Seat, SeatWithStatus} from '@cinemabooking/interfaces/seat';
 import {BookingService} from '@cinemabooking/services/booking.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {catchError, delay, EMPTY, pipe, switchMap, tap} from 'rxjs';
@@ -10,10 +7,13 @@ import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {TicketType} from '@cinemabooking/enums/ticket-type';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {tapResponse} from '@ngrx/operators';
-import {Booking} from '@cinemabooking/interfaces/booking';
 import {HttpErrorResponse} from '@angular/common/http';
 import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
+import {Seat, SeatWithStatus} from '@cinemabooking/interfaces/models/seat';
+import {Booking} from '@cinemabooking/interfaces/models/booking';
 
 interface BookingState {
   activeBooking: BookingDto | null;
@@ -295,7 +295,7 @@ export const BookingStore = signalStore(
           return bookingService.updateTicketTypes(booking.id, updates).pipe(
             switchMap((updatedBooking) => {
               patchState(store, {activeBooking: updatedBooking});
-              
+
               return bookingService.confirmBooking(updatedBooking.id, store.contactDetails());
             }),
             tap(() => patchState(store, {isPaymentProcessing: true})),

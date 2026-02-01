@@ -1,12 +1,12 @@
 import {Component, inject} from '@angular/core';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {Router, RouterLink} from '@angular/router';
-import {NavLink} from '@cinemabooking/interfaces/other/nav-link';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {UserMenuComponent} from '@cinemabooking/ui/user-menu/user-menu.component';
 import {ThemeService} from '@cinemabooking/services/theme.service';
 import {Button} from 'primeng/button';
 import {Tooltip} from 'primeng/tooltip';
+import {NavLink} from '@cinemabooking/interfaces/ui/nav-link';
 
 
 @Component({

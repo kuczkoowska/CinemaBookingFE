@@ -1,6 +1,6 @@
 import {Component, computed, input} from '@angular/core';
-import {Movie} from '@cinemabooking/interfaces/movie';
 import {SafeUrlPipe} from '@cinemabooking/pipes/safe-url.pipe';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 @Component({
   selector: 'app-movie-description',

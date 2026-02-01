@@ -1,8 +1,8 @@
 import {Component, input} from '@angular/core';
-import {Movie} from '@cinemabooking/interfaces/movie';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {TicketDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 import {DatePipe, DecimalPipe} from '@angular/common';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 @Component({
   selector: 'app-booking-summary-card',

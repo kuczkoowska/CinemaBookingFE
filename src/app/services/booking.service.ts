@@ -2,15 +2,15 @@ import {inject, Injectable} from '@angular/core';
 import {forkJoin, map, Observable, switchMap} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
-import {LockSeatsDto, SeatWithStatus} from '@cinemabooking/interfaces/seat';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {MovieService} from '@cinemabooking/services/movie.service';
-import {Booking} from '@cinemabooking/interfaces/booking';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
-import {TicketPrice} from '@cinemabooking/interfaces/ticket';
-import {Page} from '@cinemabooking/interfaces/page';
 import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
+import {TicketPrice} from '@cinemabooking/interfaces/models/ticket-price';
+import {LockSeatsDto, SeatWithStatus} from '@cinemabooking/interfaces/models/seat';
+import {Booking} from '@cinemabooking/interfaces/models/booking';
+import {Page} from '@cinemabooking/interfaces/api/page';
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +65,7 @@ export class BookingService {
 
             const priceMap: Record<string, number> = result.prices.reduce((acc, curr) => {
               acc[curr.ticketType] = curr.price;
-              
+
               return acc;
             }, {} as Record<string, number>);
 

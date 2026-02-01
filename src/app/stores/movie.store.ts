@@ -4,11 +4,11 @@ import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {EMPTY, pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {MovieService} from '@cinemabooking/services/movie.service';
-import {Movie} from '@cinemabooking/interfaces/movie';
 import {MovieFilters} from '@cinemabooking/interfaces/filters/movie-filters';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {HttpErrorResponse} from '@angular/common/http';
 import {NotificationService} from '@cinemabooking/services/notification.service';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 interface MovieState {
   movies: Movie[];

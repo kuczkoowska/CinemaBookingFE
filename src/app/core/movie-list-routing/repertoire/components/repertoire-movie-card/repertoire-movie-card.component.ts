@@ -4,8 +4,8 @@ import {
   RepertoireScreeningComponent
 } from '@cinemabooking/core/movie-list-routing/repertoire/components/repertoire-screening/repertoire-screening.component';
 import {Tag} from 'primeng/tag';
-import {RepertoireItem} from '@cinemabooking/interfaces/repertoire-item';
 import {NgOptimizedImage} from '@angular/common';
+import {RepertoireItem} from '@cinemabooking/interfaces/models/repertoire-item';
 
 @Component({
   selector: 'app-repertoire-movie-card',

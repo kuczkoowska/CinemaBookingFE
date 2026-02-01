@@ -2,9 +2,9 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
 import {Observable} from 'rxjs';
-import {Screening} from '@cinemabooking/interfaces/screening';
-import {Seat} from '@cinemabooking/interfaces/seat';
 import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
+import {Seat} from '@cinemabooking/interfaces/models/seat';
 
 @Injectable({
   providedIn: 'root',

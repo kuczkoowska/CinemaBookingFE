@@ -1,9 +1,9 @@
 import {Component, computed, input, output} from '@angular/core';
 import {ButtonDirective} from 'primeng/button';
 import {DatePipe} from '@angular/common';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {Ripple} from 'primeng/ripple';
 import {TooltipModule} from 'primeng/tooltip';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 @Component({
   selector: 'app-repertoire-screening',

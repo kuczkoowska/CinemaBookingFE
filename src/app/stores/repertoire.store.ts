@@ -3,10 +3,10 @@ import {patchState, signalStore, withHooks, withMethods, withState} from '@ngrx/
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {map, pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
-import {RepertoireItem} from '@cinemabooking/interfaces/repertoire-item';
 import {formatDate} from '@angular/common';
+import {RepertoireItem} from '@cinemabooking/interfaces/models/repertoire-item';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 interface RepertoireState {
   selectedDate: Date;

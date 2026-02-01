@@ -1,8 +1,8 @@
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Movie } from '@cinemabooking/interfaces/movie';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import {inject, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment.development';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 @Injectable({
   providedIn: 'root',

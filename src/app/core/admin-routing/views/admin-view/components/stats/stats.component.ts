@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
 import {Card} from 'primeng/card';
-import {StatItem} from '@cinemabooking/interfaces/other/stat-item';
+import {StatItem} from '@cinemabooking/interfaces/ui/stat-item';
 
 @Component({
   selector: 'app-stats',

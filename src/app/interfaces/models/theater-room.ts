@@ -1,4 +1,4 @@
-import {Seat} from '@cinemabooking/interfaces/seat';
+import {Seat} from '@cinemabooking/interfaces/models/seat';
 
 export interface TheaterRoom {
   readonly id: number;

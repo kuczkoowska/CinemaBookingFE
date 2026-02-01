@@ -4,9 +4,9 @@ import {AuthService} from '../services/auth.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
 import {Router} from '@angular/router';
-import {User} from '@cinemabooking/interfaces/user';
 import {tapResponse} from '@ngrx/operators';
 import {HttpErrorResponse} from '@angular/common/http';
+import {User} from '@cinemabooking/interfaces/models/user';
 
 interface AuthState {
   user: User | null;

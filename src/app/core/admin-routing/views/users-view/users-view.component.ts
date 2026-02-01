@@ -1,5 +1,4 @@
 import {Component, effect, inject, OnInit} from '@angular/core';
-import {User} from '@cinemabooking/interfaces/user';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TableModule} from 'primeng/table';
@@ -16,6 +15,7 @@ import {userStore} from '@cinemabooking/stores/user.store';
 import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
 import {UserForm} from '@cinemabooking/interfaces/form/user-form';
 import {ConfirmDialog} from 'primeng/confirmdialog';
+import {User} from '@cinemabooking/interfaces/models/user';
 
 @Component({
   selector: 'app-users-view',

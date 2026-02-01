@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LogType, SystemLog} from '@cinemabooking/interfaces/system-log';
 import {environment} from '../../environments/environment.development';
+import {LogType, SystemLog} from '@cinemabooking/interfaces/api/system-log';
 
 @Injectable({
   providedIn: 'root',

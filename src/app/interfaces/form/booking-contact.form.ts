@@ -1,16 +1,16 @@
 export interface BookingContactDetails {
-  contact: {
-    email: string;
-    phone: string;
+  readonly contact: {
+    readonly email: string;
+    readonly phone: string;
   };
-  wantsInvoice: boolean;
-  invoice?: {
-    companyName: string;
-    nip: string;
-    address: string;
+  readonly wantsInvoice: boolean;
+  readonly invoice?: {
+    readonly companyName: string;
+    readonly nip: string;
+    readonly address: string;
   };
-  holders: {
-    seatNumber: number;
-    name: string;
+  readonly holders: {
+    readonly seatNumber: number;
+    readonly name: string;
   }[];
 }

@@ -1,11 +1,11 @@
 import {Component, input, output} from '@angular/core';
-import {Screening} from '@cinemabooking/interfaces/screening';
-import {Movie} from '@cinemabooking/interfaces/movie';
 import {DatePipe} from '@angular/common';
 import {Image} from 'primeng/image';
 import {Card} from 'primeng/card';
 import {Divider} from 'primeng/divider';
 import {Button} from 'primeng/button';
+import {Movie} from '@cinemabooking/interfaces/models/movie';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 @Component({
   selector: 'app-movie-card-booking',

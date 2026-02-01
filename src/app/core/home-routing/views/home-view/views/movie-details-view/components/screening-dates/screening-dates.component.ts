@@ -1,11 +1,11 @@
 import {Component, input, output} from '@angular/core';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {DatePipe} from '@angular/common';
 import {DatePickerModule} from 'primeng/datepicker';
 import {FormsModule} from '@angular/forms';
 import {Button} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
 import {TagModule} from 'primeng/tag';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 interface CalendarDay {
   label: string;

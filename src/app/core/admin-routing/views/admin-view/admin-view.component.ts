@@ -7,7 +7,7 @@ import {
   MenuItemComponent
 } from '@cinemabooking/core/admin-routing/views/admin-view/components/menu-item/menu-item.component';
 import {RefreshButtonComponent} from '@cinemabooking/ui/refresh-button/refresh-button.component';
-import {StatItem} from '@cinemabooking/interfaces/other/stat-item';
+import {StatItem} from '@cinemabooking/interfaces/ui/stat-item';
 
 @Component({
   selector: 'app-admin-view',

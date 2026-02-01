@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {User} from '@cinemabooking/interfaces/user';
 import {UpdateUserDto} from '@cinemabooking/interfaces/dto/update-user-dto';
 import {environment} from '../../environments/environment.development';
+import {User} from '@cinemabooking/interfaces/models/user';
 
 @Injectable({
   providedIn: 'root',

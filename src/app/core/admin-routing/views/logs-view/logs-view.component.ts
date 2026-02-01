@@ -1,13 +1,15 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { LogsService } from '@cinemabooking/services/logs.service';
-import { LogType, SystemLog } from '@cinemabooking/interfaces/system-log';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
-import { TagModule } from 'primeng/tag';
-import { BackDashboardComponent } from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {LogsService} from '@cinemabooking/services/logs.service';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
+import {SelectModule} from 'primeng/select';
+import {TagModule} from 'primeng/tag';
+import {
+  BackDashboardComponent
+} from '@cinemabooking/core/admin-routing/components/back-dashboard/back-dashboard.component';
+import {LogType, SystemLog} from '@cinemabooking/interfaces/api/system-log';
 
 @Component({
   selector: 'app-logs-view',
@@ -29,10 +31,10 @@ export class LogsViewComponent implements OnInit {
   public selectedType = signal<LogType | undefined>(undefined);
 
   public logTypes = [
-    { label: 'Wszystkie', value: undefined },
-    { label: 'INFO', value: LogType.INFO },
-    { label: 'WARNING', value: LogType.WARNING },
-    { label: 'ERROR', value: LogType.ERROR },
+    {label: 'Wszystkie', value: undefined},
+    {label: 'INFO', value: LogType.INFO},
+    {label: 'WARNING', value: LogType.WARNING},
+    {label: 'ERROR', value: LogType.ERROR},
   ];
 
   public ngOnInit(): void {

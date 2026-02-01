@@ -1,5 +1,5 @@
 import {MenuItem} from 'primeng/api';
-import {UserMenuActions} from '@cinemabooking/interfaces/other/user-menu-actions';
+import {UserMenuActions} from '@cinemabooking/interfaces/ui/user-menu-actions';
 
 export function getUserMenuItems(
   isAdmin: boolean,

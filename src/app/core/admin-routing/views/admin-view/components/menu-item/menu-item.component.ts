@@ -2,8 +2,8 @@ import {Component, input} from '@angular/core';
 import {Card} from "primeng/card";
 import {PrimeTemplate} from "primeng/api";
 import {RouterLink} from '@angular/router';
-import {AdminMenuItem} from '@cinemabooking/interfaces/other/admin-menu-item';
 import {NgClass} from '@angular/common';
+import {AdminMenuItem} from '@cinemabooking/interfaces/ui/admin-menu-item';
 
 @Component({
   selector: 'app-menu-item',

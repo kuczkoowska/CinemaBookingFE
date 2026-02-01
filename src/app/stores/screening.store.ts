@@ -1,12 +1,12 @@
 import {computed, inject} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
-import {Screening} from '@cinemabooking/interfaces/screening';
 import {ScreeningService} from '@cinemabooking/services/screening.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Screening} from '@cinemabooking/interfaces/models/screening';
 
 interface ScreeningState {
   screenings: Screening[];
@@ -79,6 +79,6 @@ function generateDays(count: number): { label: string; date: string }[] {
 
     dates.push({label, date: dateString});
   }
-  
+
   return dates;
 }

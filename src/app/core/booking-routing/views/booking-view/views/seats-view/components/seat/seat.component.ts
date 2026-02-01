@@ -1,7 +1,7 @@
 import {Component, input, output} from '@angular/core';
 import {Tooltip} from 'primeng/tooltip';
 import {NgClass} from '@angular/common';
-import {SeatWithStatus} from '@cinemabooking/interfaces/seat';
+import {SeatWithStatus} from '@cinemabooking/interfaces/models/seat';
 
 @Component({
   selector: 'app-seat',
