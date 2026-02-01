@@ -1,15 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { AuthService } from '@cinemabooking/services/auth.service';
-import { passwordMatchValidator } from '@cinemabooking/validators/password.validator';
-import { RegisterDto } from '@cinemabooking/interfaces/dto/register-dto';
-import { finalize } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {InputTextModule} from 'primeng/inputtext';
+import {PasswordModule} from 'primeng/password';
+import {ButtonModule} from 'primeng/button';
+import {MessageModule} from 'primeng/message';
+import {AuthService} from '@cinemabooking/services/auth.service';
+import {RegisterDto} from '@cinemabooking/interfaces/dto/register-dto';
+import {finalize} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {AuthStore} from '@cinemabooking/stores/auth.store';
 
 @Component({
   selector: 'app-register-view',
@@ -19,97 +20,66 @@ import { HttpErrorResponse } from '@angular/common/http';
     PasswordModule,
     ButtonModule,
     MessageModule,
+    TranslatePipe,
     RouterLink,
   ],
   templateUrl: './register-view.component.html',
 })
-export class RegisterViewComponent {
+export class RegisterViewComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  protected authStore = inject(AuthStore);
   private router = inject(Router);
+  public translateService = inject(TranslateService);
 
   public isLoading = signal(false);
   public errorMessage = signal('');
-  public language = signal<'pl' | 'en'>('pl');
 
-  public translations = {
-    pl: {
-      title: 'Załóż konto',
-      subtitle: 'Dołącz do CinemaBooking w 30 sekund',
-      firstName: 'Imię',
-      lastName: 'Nazwisko',
-      email: 'Email',
-      password: 'Hasło',
-      confirmPassword: 'Powtórz hasło',
-      registerButton: 'Zarejestruj się',
-      haveAccount: 'Masz już konto?',
-      signIn: 'Zaloguj się',
-      firstNamePlaceholder: 'Jan',
-      lastNamePlaceholder: 'Kowalski',
-      emailPlaceholder: 'jan@example.com',
-      firstNameError: 'Wymagane (min 2 znaki).',
-      lastNameError: 'Wymagane (min 2 znaki).',
-      emailError: 'Wpisz poprawny adres email.',
-      passwordError: 'Hasło jest za krótkie.',
-      passwordMismatch: 'Hasła muszą być identyczne.',
-      passwordHint: 'Wskazówka: Użyj minimum 6 znaków.',
-      errorInvalidData: 'Nieprawidłowe dane.',
-      errorServer: 'Wystąpił błąd serwera. Spróbuj później.',
-    },
-    en: {
-      title: 'Create Account',
-      subtitle: 'Join CinemaBooking in 30 seconds',
-      firstName: 'First Name',
-      lastName: 'Last Name',
-      email: 'Email',
-      password: 'Password',
-      confirmPassword: 'Confirm Password',
-      registerButton: 'Sign Up',
-      haveAccount: 'Already have an account?',
-      signIn: 'Sign In',
-      firstNamePlaceholder: 'John',
-      lastNamePlaceholder: 'Doe',
-      emailPlaceholder: 'john@example.com',
-      firstNameError: 'Required (min 2 characters).',
-      lastNameError: 'Required (min 2 characters).',
-      emailError: 'Enter a valid email address.',
-      passwordError: 'Password is too short.',
-      passwordMismatch: 'Passwords must match.',
-      passwordHint: 'Hint: Use at least 6 characters.',
-      errorInvalidData: 'Invalid data.',
-      errorServer: 'A server error occurred. Try again later.',
-    },
-  };
+  public registerForm = this.fb.nonNullable.group({
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]],
+  }, {
+    validators: this.passwordMatchValidator
+  });
 
-  public t = () => this.translations[this.language()];
-
-  public toggleLanguage(): void {
-    this.language.set(this.language() === 'pl' ? 'en' : 'pl');
+  public ngOnInit(): void {
+    this.translateService.use('pl');
   }
 
-  public registerForm = this.fb.nonNullable.group(
-    {
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
-    },
-    {
-      validators: passwordMatchValidator,
-    },
-  );
+  protected changeLanguage(): void {
+    const lang = this.translateService.getCurrentLang();
+    this.translateService.use(lang === 'pl' ? 'en' : 'pl');
+  }
+
+  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value === confirmPassword.value ? null : {passwordMismatch: true};
+  }
 
   public isInvalid(controlName: string): boolean {
     const control = this.registerForm.get(controlName);
-
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  public hasPasswordMismatch(): boolean {
+    return !!(
+      this.registerForm.errors?.['passwordMismatch'] &&
+      this.registerForm.get('confirmPassword')?.touched
+    );
   }
 
   public onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-
       return;
     }
 
@@ -133,9 +103,9 @@ export class RegisterViewComponent {
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 400) {
-            this.errorMessage.set(this.t().errorInvalidData);
+            this.errorMessage.set('Nieprawidłowe dane');
           } else {
-            this.errorMessage.set(this.t().errorServer);
+            this.errorMessage.set('Błąd serwera. Spróbuj ponownie później.');
           }
         },
       });

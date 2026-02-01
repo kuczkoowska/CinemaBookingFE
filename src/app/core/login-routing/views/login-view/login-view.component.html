@@ -1,18 +1,19 @@
-<div class="min-h-screen flex items-center justify-center bg-(--bg-app) p-4">
-  <div
-    class="w-full max-w-sm bg-element border border-(--border-color) rounded-2xl shadow-xl p-8 relative"
-  >
+<div class="min-h-screen flex items-center justify-center bg-[var(--bg-app)] p-4">
+  <div class="w-full max-w-sm bg-element border border-[var(--border-color)] rounded-2xl shadow-xl p-8 relative">
+
     <button
-      (click)="toggleLanguage()"
-      class="absolute top-4 right-4 text-2xl hover:scale-110 transition-transform cursor-pointer"
-      [title]="language() === 'pl' ? 'Switch to English' : 'Przełącz na Polski'"
-    >
-      {{ language() === 'pl' ? '🇬🇧' : '🇵🇱' }}
+      (click)="changeLanguage()"
+      class="absolute top-4 right-4 cursor-pointer bg-transparent border-none"
+    >Zmień
     </button>
 
     <div class="text-center mb-8">
-      <h2 class="text-2xl font-bold text-main">{{ t().title }}</h2>
-      <p class="text-(--text-muted) text-sm mt-1">{{ t().subtitle }}</p>
+      <h2 class="text-2xl font-bold text-main">
+        {{ 'LOGIN.TITLE' | translate }}
+      </h2>
+      <p class="text-[var(--text-muted)] text-sm mt-1">
+        {{ 'LOGIN.SUBTITLE' | translate }}
+      </p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
@@ -21,54 +22,60 @@
           pInputText
           type="email"
           id="username"
-          [placeholder]="t().emailPlaceholder"
+          [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
           formControlName="username"
           [invalid]="isInvalid('username')"
+          class="w-full"
         />
+
         @if (isInvalid('username')) {
           @if (loginForm.get('username')?.errors?.['required']) {
-            <p-message severity="error" size="small" variant="simple">{{
-              t().emailRequired
-            }}</p-message>
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'LOGIN.ERRORS.EMAIL_REQUIRED' | translate }}
+            </p-message>
           }
           @if (loginForm.get('username')?.errors?.['email']) {
-            <p-message severity="error" size="small" variant="simple">{{
-              t().emailInvalid
-            }}</p-message>
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'LOGIN.ERRORS.EMAIL_INVALID' | translate }}
+            </p-message>
           }
         }
       </div>
+
       <div class="flex flex-col gap-1">
         <p-password
           id="password"
-          [placeholder]="t().passwordPlaceholder"
+          [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
           formControlName="password"
           [invalid]="isInvalid('password')"
           [feedback]="false"
           [toggleMask]="true"
-          fluid
+          styleClass="w-full"
+          inputStyleClass="w-full"
         />
         @if (isInvalid('password')) {
-          <p-message severity="error" size="small" variant="simple">{{
-            t().passwordRequired
-          }}</p-message>
+          <p-message severity="error" size="small" variant="simple">
+            {{ 'LOGIN.ERRORS.PASS_REQUIRED' | translate }}
+          </p-message>
         }
       </div>
+
       <p-button
-        [label]="t().loginButton"
+        [label]="'LOGIN.BTN' | translate"
         type="submit"
+        [loading]="authStore.isLoading()"
         [disabled]="loginForm.invalid"
-        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white focus:ring-2 focus:!ring-[var(----primary-color)]"
+        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white"
       >
       </p-button>
 
-      <div class="text-center mt-2 text-sm text-(--text-muted)">
-        {{ t().noAccount }}
+      <div class="text-center mt-2 text-sm text-[var(--text-muted)]">
+        {{ 'LOGIN.NO_ACCOUNT' | translate }}
         <a
           [routerLink]="['/login/register']"
           class="text-primary hover:text-primary-hover font-bold cursor-pointer transition-colors hover:underline ml-1"
         >
-          {{ t().register }}
+          {{ 'LOGIN.REGISTER' | translate }}
         </a>
       </div>
     </form>

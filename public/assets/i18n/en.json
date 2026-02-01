@@ -1,0 +1,42 @@
+{
+  "LOGIN": {
+    "TITLE": "Welcome back!",
+    "SUBTITLE": "Sign in to CinemaBooking",
+    "EMAIL_PLACEHOLDER": "E-mail",
+    "PASSWORD_PLACEHOLDER": "Password",
+    "BTN": "Sign In",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER": "Sign Up",
+    "ERRORS": {
+      "EMAIL_REQUIRED": "Email is required.",
+      "EMAIL_INVALID": "Enter a valid email.",
+      "PASS_REQUIRED": "Password is required."
+    }
+  },
+  "REGISTER": {
+    "TITLE": "Create Account",
+    "SUBTITLE": "Join us today!",
+    "FIRST_NAME": "First Name",
+    "FIRST_NAME_PLACEHOLDER": "Enter first name",
+    "LAST_NAME": "Last Name",
+    "LAST_NAME_PLACEHOLDER": "Enter last name",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Email address",
+    "PASSWORD": "Password",
+    "PASSWORD_PLACEHOLDER": "Enter password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirm password",
+    "PASSWORD_HINT": "Password must be at least 6 characters",
+    "BTN": "Sign Up",
+    "HAVE_ACCOUNT": "Already have an account?",
+    "SIGN_IN": "Sign in",
+    "ERRORS": {
+      "FIRST_NAME_REQUIRED": "First name is required",
+      "LAST_NAME_REQUIRED": "Last name is required",
+      "EMAIL_REQUIRED": "Email is required",
+      "EMAIL_INVALID": "Please enter a valid email",
+      "PASSWORD_REQUIRED": "Password is required",
+      "PASSWORD_MISMATCH": "Passwords do not match"
+    }
+  }
+}

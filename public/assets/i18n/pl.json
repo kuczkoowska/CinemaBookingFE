@@ -1,0 +1,42 @@
+{
+  "LOGIN": {
+    "TITLE": "Witaj ponownie!",
+    "SUBTITLE": "Zaloguj się do CinemaBooking",
+    "EMAIL_PLACEHOLDER": "E-mail",
+    "PASSWORD_PLACEHOLDER": "Hasło",
+    "BTN": "Zaloguj się",
+    "NO_ACCOUNT": "Nie masz jeszcze konta?",
+    "REGISTER": "Zarejestruj się",
+    "ERRORS": {
+      "EMAIL_REQUIRED": "Email jest wymagany.",
+      "EMAIL_INVALID": "Wprowadź poprawny email.",
+      "PASS_REQUIRED": "Hasło jest wymagane."
+    }
+  },
+  "REGISTER": {
+    "TITLE": "Utwórz konto",
+    "SUBTITLE": "Dołącz do nas już dziś!",
+    "FIRST_NAME": "Imię",
+    "FIRST_NAME_PLACEHOLDER": "Wprowadź imię",
+    "LAST_NAME": "Nazwisko",
+    "LAST_NAME_PLACEHOLDER": "Wprowadź nazwisko",
+    "EMAIL": "E-mail",
+    "EMAIL_PLACEHOLDER": "Adres e-mail",
+    "PASSWORD": "Hasło",
+    "PASSWORD_PLACEHOLDER": "Wprowadź hasło",
+    "CONFIRM_PASSWORD": "Potwierdź hasło",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Potwierdź hasło",
+    "PASSWORD_HINT": "Hasło musi zawierać co najmniej 6 znaków",
+    "BTN": "Zarejestruj się",
+    "HAVE_ACCOUNT": "Masz już konto?",
+    "SIGN_IN": "Zaloguj się",
+    "ERRORS": {
+      "FIRST_NAME_REQUIRED": "Imię jest wymagane",
+      "LAST_NAME_REQUIRED": "Nazwisko jest wymagane",
+      "EMAIL_REQUIRED": "E-mail jest wymagany",
+      "EMAIL_INVALID": "Podaj poprawny adres e-mail",
+      "PASSWORD_REQUIRED": "Hasło jest wymagane",
+      "PASSWORD_MISMATCH": "Hasła nie są identyczne"
+    }
+  }
+}

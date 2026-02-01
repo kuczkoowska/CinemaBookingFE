@@ -1,146 +1,164 @@
-<div class="flex items-center justify-center bg-(--bg-app) p-4">
-  <div
-    class="w-full max-w-md bg-element border border-(--border-color) rounded-2xl shadow-xl p-8 relative"
-  >
+<div class="min-h-screen flex items-center justify-center bg-[var(--bg-app)] p-4">
+  <div class="w-full max-w-md bg-element border border-[var(--border-color)] rounded-2xl shadow-xl p-8 relative">
+
     <button
-      (click)="toggleLanguage()"
-      class="absolute top-4 right-4 text-2xl hover:scale-110 transition-transform cursor-pointer"
-      [title]="language() === 'pl' ? 'Switch to English' : 'Przełącz na Polski'"
-    >
-      {{ language() === 'pl' ? '🇬🇧' : '🇵🇱' }}
+      (click)="changeLanguage()"
+      class="absolute top-4 right-4 text-2xl hover:scale-110 transition-transform cursor-pointer bg-transparent border-none"
+    >Zmień
     </button>
 
     <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-main">{{ t().title }}</h2>
-      <p class="text-(--text-muted) text-sm mt-1">{{ t().subtitle }}</p>
+      <h2 class="text-2xl font-bold text-main">
+        {{ 'REGISTER.TITLE' | translate }}
+      </h2>
+      <p class="text-[var(--text-muted)] text-sm mt-1">
+        {{ 'REGISTER.SUBTITLE' | translate }}
+      </p>
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <!-- First Name & Last Name -->
       <div class="flex flex-col sm:flex-row gap-4">
         <div class="flex-1 flex flex-col gap-1">
-          <label for="firstName" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
-            t().firstName
-          }}</label>
+          <label for="firstName" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">
+            {{ 'REGISTER.FIRST_NAME' | translate }}
+          </label>
           <input
             pInputText
             id="firstName"
             formControlName="firstName"
-            [placeholder]="t().firstNamePlaceholder"
-            class="w-full p-3 text-sm"
+            [placeholder]="'REGISTER.FIRST_NAME_PLACEHOLDER' | translate"
+            class="w-full"
             [invalid]="isInvalid('firstName')"
           />
           @if (isInvalid('firstName')) {
-            <small class="text-red-500 text-xs">{{ t().firstNameError }}</small>
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'REGISTER.ERRORS.FIRST_NAME_REQUIRED' | translate }}
+            </p-message>
           }
         </div>
 
         <div class="flex-1 flex flex-col gap-1">
-          <label for="lastName" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
-            t().lastName
-          }}</label>
+          <label for="lastName" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">
+            {{ 'REGISTER.LAST_NAME' | translate }}
+          </label>
           <input
             pInputText
             id="lastName"
             formControlName="lastName"
-            [placeholder]="t().lastNamePlaceholder"
-            class="w-full p-3 text-sm"
+            [placeholder]="'REGISTER.LAST_NAME_PLACEHOLDER' | translate"
+            class="w-full"
             [invalid]="isInvalid('lastName')"
           />
           @if (isInvalid('lastName')) {
-            <small class="text-red-500 text-xs">{{ t().lastNameError }}</small>
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'REGISTER.ERRORS.LAST_NAME_REQUIRED' | translate }}
+            </p-message>
           }
         </div>
       </div>
 
+      <!-- Email -->
       <div class="flex flex-col gap-1">
-        <label for="email" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
-          t().email
-        }}</label>
+        <label for="email" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">
+          {{ 'REGISTER.EMAIL' | translate }}
+        </label>
         <input
           pInputText
           type="email"
           id="email"
           formControlName="email"
-          [placeholder]="t().emailPlaceholder"
-          class="w-full p-3 text-sm"
+          [placeholder]="'REGISTER.EMAIL_PLACEHOLDER' | translate"
+          class="w-full"
           [invalid]="isInvalid('email')"
         />
         @if (isInvalid('email')) {
-          <small class="text-red-500 text-xs">{{ t().emailError }}</small>
+          @if (registerForm.get('email')?.errors?.['required']) {
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
+            </p-message>
+          }
+          @if (registerForm.get('email')?.errors?.['email']) {
+            <p-message severity="error" size="small" variant="simple">
+              {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
+            </p-message>
+          }
         }
       </div>
 
+      <!-- Password -->
       <div class="flex flex-col gap-1">
-        <label for="password" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
-          t().password
-        }}</label>
+        <label for="password" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">
+          {{ 'REGISTER.PASSWORD' | translate }}
+        </label>
         <p-password
           id="password"
           formControlName="password"
+          [placeholder]="'REGISTER.PASSWORD_PLACEHOLDER' | translate"
           [toggleMask]="true"
           [feedback]="true"
           [invalid]="isInvalid('password')"
-          fluid
+          styleClass="w-full"
+          inputStyleClass="w-full"
         >
           <ng-template pTemplate="footer">
-            <p class="mt-2 text-xs">{{ t().passwordHint }}</p>
+            <p class="mt-2 text-xs">{{ 'REGISTER.PASSWORD_HINT' | translate }}</p>
           </ng-template>
         </p-password>
-
         @if (isInvalid('password')) {
-          <small class="text-red-500 text-xs">{{ t().passwordError }}</small>
+          <p-message severity="error" size="small" variant="simple">
+            {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
+          </p-message>
         }
       </div>
 
+      <!-- Confirm Password -->
       <div class="flex flex-col gap-1">
-        <label for="confirmPassword" class="text-xs font-bold text-(--text-muted) uppercase ml-1">{{
-          t().confirmPassword
-        }}</label>
+        <label for="confirmPassword" class="text-xs font-bold text-[var(--text-muted)] uppercase ml-1">
+          {{ 'REGISTER.CONFIRM_PASSWORD' | translate }}
+        </label>
         <p-password
           id="confirmPassword"
           formControlName="confirmPassword"
+          [placeholder]="'REGISTER.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
           [toggleMask]="true"
           [feedback]="false"
-          fluid
-          [invalid]="
-            isInvalid('confirmPassword') ||
-            (registerForm.errors?.['passwordMismatch'] &&
-              registerForm.get('confirmPassword')?.touched)
-          "
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          [invalid]="isInvalid('confirmPassword') || hasPasswordMismatch()"
         >
         </p-password>
-
-        @if (
-          registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched
-        ) {
-          <small class="text-red-500 text-xs">{{ t().passwordMismatch }}</small>
+        @if (hasPasswordMismatch()) {
+          <p-message severity="error" size="small" variant="simple">
+            {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
+          </p-message>
         }
       </div>
 
-      @if (errorMessage()) {
-        <div
-          class="bg-red-500/10 text-red-500 text-xs p-3 rounded text-center border border-red-500/20"
-        >
-          {{ errorMessage() }}
+      <!-- Error Message (jeśli potrzebne) -->
+      @if (authStore.error()) {
+        <div class="bg-red-500/10 text-red-500 text-xs p-3 rounded text-center border border-red-500/20">
+          {{ authStore.error() }}
         </div>
       }
 
+      <!-- Submit Button -->
       <p-button
-        [label]="t().registerButton"
+        [label]="'REGISTER.BTN' | translate"
         type="submit"
-        [loading]="isLoading()"
+        [loading]="authStore.isLoading()"
         [disabled]="registerForm.invalid"
-        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white focus:ring-2 focus:!ring-[var(----primary-color)]"
+        styleClass="w-full mt-2 font-bold !bg-primary-hover !border-primary-hover hover:!bg-primary-hover text-white"
       >
       </p-button>
 
-      <div class="text-center mt-2 text-sm text-(--text-muted)">
-        {{ t().haveAccount }}
+      <div class="text-center mt-2 text-sm text-[var(--text-muted)]">
+        {{ 'REGISTER.HAVE_ACCOUNT' | translate }}
         <a
           [routerLink]="['/login']"
-          class="text-primary hover:text-primary-hover font-bold cursor-pointer hover:underline ml-1"
+          class="text-primary hover:text-primary-hover font-bold cursor-pointer transition-colors hover:underline ml-1"
         >
-          {{ t().signIn }}
+          {{ 'REGISTER.SIGN_IN' | translate }}
         </a>
       </div>
     </form>
