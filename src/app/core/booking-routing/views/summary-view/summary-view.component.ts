@@ -4,13 +4,13 @@ import {Router} from '@angular/router';
 import {
   PaymentMethod,
   PaymentMethodSelectorComponent,
-} from '@cinemabooking/core/booking-routing/views/summary-view/components/payment-method-selector.component';
+} from '@cinemabooking/core/booking-routing/views/summary-view/components/payment-method-selector/payment-method-selector.component';
 import {
   BookingConfirmationComponent
-} from '@cinemabooking/core/booking-routing/views/summary-view/components/booking-confirmation.component';
+} from '@cinemabooking/core/booking-routing/views/summary-view/components/booking-confirmation/booking-confirmation.component';
 import {
   BookingSummaryCardComponent
-} from '@cinemabooking/core/booking-routing/views/summary-view/components/booking-summary-card.component';
+} from '@cinemabooking/core/booking-routing/views/summary-view/components/booking-summary-card/booking-summary-card.component';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 
 @Component({
