@@ -26,16 +26,22 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
 })
 export class BookingViewComponent implements OnInit {
   protected readonly store = inject(BookingStore);
+
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
 
   public ngOnInit(): void {
-    const screeningId = Number(this.route.snapshot.paramMap.get('screeningId'));
-    this.store.loadBookingData(screeningId);
+    const screeningId = this.route.snapshot.paramMap.get('screeningId');
+
+    if (screeningId) {
+      this.store.loadBookingData(Number(screeningId));
+    } else {
+      this.router.navigate([AppRoute.HOME]);
+    }
   }
 
-  public cancelAndGoHome(): void {
+  protected onCancelAndGoHome(): void {
     this.confirmationService.confirm({
       message: 'Czy na pewno chcesz anulować rezerwację i wrócić do strony głównej?',
       header: 'Anuluj rezerwację',
@@ -43,24 +49,21 @@ export class BookingViewComponent implements OnInit {
       acceptLabel: 'Tak, anuluj',
       rejectLabel: 'Nie, kontynuuj',
       acceptButtonStyleClass: 'p-button-danger',
-      accept: () => {
-        const bookingId = this.store.activeBooking()?.id;
-        if (bookingId) {
-          this.store.cancelAndGoBack();
-        }
+      accept: (): void => {
+        this.store.cancelAndGoBack();
         this.router.navigate([AppRoute.HOME]);
       },
     });
   }
 
-  public changeScreening(): void {
+  protected onChangeScreening(): void {
     this.confirmationService.confirm({
       message: 'Zmiana seansu anuluje obecną rezerwację. Czy chcesz kontynuować?',
       header: 'Zmiana seansu',
       icon: 'pi pi-info-circle',
       acceptLabel: 'Tak, zmień seans',
-      rejectLabel: 'Anuluj',
-      accept: () => {
+      rejectLabel: 'Wróć',
+      accept: (): void => {
         const bookingId = this.store.activeBooking()?.id;
         if (bookingId) {
           this.store.cancelBookingSilent(bookingId);

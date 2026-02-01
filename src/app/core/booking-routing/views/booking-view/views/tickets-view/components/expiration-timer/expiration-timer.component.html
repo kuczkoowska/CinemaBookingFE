@@ -1,30 +1,21 @@
 @if (store.expirationTime()) {
+  <div class="flex justify-center mb-6 animate-fade-in">
 
-  @let time = timeLeft$ | async;
-
-  <div class="timer-wrapper">
-
-    @if (store.isExpired()) {
-
-      <p-message
-        severity="error"
-        styleClass="w-full">
-        Czas minął! Twoje miejsca zostały zwolnione.
-      </p-message>
-
+    @if (timeDiff() === 0) {
+      <p-message severity="error" text="Czas minął!"></p-message>
     } @else {
-
-      <div class="flex align-items-center gap-2">
-        <span class="text-700 font-medium">Czas na dokończenie:</span>
+      <div class="flex items-center gap-3 bg-surface-0 px-4 py-2 rounded-full border shadow-sm">
+        <span class="text-gray-500 font-bold text-xs uppercase">Czas:</span>
 
         <p-tag
-          [value]="time || '00:00'"
-          icon="pi pi-clock"
+          [value]="(timeDiff() | date:'mm:ss':'UTC') || '00:00'"
+          severity="warn"
           [rounded]="true"
-          class="text-lg px-3 py-2">
-        </p-tag>
-      </div>
+          class="font-mono text-lg font-bold"
+        ></p-tag>
 
+      </div>
     }
+
   </div>
 }

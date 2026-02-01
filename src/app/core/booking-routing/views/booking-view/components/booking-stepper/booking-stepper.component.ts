@@ -1,16 +1,11 @@
 import {Component, computed, inject} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {filter, map, startWith} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {StepsModule} from 'primeng/steps';
 import {MenuItem} from 'primeng/api';
-
-interface BookingStep {
-  label: string;
-  route: string;
-  index: number;
-}
+import {BOOKING_STEPS_CONFIG} from '@cinemabooking/const/booking-steps.constants';
 
 @Component({
   selector: 'app-booking-stepper',
@@ -22,42 +17,26 @@ interface BookingStep {
 
 })
 export class BookingStepperComponent {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  private readonly stepsData: BookingStep[] = [
-    {label: 'Wybór miejsc', route: 'seats', index: 0},
-    {label: 'Bilety', route: 'tickets', index: 1},
-    {label: 'Kontakt', route: 'contact', index: 2},
-    {label: 'Płatność', route: 'summary', index: 3}
-  ];
+  private readonly stepsConfig = BOOKING_STEPS_CONFIG;
 
-  protected items = computed<MenuItem[]>(() =>
-    this.stepsData.map(s => ({
-      label: s.label,
-    }))
+  protected readonly items = computed<MenuItem[]>(() =>
+    this.stepsConfig.map((s) => ({label: s.label}))
   );
 
-  private currentRoute = toSignal(
+  private readonly currentUrl = toSignal(
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.getCurrentRouteSegment()),
-      startWith(this.getCurrentRouteSegment())
-    ),
-    {initialValue: 'seats'}
+      filter((e) => e instanceof NavigationEnd),
+      map((e: NavigationEnd) => e.urlAfterRedirects),
+      startWith(this.router.url)
+    )
   );
 
-  protected activeStepIndex = computed(() => {
-    const route = this.currentRoute();
-    const step = this.stepsData.find(s => route.includes(s.route));
-    return step ? step.index : 0;
-  });
+  protected readonly activeStepIndex = computed(() => {
+    const url = this.currentUrl();
+    const index = this.stepsConfig.findIndex((s) => url?.includes(s.route));
 
-  private getCurrentRouteSegment(): string {
-    let currentRoute = this.route;
-    while (currentRoute.firstChild) {
-      currentRoute = currentRoute.firstChild;
-    }
-    return currentRoute.snapshot.url.map(segment => segment.path).join('/') || '';
-  }
+    return index !== -1 ? index : 0;
+  });
 }

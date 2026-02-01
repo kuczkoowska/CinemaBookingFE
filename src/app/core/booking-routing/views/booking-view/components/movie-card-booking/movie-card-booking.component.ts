@@ -1,11 +1,11 @@
-import { Component, input, output } from '@angular/core';
-import { Screening } from '@cinemabooking/interfaces/screening';
-import { Movie } from '@cinemabooking/interfaces/movie';
-import { DatePipe } from '@angular/common';
-import { Image } from 'primeng/image';
-import { Card } from 'primeng/card';
-import { Divider } from 'primeng/divider';
-import { Button } from 'primeng/button';
+import {Component, input, output} from '@angular/core';
+import {Screening} from '@cinemabooking/interfaces/screening';
+import {Movie} from '@cinemabooking/interfaces/movie';
+import {DatePipe} from '@angular/common';
+import {Image} from 'primeng/image';
+import {Card} from 'primeng/card';
+import {Divider} from 'primeng/divider';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-movie-card-booking',
@@ -17,7 +17,7 @@ export class MovieCardBookingComponent {
   public readonly screening = input.required<Screening>();
   public readonly changeDate = output<void>();
 
-  public onChangeDate(): void {
+  protected onChangeDate(): void {
     this.changeDate.emit();
   }
 }

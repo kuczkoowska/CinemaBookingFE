@@ -1,56 +1,44 @@
-import {Component, effect, inject} from '@angular/core';
+import {Component, effect, inject, OnDestroy, signal} from '@angular/core';
 import {Router} from '@angular/router';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
-import {interval, map, Observable, startWith, takeWhile} from 'rxjs';
-import {AsyncPipe, CommonModule} from '@angular/common';
-import {NotificationService} from '@cinemabooking/services/notification.service';
+import {CommonModule} from '@angular/common';
 
 import {MessageModule} from 'primeng/message';
 import {TagModule} from 'primeng/tag';
 
 @Component({
   selector: 'app-expiration-timer',
-  imports: [CommonModule, AsyncPipe, MessageModule, TagModule],
+  imports: [CommonModule, MessageModule, TagModule],
   templateUrl: './expiration-timer.component.html',
 })
-export class ExpirationTimerComponent {
-  readonly store = inject(BookingStore);
+export class ExpirationTimerComponent implements OnDestroy {
+  protected readonly store = inject(BookingStore);
   private readonly router = inject(Router);
-  private readonly notificationService = inject(NotificationService);
+  protected readonly timeDiff = signal<number>(0);
+
+  private readonly intervalId = setInterval(() => this.updateTimer(), 1000);
 
   public constructor() {
+    this.updateTimer();
+
     effect((): void => {
-      if (this.store.isExpired() && !this.store.isFinished()) {
-        this.notificationService.showError(
-          'Czas minął',
-          'Czas na rezerwację minął. Przekierowywanie do repertuaru...',
-        );
-        setTimeout(() => {
-          this.router.navigate(['/showtimes']);
-        }, 2000);
+      if (this.timeDiff() <= 0 && this.store.activeBooking() && !this.store.isFinished()) {
+        clearInterval(this.intervalId);
+        setTimeout(() => this.router.navigate(['/']), 2000);
       }
     });
   }
 
-  readonly timeLeft$: Observable<string> = interval(1000).pipe(
-    startWith(0),
-    takeWhile(() => !this.store.isExpired(), true),
-    map(() => {
-      const expString = this.store.expirationTime();
-      if (!expString) return '00:00';
+  public ngOnDestroy(): void {
+    clearInterval(this.intervalId);
+  }
 
-      const distance = new Date(expString).getTime() - new Date().getTime();
+  private updateTimer(): void {
+    const expString = this.store.expirationTime();
+    if (!expString) return;
 
-      if (distance <= 0) return '00:00';
-
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      return `${this.pad(minutes)}:${this.pad(seconds)}`;
-    })
-  );
-
-  private pad(num: number): string {
-    return num < 10 ? `0${num}` : `${num}`;
+    const diff = new Date(expString).getTime() - Date.now();
+    // zapobiega liczbom ujemnym
+    this.timeDiff.set(Math.max(0, diff));
   }
 }

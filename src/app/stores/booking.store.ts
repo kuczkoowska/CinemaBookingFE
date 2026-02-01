@@ -13,6 +13,7 @@ import {withRequestStatus} from '@cinemabooking/stores/features/request-status.s
 import {tapResponse} from '@ngrx/operators';
 import {Booking} from '@cinemabooking/interfaces/booking';
 import {HttpErrorResponse} from '@angular/common/http';
+import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
 
 interface BookingState {
   activeBooking: BookingDto | null;
@@ -26,6 +27,7 @@ interface BookingState {
   isPaymentProcessing: boolean;
   isPaymentSuccess: boolean;
   isFinished: boolean;
+  contactDetails: BookingContactDetails | null;
 }
 
 const initialState: BookingState = {
@@ -40,6 +42,7 @@ const initialState: BookingState = {
   isPaymentProcessing: false,
   isPaymentSuccess: false,
   isFinished: false,
+  contactDetails: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -139,6 +142,10 @@ export const BookingStore = signalStore(
       bookingService.cancelBooking(bookingId).subscribe();
     },
 
+    saveContactDetails(details: BookingContactDetails): void {
+      patchState(store, {contactDetails: details});
+    },
+
     toggleSeat(seatId: number): void {
       const currentIds = store.selectedSeatIds();
       const seat = store.seats().find((s) => s.id === seatId);
@@ -232,6 +239,8 @@ export const BookingStore = signalStore(
         switchMap((payload) => {
           const booking = store.activeBooking();
 
+          const contactData = store.contactDetails();
+
           if (!booking) return EMPTY;
 
           const updates: UpdateTicketTypeDto[] = booking.tickets.map((ticket) => ({
@@ -243,7 +252,7 @@ export const BookingStore = signalStore(
             switchMap((updatedBooking) => {
               patchState(store, {activeBooking: updatedBooking});
 
-              return bookingService.confirmBooking(updatedBooking.id);
+              return bookingService.confirmBooking(updatedBooking.id, contactData);
             }),
             tap(() => patchState(store, {isPaymentProcessing: true})),
             delay(2000),

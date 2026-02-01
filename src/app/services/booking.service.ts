@@ -10,6 +10,7 @@ import {Booking} from '@cinemabooking/interfaces/booking';
 import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 import {TicketPrice} from '@cinemabooking/interfaces/ticket';
 import {Page} from '@cinemabooking/interfaces/page';
+import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,8 @@ export class BookingService {
     return this.http.put<BookingDto>(`${this.apiUrl}/${bookingId}/tickets`, tickets);
   }
 
-  public confirmBooking(bookingId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${bookingId}/pay`, {});
+  public confirmBooking(bookingId: number, contactDetails: BookingContactDetails | null): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${bookingId}/pay`, contactDetails || {});
   }
 
   public cancelBooking(bookingId: number): Observable<void> {
