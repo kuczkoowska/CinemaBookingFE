@@ -1,18 +1,14 @@
-import {Component, computed, inject, viewChild} from '@angular/core';
+import {Component, computed, effect, inject, signal, viewChild} from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import {Menu, MenuModule} from 'primeng/menu';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {getUserMenuItems} from '@cinemabooking/const/user-menu.constants';
 import {Button} from 'primeng/button';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-user-menu',
-  standalone: true,
-  imports: [
-    MenuModule,
-    RouterModule,
-    Button
-  ],
+  imports: [MenuModule, RouterModule, Button],
   templateUrl: './user-menu.component.html',
 })
 export class UserMenuComponent {
@@ -27,19 +23,25 @@ export class UserMenuComponent {
     return name.slice(0, 2).toUpperCase();
   });
 
-  public menu = viewChild<Menu>('menu')
+  public menu = viewChild<Menu>('menu');
+  public menuItems = signal<MenuItem[]>([]);
 
-  public menuItems = computed(() =>
-    getUserMenuItems(this.auth.isAdmin(), {
-      onLogout: () => {
-        console.log(this.menu())
-        this.menu()?.hide();
-        this.auth.logout();
-      },
+  constructor() {
+    effect(() => {
+      const isAdmin = this.auth.isAdmin();
+      const isActive = this.auth.user()?.isActive ?? true;
 
-      onAdminPanel: () => {
-        this.router.navigate(['/admin/dashboard']);
-      },
-    })
-  );
+      const items = getUserMenuItems(isAdmin, isActive, {
+        onLogout: () => {
+          this.menu()?.hide();
+          this.auth.logout();
+        },
+        onAdminPanel: () => {
+          this.router.navigate(['/admin/dashboard']);
+        },
+      });
+
+      this.menuItems.set(items);
+    });
+  }
 }
