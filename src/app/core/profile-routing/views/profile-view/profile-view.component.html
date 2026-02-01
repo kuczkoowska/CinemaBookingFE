@@ -17,13 +17,13 @@
     <h2 class="text-xl font-bold mb-4">Twoje rezerwacje</h2>
 
     <p-table
-      [value]="bookings()"
+      [value]="bookingStore.items()"
       [lazy]="true"
-      (onLazyLoad)="loadBookings($event)"
+      (onLazyLoad)="onLazyLoad($event)"
       [paginator]="true"
       [rows]="5"
-      [totalRecords]="totalRecords()"
-      [loading]="loading()"
+      [totalRecords]="bookingStore.totalRecords()"
+      [loading]="bookingStore.isLoading()"
       [rowsPerPageOptions]="[5, 10, 20]"
     >
       <ng-template pTemplate="header">

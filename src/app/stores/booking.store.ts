@@ -7,13 +7,13 @@ import {BookingService} from '@cinemabooking/services/booking.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {catchError, delay, EMPTY, pipe, switchMap, tap} from 'rxjs';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
-import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 import {TicketType} from '@cinemabooking/enums/ticket-type';
 import {withRequestStatus} from '@cinemabooking/stores/features/request-status.store';
 import {tapResponse} from '@ngrx/operators';
 import {Booking} from '@cinemabooking/interfaces/booking';
 import {HttpErrorResponse} from '@angular/common/http';
 import {BookingContactDetails} from '@cinemabooking/interfaces/form/booking-contact.form';
+import {UpdateTicketTypeDto} from '@cinemabooking/interfaces/dto/ticket-dto';
 
 interface BookingState {
   activeBooking: BookingDto | null;
@@ -28,6 +28,9 @@ interface BookingState {
   isPaymentSuccess: boolean;
   isFinished: boolean;
   contactDetails: BookingContactDetails | null;
+  items: BookingDto[];
+  totalRecords: number;
+  isLoading: boolean;
 }
 
 const initialState: BookingState = {
@@ -43,6 +46,9 @@ const initialState: BookingState = {
   isPaymentSuccess: false,
   isFinished: false,
   contactDetails: null,
+  items: [],
+  totalRecords: 0,
+  isLoading: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -121,7 +127,7 @@ export const BookingStore = signalStore(
         return booking.tickets.reduce((total, ticket) => {
           const currentType = selections[ticket.id] || ticket.type;
           const currentPrice = priceMap[currentType] || ticket.price;
-          
+
           return total + currentPrice;
         }, 0);
       }),
@@ -139,9 +145,13 @@ export const BookingStore = signalStore(
       patchState(store, {isFinished: true});
     },
 
-    cancelBookingOnExit(bookingId: number): void {
-      bookingService.cancelBooking(bookingId).subscribe();
-    },
+    cancelBookingOnExit: rxMethod<number>(
+      pipe(
+        switchMap(id => bookingService.cancelBooking(id).pipe(
+          catchError(() => EMPTY)
+        ))
+      )
+    ),
 
     saveContactDetails(details: BookingContactDetails): void {
       patchState(store, {contactDetails: details});
@@ -239,45 +249,49 @@ export const BookingStore = signalStore(
         tap(() => store.setLoading()),
         switchMap((payload) => {
           const booking = store.activeBooking();
-
-          const contactData = store.contactDetails();
-
           if (!booking) return EMPTY;
 
-          const updates: UpdateTicketTypeDto[] = booking.tickets.map((ticket) => ({
-            ticketId: ticket.id,
-            newType: store.ticketSelections()[ticket.id] || ticket.type,
-          }));
+          const updates = mapTicketsToUpdates(booking, store.ticketSelections());
 
           return bookingService.updateTicketTypes(booking.id, updates).pipe(
             switchMap((updatedBooking) => {
               patchState(store, {activeBooking: updatedBooking});
-
-              return bookingService.confirmBooking(updatedBooking.id, contactData);
+              return bookingService.confirmBooking(updatedBooking.id, store.contactDetails());
             }),
             tap(() => patchState(store, {isPaymentProcessing: true})),
             delay(2000),
             tapResponse({
               next: () => {
-                patchState(store, {
-                  isPaymentProcessing: false,
-                  isPaymentSuccess: true,
-                  isFinished: true,
-                });
+                patchState(store, {isPaymentProcessing: false, isPaymentSuccess: true, isFinished: true});
                 store.setLoaded();
-
-                if (payload && typeof payload === 'object' && 'onSuccess' in payload && payload.onSuccess) {
-                  payload.onSuccess();
-                }
+                payload?.onSuccess?.();
               },
-              error: (err: HttpErrorResponse | Error) => {
+              error: (err: HttpErrorResponse) => {
                 patchState(store, {isPaymentProcessing: false});
                 store.setError(err);
-              },
-            }),
+              }
+            })
           );
-        }),
-      ),
+        })
+      )
+    ),
+
+    loadBookings: rxMethod<{ page: number; rows: number }>(
+      pipe(
+        tap(() => patchState(store, {isLoading: true})),
+        switchMap(({page, rows}) =>
+          bookingService.getMyBookings(page, rows).pipe(
+            tapResponse({
+              next: (response) => patchState(store, {
+                items: response.content,
+                totalRecords: response.totalElements,
+                isLoading: false
+              }),
+              error: () => patchState(store, {items: [], isLoading: false}),
+            })
+          )
+        )
+      )
     ),
 
     loadBookingData: rxMethod<number>(
@@ -301,6 +315,24 @@ export const BookingStore = signalStore(
         }),
       ),
     ),
+
+    loadBookingById: rxMethod<number>(
+      pipe(
+        tap(() => patchState(store, {isLoading: true, error: null})),
+        switchMap((id) => bookingService.getBookingById(id).pipe(
+          tapResponse({
+            next: (booking) => patchState(store, {
+              activeBooking: booking,
+              isLoading: false
+            }),
+            error: (err: HttpErrorResponse) => patchState(store, {
+              error: 'Nie udało się pobrać szczegółów',
+              isLoading: false
+            }),
+          })
+        ))
+      )
+    )
   })),
 );
 
@@ -327,4 +359,11 @@ function groupSeatsByRows(
       ),
     };
   });
+}
+
+function mapTicketsToUpdates(booking: BookingDto, selections: Record<number, string>): UpdateTicketTypeDto[] {
+  return booking.tickets.map(ticket => ({
+    ticketId: ticket.id,
+    newType: (selections[ticket.id] || ticket.type) as TicketType,
+  }));
 }
