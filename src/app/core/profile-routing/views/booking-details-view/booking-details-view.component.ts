@@ -1,5 +1,5 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, computed, effect, inject, input, numberAttribute, signal} from '@angular/core';
+import {Router} from '@angular/router';
 import {BookingService} from '@cinemabooking/services/booking.service';
 import {BookingDto} from '@cinemabooking/interfaces/dto/booking-dto';
 import {Button} from 'primeng/button';
@@ -7,84 +7,79 @@ import {DatePipe, DecimalPipe} from '@angular/common';
 import {SpinnerComponent} from '@cinemabooking/ui/spinner/spinner.component';
 import {Tag} from 'primeng/tag';
 import {Divider} from 'primeng/divider';
+import {finalize} from 'rxjs';
 
 @Component({
   selector: 'app-booking-details-view',
   imports: [Button, DatePipe, DecimalPipe, SpinnerComponent, Tag, Divider],
   templateUrl: './booking-details-view.component.html',
 })
-export class BookingDetailsViewComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute);
+export class BookingDetailsViewComponent {
   private readonly router = inject(Router);
   private readonly bookingService = inject(BookingService);
 
-  public booking = signal<BookingDto | null>(null);
-  public isLoading = signal(true);
-  public error = signal<string | null>(null);
-
-  public statusSeverity = computed(() => {
-    const status = this.booking()?.status;
-    switch (status) {
-      case 'POTWIERDZONA':
-        return 'success';
-      case 'OCZEKUJE':
-        return 'warn';
-      case 'ANULOWANA':
-        return 'danger';
-      default:
-        return 'info';
-    }
+  public readonly bookingId = input.required<number, string>({
+    transform: numberAttribute,
+    alias: 'bookingId'
   });
 
-  public statusLabel = computed(() => {
+  protected readonly booking = signal<BookingDto | null>(null);
+  protected readonly isLoading = signal<boolean>(false);
+  protected readonly error = signal<string | null>(null);
+
+  protected readonly statusSeverity = computed(() => {
     const status = this.booking()?.status;
-    switch (status) {
-      case 'POTWIERDZONA':
-        return 'Potwierdzona';
-      case 'OCZEKUJE':
-        return 'Oczekuje na płatność';
-      case 'ANULOWANA':
-        return 'Anulowana';
-      default:
-        return status;
-    }
+    const map: Record<string, 'success' | 'warn' | 'danger' | 'info'> = {
+      'POTWIERDZONA': 'success',
+      'OCZEKUJE': 'warn',
+      'ANULOWANA': 'danger'
+    };
+
+    return map[status as string] || 'info';
   });
 
-  public ngOnInit(): void {
-    const bookingId = Number(this.route.snapshot.paramMap.get('bookingId'));
-    if (bookingId) {
-      this.loadBooking(bookingId);
-    } else {
-      this.error.set('Nieprawidłowy identyfikator rezerwacji');
-      this.isLoading.set(false);
-    }
-  }
+  protected readonly statusLabel = computed(() => {
+    const status = this.booking()?.status;
+    const map: Record<string, string> = {
+      'POTWIERDZONA': 'Potwierdzona',
+      'OCZEKUJE': 'Oczekuje na płatność',
+      'ANULOWANA': 'Anulowana'
+    };
 
-  private loadBooking(bookingId: number): void {
-    this.bookingService.getBookingById(bookingId).subscribe({
-      next: (booking) => {
-        this.booking.set(booking);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.error.set('Nie udało się pobrać szczegółów rezerwacji');
-        this.isLoading.set(false);
-      },
+    return map[status as string] || status || '';
+  });
+
+  public constructor() {
+    effect(() => {
+      const id = this.bookingId();
+      if (id) {
+        this.loadBooking(id);
+      }
     });
   }
 
-  public goBack(): void {
+  protected goBack(): void {
     this.router.navigate(['/profile']);
   }
 
-  public getTicketTypeLabel(type: string): string {
-    switch (type) {
-      case 'NORMALNY':
-        return 'Normalny';
-      case 'ULGOWY':
-        return 'Ulgowy';
-      default:
-        return type;
-    }
+  protected getTicketTypeLabel(type: string): string {
+    const map: Record<string, string> = {
+      'NORMALNY': 'Normalny',
+      'ULGOWY': 'Ulgowy'
+    };
+
+    return map[type] || type;
+  }
+
+  private loadBooking(bookingId: number): void {
+    this.isLoading.set(true);
+    this.error.set(null);
+
+    this.bookingService.getBookingById(bookingId)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        next: (booking) => this.booking.set(booking),
+        error: () => this.error.set('Nie udało się pobrać szczegółów rezerwacji'),
+      });
   }
 }

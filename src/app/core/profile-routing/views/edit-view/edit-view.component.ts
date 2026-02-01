@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
@@ -15,45 +15,53 @@ import {InputText} from 'primeng/inputtext';
   ],
   templateUrl: './edit-view.component.html',
 })
-export class EditViewComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private auth = inject(AuthStore);
-  private userStore = inject(UserStore);
-  private router = inject(Router);
+export class EditViewComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly authStore = inject(AuthStore);
+  private readonly userStore = inject(UserStore);
+  private readonly router = inject(Router);
 
-  public isLoading = false;
+  protected readonly isLoading = signal<boolean>(false);
 
-  public form = this.fb.group({
+  protected readonly form = this.fb.nonNullable.group({
     email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required]
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]]
   });
 
-  ngOnInit() {
-    const user = this.auth.user();
-    if (user) {
-      this.form.patchValue({
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
-      });
-    }
+  public constructor() {
+    effect(() => {
+      const user = this.authStore.user();
+      if (user) {
+        this.form.patchValue({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName
+        });
+      }
+    });
   }
 
-  save() {
-    if (this.form.invalid) return;
+  protected save(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
 
+      return;
+    }
+
+    this.isLoading.set(true);
     const data = this.form.getRawValue();
 
     this.userStore.updateMyProfile({
       data: data,
       onSuccess: () => {
+        this.isLoading.set(false);
         this.router.navigate(['/profile']);
       }
     });
   }
 
-  cancel() {
+  protected cancel(): void {
     this.router.navigate(['/profile']);
   }
 }
