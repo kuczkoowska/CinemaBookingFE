@@ -7,6 +7,7 @@ import {
   MenuItemComponent
 } from '@cinemabooking/core/admin-routing/views/admin-view/components/menu-item/menu-item.component';
 import {RefreshButtonComponent} from '@cinemabooking/ui/refresh-button/refresh-button.component';
+import {StatItem} from '@cinemabooking/interfaces/other/stat-item';
 
 @Component({
   selector: 'app-admin-view',
@@ -19,12 +20,12 @@ import {RefreshButtonComponent} from '@cinemabooking/ui/refresh-button/refresh-b
   templateUrl: './admin-view.component.html',
 })
 export class AdminViewComponent {
-  public auth = inject(AuthStore);
-  public today = new Date();
+  protected readonly auth = inject(AuthStore);
+  protected readonly today = new Date();
 
-  public menuItems = ADMIN_MENU_ITEMS;
+  protected readonly menuItems = ADMIN_MENU_ITEMS;
 
-  public stats = [
+  protected readonly stats: StatItem[] = [
     {
       label: 'Dzisiejsza sprzedaż',
       value: '1,240 PLN',
@@ -32,8 +33,26 @@ export class AdminViewComponent {
       color: 'text-blue-500',
       bg: 'bg-blue-500/10'
     },
-    {label: 'Nowi użytkownicy', value: '+12', icon: 'pi pi-user-plus', color: 'text-green-500', bg: 'bg-green-500/10'},
-    {label: 'Aktywne seanse', value: '8', icon: 'pi pi-video', color: 'text-purple-500', bg: 'bg-purple-500/10'},
-    {label: 'Błędy (24h)', value: '0', icon: 'pi pi-exclamation-circle', color: 'text-red-500', bg: 'bg-red-500/10'}
+    {
+      label: 'Nowi użytkownicy',
+      value: '+12',
+      icon: 'pi pi-user-plus',
+      color: 'text-green-500',
+      bg: 'bg-green-500/10'
+    },
+    {
+      label: 'Aktywne seanse',
+      value: '8',
+      icon: 'pi pi-video',
+      color: 'text-purple-500',
+      bg: 'bg-purple-500/10'
+    },
+    {
+      label: 'Błędy (24h)',
+      value: '0',
+      icon: 'pi pi-exclamation-circle',
+      color: 'text-red-500',
+      bg: 'bg-red-500/10'
+    }
   ];
 }
