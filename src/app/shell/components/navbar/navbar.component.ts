@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {AppRoute} from '@cinemabooking/enums/app-routes';
 import {Router, RouterLink} from '@angular/router';
 import {NavLink} from '@cinemabooking/interfaces/other/nav-link';
@@ -19,7 +19,7 @@ import {Tooltip} from 'primeng/tooltip';
   ],
   templateUrl: './navbar.component.html',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   protected readonly AppRoute = AppRoute;
   protected themeService = inject(ThemeService);
   protected router = inject(Router);
@@ -31,9 +31,4 @@ export class NavbarComponent implements OnInit {
     {label: 'Cennik', route: AppRoute.PRICING},
     {label: 'Kontakt', route: AppRoute.CONTACT}
   ];
-
-  public ngOnInit(): void {
-    this.auth.checkAuth();
-  }
-
 }
