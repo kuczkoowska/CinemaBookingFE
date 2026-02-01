@@ -1,5 +1,4 @@
 <div class="sticky top-24 p-6 rounded-xl border border-app-border bg-element shadow-sm h-fit">
-
   <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-main">
     <span class="text-2xl">🎬</span>
     Repertuar
@@ -19,28 +18,58 @@
   @if (filteredScreenings().length > 0) {
     <div class="flex flex-col gap-3">
       @for (screening of filteredScreenings(); track screening.id) {
+        @let isDisabled = isScreeningDisabled(screening);
+        @let isPast = isScreeningPast(screening);
+        @let status = getScreeningStatus(screening);
 
         <button
           pRipple
-          (click)="onScreeningClick(screening.id)"
-          class="flex justify-between items-center p-4 rounded-lg border border-app-border hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer text-left w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-app-element"
+          (click)="onScreeningClick(screening)"
+          [disabled]="isDisabled"
+          [class.opacity-40]="isPast"
+          [class.opacity-60]="!isPast && isDisabled"
+          [class.cursor-not-allowed]="isDisabled"
+          [class.grayscale]="isPast"
+          [class.hover:border-primary]="!isDisabled"
+          [class.cursor-pointer]="!isDisabled"
+          class="flex justify-between items-center p-4 rounded-lg border border-app-border transition-all group text-left w-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-app-element"
         >
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-3">
+              <span
+                class="text-xl font-bold text-main transition-colors"
+                [class.group-hover:text-primary]="!isDisabled"
+                [class.line-through]="isPast"
+              >
+                {{ screening.startTime | date: 'HH:mm' }}
+              </span>
 
-          <div>
-            <span class="text-xl font-bold text-main block group-hover:text-primary transition-colors">
-              {{ screening.startTime | date:'HH:mm' }}
-            </span>
-            <span class="text-xs text-muted-color font-medium">
-              {{ screening.theaterRoomName }}
-            </span>
+              @if (status) {
+                <p-tag [value]="status.label" [severity]="status.severity" styleClass="text-xs"/>
+              }
+            </div>
+
+            <div class="flex items-center gap-2 text-xs text-muted-color font-medium">
+              <span>{{ screening.theaterRoomName }}</span>
+              <span>•</span>
+              <span
+                [class.text-orange-500]="
+                  screening.availableSeats <= 10 && screening.availableSeats > 0
+                "
+              >
+                {{ screening.availableSeats }}/{{ screening.totalSeats }} miejsc
+              </span>
+            </div>
           </div>
 
-          <span
-            class="text-xs text-primary font-bold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 uppercase tracking-wider">
-             Wybierz
-          </span>
+          @if (!isDisabled) {
+            <span
+              class="text-xs font-bold text-primary opacity-0 -translate-x-2 transition-all duration-300 uppercase tracking-wider group-hover:opacity-100 group-hover:translate-x-0"
+            >
+              Wybierz →
+            </span>
+          }
         </button>
-
       }
     </div>
   } @else {

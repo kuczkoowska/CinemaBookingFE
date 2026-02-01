@@ -1,10 +1,11 @@
-<div class="p-6">
+<div class="p-6 animate-fade-in">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold">Zarządzanie Filmami</h1>
-    <button pButton icon="pi pi-plus" (click)="openAdd()">Dodaj Film</button>
+    <div class="flex items-center gap-3">
+      <app-back-dashboard />
+      <h1 class="text-3xl font-bold text-gray-800">Baza Filmów</h1>
+    </div>
+    <p-button label="Dodaj Film" icon="pi pi-plus" (onClick)="goToAdd()"> </p-button>
   </div>
 
-  <app-movies-table (edit)="openEdit($event)"/>
-
-  <app-movie-dialog [(visible)]="isDialogVisible" [movie]="movieToEdit()"/>
+  <app-movies-table (edit)="goToEdit($event)" />
 </div>

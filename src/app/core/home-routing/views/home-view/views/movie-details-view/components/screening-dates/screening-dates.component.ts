@@ -5,12 +5,11 @@ import {DatePickerModule} from 'primeng/datepicker';
 import {FormsModule} from '@angular/forms';
 import {Button} from 'primeng/button';
 import {Ripple} from 'primeng/ripple';
+import {TagModule} from 'primeng/tag';
 
 @Component({
   selector: 'app-screening-dates',
-  imports: [
-    DatePipe, DatePickerModule, FormsModule, Button, Ripple
-  ],
+  imports: [DatePipe, DatePickerModule, FormsModule, Button, Ripple, TagModule],
   templateUrl: './screening-dates.component.html',
 })
 export class ScreeningDatesComponent {
@@ -34,11 +33,43 @@ export class ScreeningDatesComponent {
     this.selectedDate.set(date);
   }
 
-  public onScreeningClick(screeningId: number): void {
-    this.screeningSelect.emit(screeningId);
+  public onScreeningClick(screening: Screening): void {
+    if (this.isScreeningDisabled(screening)) return;
+    this.screeningSelect.emit(screening.id);
   }
 
-  private generateDays(count: number): { label: string, date: string }[] {
+  public isScreeningPast(screening: Screening): boolean {
+    return new Date(screening.startTime) < new Date();
+  }
+
+  public isScreeningSoldOut(screening: Screening): boolean {
+    return screening.availableSeats === 0;
+  }
+
+  public isScreeningDisabled(screening: Screening): boolean {
+    return (
+      this.isScreeningPast(screening) ||
+      this.isScreeningSoldOut(screening)
+    );
+  }
+
+  public getScreeningStatus(
+    screening: Screening,
+  ): { label: string; severity: 'danger' | 'warn' | 'success' } | null {
+    if (this.isScreeningPast(screening)) {
+      return {label: 'Zakończony', severity: 'danger'};
+    }
+    if (this.isScreeningSoldOut(screening)) {
+      return {label: 'Wyprzedany', severity: 'warn'};
+    }
+    if (screening.availableSeats <= 10) {
+      return {label: `Ostatnie ${screening.availableSeats} miejsc`, severity: 'warn'};
+    }
+
+    return null;
+  }
+
+  private generateDays(count: number): { label: string; date: string }[] {
     const dates = [];
     for (let i = 0; i < count; i++) {
       const date = new Date();
@@ -49,7 +80,7 @@ export class ScreeningDatesComponent {
       else {
         label = date.toLocaleDateString('pl-PL', {
           day: 'numeric',
-          month: 'numeric'
+          month: 'numeric',
         });
       }
 
@@ -63,8 +94,8 @@ export class ScreeningDatesComponent {
 
   private getLocalDateString(date: Date): string {
     const offset = date.getTimezoneOffset() * 60000;
-    const localIsoTime = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
-    
+    const localIsoTime = new Date(date.getTime() - offset).toISOString().slice(0, -1);
+
     return localIsoTime.split('T')[0];
   }
 }

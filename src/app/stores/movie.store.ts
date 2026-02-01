@@ -1,5 +1,5 @@
 import {computed, inject} from '@angular/core';
-import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withHooks, withMethods, withState} from '@ngrx/signals';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {EMPTY, pipe, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
@@ -31,8 +31,9 @@ export const movieStore = signalStore(
   withRequestStatus(),
   withState(initialState),
 
-  withComputed(({movies, filters, selectedMovieId, page, pageSize}) => ({
-    filteredMovies: computed((): Movie[] => {
+  withComputed(({movies, filters, selectedMovieId, page, pageSize}) => {
+
+    const filteredMovies = computed((): Movie[] => {
       const currentFilters = filters();
       const query = (currentFilters.searchQuery || '').toLowerCase();
 
@@ -43,58 +44,31 @@ export const movieStore = signalStore(
 
         return matchesTitle && matchesGenre && matchesAge;
       });
-    }),
+    });
 
-    paginatedMovies: computed((): Movie[] => {
-      const filtered = movies().filter((movie: Movie): boolean => {
-        const currentFilters = filters();
-        const query = (currentFilters.searchQuery || '').toLowerCase();
-        const matchesTitle = movie.title.toLowerCase().includes(query);
-        const matchesGenre = currentFilters.genre ? movie.genre === currentFilters.genre : true;
-        const matchesAge = currentFilters.hideAdult ? movie.ageRating < 16 : true;
+    return {
+      filteredMovies,
 
-        return matchesTitle && matchesGenre && matchesAge;
-      });
+      paginatedMovies: computed((): Movie[] => {
+        const moviesList = filteredMovies();
+        const startIndex = (page() - 1) * pageSize();
+        const endIndex = startIndex + pageSize();
 
-      const startIndex = (page() - 1) * pageSize();
-      const endIndex = startIndex + pageSize();
+        return moviesList.slice(startIndex, endIndex);
+      }),
 
-      return filtered.slice(startIndex, endIndex);
-    }),
+      totalItems: computed(() => filteredMovies().length),
 
-    totalPages: computed((): number => {
-      const filtered = movies().filter((movie: Movie): boolean => {
-        const currentFilters = filters();
-        const query = (currentFilters.searchQuery || '').toLowerCase();
-        const matchesTitle = movie.title.toLowerCase().includes(query);
-        const matchesGenre = currentFilters.genre ? movie.genre === currentFilters.genre : true;
-        const matchesAge = currentFilters.hideAdult ? movie.ageRating < 16 : true;
+      totalPages: computed(() => Math.ceil(filteredMovies().length / pageSize())),
 
-        return matchesTitle && matchesGenre && matchesAge;
-      });
+      selectedMovie: computed((): Movie | null => {
+        const id = selectedMovieId();
 
-      return Math.ceil(filtered.length / pageSize());
-    }),
+        return movies().find((m) => m.id === id) ?? null;
+      }),
+    };
+  }),
 
-    totalItems: computed((): number => {
-      const currentFilters = filters();
-      const query = (currentFilters.searchQuery || '').toLowerCase();
-
-      return movies().filter((movie: Movie): boolean => {
-        const matchesTitle = movie.title.toLowerCase().includes(query);
-        const matchesGenre = currentFilters.genre ? movie.genre === currentFilters.genre : true;
-        const matchesAge = currentFilters.hideAdult ? movie.ageRating < 16 : true;
-
-        return matchesTitle && matchesGenre && matchesAge;
-      }).length;
-    }),
-
-    selectedMovie: computed((): Movie | null => {
-      const id = selectedMovieId();
-
-      return movies().find((m) => m.id === id) ?? null;
-    }),
-  })),
 
   withMethods(
     (store, movieService = inject(MovieService), notification = inject(NotificationService)) => ({
@@ -240,4 +214,9 @@ export const movieStore = signalStore(
       ),
     }),
   ),
+  withHooks({
+    onInit(store) {
+      store.loadMovies();
+    },
+  })
 );
