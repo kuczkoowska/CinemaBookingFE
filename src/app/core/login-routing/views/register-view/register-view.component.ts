@@ -67,6 +67,7 @@ export class RegisterViewComponent implements OnInit {
 
   public isInvalid(controlName: string): boolean {
     const control = this.registerForm.get(controlName);
+
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
@@ -80,6 +81,7 @@ export class RegisterViewComponent implements OnInit {
   public onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+
       return;
     }
 

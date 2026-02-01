@@ -43,12 +43,14 @@ export class LoginViewComponent implements OnInit {
 
   public isInvalid(controlName: string): boolean {
     const control = this.loginForm.get(controlName);
+
     return !!(control?.invalid && (control.dirty || control.touched));
   }
 
   public onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+
       return;
     }
     const {username, password} = this.loginForm.getRawValue();
