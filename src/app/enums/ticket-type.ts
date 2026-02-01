@@ -1,4 +1,4 @@
 export enum TicketType {
-  'NORMALNY' = 'Normalny',
-  'ULGOWY' = 'Ulgowy'
+  NORMALNY = 'NORMALNY',
+  ULGOWY = 'ULGOWY',
 }
