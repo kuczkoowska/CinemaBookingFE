@@ -1,7 +1,6 @@
 import {Component, effect, inject, OnInit, signal, untracked} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CommonModule} from '@angular/common';
 import {movieStore} from '@cinemabooking/stores/movie.store';
 import {MovieForm} from '@cinemabooking/interfaces/form/movie-form';
 import {GENRE_SELECT_OPTIONS} from '@cinemabooking/const/movie-genre.constants';
@@ -18,7 +17,7 @@ import {Movie} from '@cinemabooking/interfaces/models/movie';
 @Component({
   selector: 'app-movie-form',
   imports: [
-    CommonModule, ReactiveFormsModule,
+    ReactiveFormsModule,
     InputTextModule, TextareaModule, InputNumberModule, SelectModule, ButtonModule, CardModule
   ],
   templateUrl: './movie-form.component.html'

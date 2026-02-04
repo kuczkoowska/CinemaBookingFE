@@ -1,5 +1,4 @@
 import {Component, effect, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
@@ -20,7 +19,6 @@ import {User} from '@cinemabooking/interfaces/models/user';
 @Component({
   selector: 'app-users-view',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TableModule,
     ButtonModule,

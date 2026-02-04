@@ -2,7 +2,6 @@ import {Component, computed, inject} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {NavigationEnd, Router} from '@angular/router';
 import {filter, map, startWith} from 'rxjs';
-import {CommonModule} from '@angular/common';
 import {StepsModule} from 'primeng/steps';
 import {MenuItem} from 'primeng/api';
 import {BOOKING_STEPS_CONFIG} from '@cinemabooking/const/booking-steps.constants';
@@ -10,7 +9,6 @@ import {BOOKING_STEPS_CONFIG} from '@cinemabooking/const/booking-steps.constants
 @Component({
   selector: 'app-booking-stepper',
   imports: [
-    CommonModule,
     StepsModule
   ],
   templateUrl: './booking-stepper.component.html',

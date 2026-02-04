@@ -1,14 +1,14 @@
 import {Component, effect, inject, OnDestroy, signal} from '@angular/core';
 import {Router} from '@angular/router';
 import {BookingStore} from '@cinemabooking/stores/booking.store';
-import {CommonModule} from '@angular/common';
+import {DatePipe} from '@angular/common';
 
 import {MessageModule} from 'primeng/message';
 import {TagModule} from 'primeng/tag';
 
 @Component({
   selector: 'app-expiration-timer',
-  imports: [CommonModule, MessageModule, TagModule],
+  imports: [DatePipe, MessageModule, TagModule],
   templateUrl: './expiration-timer.component.html',
 })
 export class ExpirationTimerComponent implements OnDestroy {

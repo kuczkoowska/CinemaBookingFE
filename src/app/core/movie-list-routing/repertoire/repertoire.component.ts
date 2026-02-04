@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {ButtonModule} from 'primeng/button';
@@ -22,14 +21,13 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-repertoire',
   imports: [
-    CommonModule,
     FormsModule,
     ButtonModule,
     TagModule,
     SkeletonModule,
     RepertoireCalendarComponent,
     SkeletonRepertoireComponent,
-    RepertoireMovieCardComponent
+    RepertoireMovieCardComponent,
   ],
   templateUrl: './repertoire.component.html',
 })

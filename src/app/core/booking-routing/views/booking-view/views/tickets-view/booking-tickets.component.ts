@@ -1,5 +1,4 @@
 import {Component, computed, inject} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {ButtonModule} from 'primeng/button';
@@ -10,17 +9,18 @@ import {TooltipModule} from 'primeng/tooltip';
 import {
   ExpirationTimerComponent
 } from '@cinemabooking/core/booking-routing/views/booking-view/views/tickets-view/components/expiration-timer/expiration-timer.component';
+import {DecimalPipe} from '@angular/common';
 
 @Component({
   selector: 'app-booking-tickets-step',
   imports: [
-    CommonModule,
     FormsModule,
     ButtonModule,
     TooltipModule,
     AutoCompleteModule,
     ExpirationTimerComponent,
     Select,
+    DecimalPipe,
   ],
   templateUrl: './booking-tickets.component.html',
 })

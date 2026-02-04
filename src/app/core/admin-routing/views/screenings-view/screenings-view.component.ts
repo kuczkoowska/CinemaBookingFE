@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {CommonModule} from '@angular/common';
 import {TableModule} from 'primeng/table';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
@@ -15,11 +14,11 @@ import {movieStore} from '@cinemabooking/stores/movie.store';
 import {CreateScreeningDto} from '@cinemabooking/interfaces/dto/create-screening-dto';
 import {adminScreeningsStore} from '@cinemabooking/stores/admin-screening.store';
 import {ScreeningForm} from '@cinemabooking/interfaces/form/screening-form';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-screenings-view',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TableModule,
     ButtonModule,
@@ -30,6 +29,7 @@ import {ScreeningForm} from '@cinemabooking/interfaces/form/screening-form';
     TooltipModule,
     BackDashboardComponent,
     FormsModule,
+    DatePipe,
   ],
   templateUrl: './screenings-view.component.html',
 })

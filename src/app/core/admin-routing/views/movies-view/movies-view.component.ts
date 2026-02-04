@@ -4,7 +4,6 @@ import {
 } from '@cinemabooking/core/admin-routing/views/movies-view/components/movies-table/movies-table.component';
 import {ButtonModule} from 'primeng/button';
 import {TableModule} from 'primeng/table';
-import {CommonModule} from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
 import {movieStore} from '@cinemabooking/stores/movie.store';
 import {
@@ -14,7 +13,7 @@ import {Movie} from '@cinemabooking/interfaces/models/movie';
 
 @Component({
   selector: 'app-movies-view',
-  imports: [CommonModule, TableModule, ButtonModule, MoviesTableComponent, BackDashboardComponent],
+  imports: [TableModule, ButtonModule, MoviesTableComponent, BackDashboardComponent],
   templateUrl: './movies-view.component.html',
 })
 export class MoviesViewComponent implements OnInit {
