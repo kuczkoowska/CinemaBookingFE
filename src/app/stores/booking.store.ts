@@ -249,42 +249,37 @@ export const BookingStore = signalStore(
           }
 
           return bookingService.cancelBooking(booking.id).pipe(
-            switchMap(() => {
-              if (!screening) {
-                return EMPTY;
-              }
+            switchMap(() => (screening ? bookingService.getBookingData(screening.id) : EMPTY)),
+            tapResponse({
+              next: (data: Booking) => {
+                const currentSelectedIds = store.selectedSeatIds();
+                const availableSelectedIds = currentSelectedIds.filter((seatId) => {
+                  const seat = data.seats.find((s) => s.id === seatId);
 
-              return bookingService.getBookingData(screening.id).pipe(
-                tapResponse({
-                  next: (data: Booking) => {
-                    const currentSelectedIds = store.selectedSeatIds();
-                    const availableSelectedIds = currentSelectedIds.filter(seatId => {
-                      const seat = data.seats.find(s => s.id === seatId);
-                      return seat && seat.available;
-                    });
+                  return seat && seat.available;
+                });
 
-                    patchState(store, {
-                      activeBooking: null,
-                      ticketSelections: {},
-                      expirationTime: null,
-                      isPaymentProcessing: false,
-                      seats: data.seats,
-                      prices: data.prices,
-                      selectedSeatIds: availableSelectedIds,
-                    });
-                    store.setLoaded();
-                  },
-                  error: (err: HttpErrorResponse | Error) => store.setError(err),
-                }),
-              );
+                patchState(store, {
+                  activeBooking: null,
+                  ticketSelections: {},
+                  expirationTime: null,
+                  isPaymentProcessing: false,
+                  seats: data.seats,
+                  prices: data.prices,
+                  selectedSeatIds: availableSelectedIds,
+                });
+                store.setLoaded();
+              },
+              error: (err: HttpErrorResponse | Error) => store.setError(err),
             }),
-            catchError((err: HttpErrorResponse | Error) => {
+            catchError((err: HttpErrorResponse) => {
               store.setError(err);
+
               return EMPTY;
-            }),
+            })
           );
-        }),
-      ),
+        })
+      )
     ),
 
     lockSeats: rxMethod<void>(

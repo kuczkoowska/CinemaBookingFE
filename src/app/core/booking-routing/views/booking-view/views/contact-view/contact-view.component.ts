@@ -72,7 +72,7 @@ export class ContactViewComponent implements OnInit {
   protected submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      
+
       return;
     }
     this.store.saveContactDetails(this.form.getRawValue());
@@ -98,11 +98,11 @@ export class ContactViewComponent implements OnInit {
     this.form.controls.holders.clear();
 
     tickets.forEach((t, index) => {
-      const savedHolder = savedDetails.holders?.[index];
+      const savedHolder = savedDetails.holders[index];
       this.form.controls.holders.push(
         this.fb.group<HolderForm>({
           seatNumber: this.fb.nonNullable.control(t.seatNumber),
-          name: this.fb.nonNullable.control(savedHolder?.name || '')
+          name: this.fb.nonNullable.control(savedHolder.name || '')
         })
       );
     });
