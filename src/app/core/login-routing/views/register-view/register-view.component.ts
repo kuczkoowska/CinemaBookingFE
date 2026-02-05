@@ -1,12 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {InputTextModule} from 'primeng/inputtext';
 import {PasswordModule} from 'primeng/password';
@@ -19,6 +12,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {AuthStore} from '@cinemabooking/stores/auth.store';
 import {RegisterForm} from '@cinemabooking/interfaces/form/register-form';
+import {passwordMatchValidator} from '@cinemabooking/validators/password.validator';
 
 @Component({
   selector: 'app-register-view',
@@ -50,7 +44,7 @@ export class RegisterViewComponent implements OnInit {
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]],
   }, {
-    validators: this.passwordMatchValidator
+    validators: passwordMatchValidator
   });
 
   public ngOnInit(): void {
@@ -60,17 +54,6 @@ export class RegisterViewComponent implements OnInit {
   protected changeLanguage(): void {
     const lang = this.translateService.getCurrentLang();
     this.translateService.use(lang === 'pl' ? 'en' : 'pl');
-  }
-
-  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-
-    if (!password || !confirmPassword) {
-      return null;
-    }
-
-    return password.value === confirmPassword.value ? null : {passwordMismatch: true};
   }
 
   public isInvalid(controlName: string): boolean {
